@@ -1,0 +1,8 @@
+<div>
+    <span>
+        {{ worker.name }}, employed at {{ worker.employmentDate }}, with position {{ worker.workerType.value }}, salary base {{ worker.salaryBase }}
+    </span>
+        <button (click)="onGetSalaryClick(worker.id)">Get salary</button>
+        <span *ngIf="salary >= 0"> Salary: {{ salary }}</span>
+
+</div>

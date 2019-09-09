@@ -1,0 +1,29 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class SalaryService {
+    private backend: string;
+    constructor(private http: HttpClient) {
+        this.backend = 'api/salary';
+    }
+    get(date: Date) : Observable<number> {
+        return this.http
+            .get<number>(this.backend, {
+                params: {
+                    date: date.toISOString()
+                }
+            });
+    }
+
+    getById(date: Date, workerId: string) : Observable<number> {
+        return this.http
+            .get<number>(this.backend, {
+                params: {
+                    date: date.toISOString(),
+                    workerId: workerId
+                }
+            });
+    }
+}
