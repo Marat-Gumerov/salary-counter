@@ -10,10 +10,16 @@ export class WorkerService {
         this.backend = 'api/worker';
     }
     get(date: Date): Observable<Worker[]> {
+        let dateString: string;
+        if (date instanceof Date) {
+            dateString = date.toISOString();
+        } else {
+            dateString = new Date(date).toISOString();
+        }
         return this.http
             .get<Worker[]>(this.backend, {
                 params: {
-                    selectionDate: date.toISOString()
+                    selectionDate: dateString
                 }
             });
     }

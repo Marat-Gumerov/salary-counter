@@ -1,6 +1,8 @@
 import { Component, Input } from "@angular/core";
 import { SalaryService } from "../../services/salary.service";
 import Worker from "../../models/worker";
+import { MatDialog } from "@angular/material";
+import { EditWorkerDialogComponent } from "../edit-worker-dialog/edit.worker.dialog";
 
 @Component({
     templateUrl: "worker.html",
@@ -10,7 +12,9 @@ export default class WorkerComponent {
     @Input() worker: Worker;
     @Input() date: Date;
     salary: number;
-    constructor(private salaryService: SalaryService) {
+    constructor(
+        private salaryService: SalaryService,
+        public dialog: MatDialog) {
         this.salary = -1;
     }
 
@@ -20,5 +24,14 @@ export default class WorkerComponent {
                 next: (salary) => this.salary = salary,
                 error: (error) => console.error(error)
             });
+    }
+
+    onEdit(): void {
+        const dialogRef = this.dialog.open(EditWorkerDialogComponent, {
+            data: this.worker
+        })
+        dialogRef.afterClosed()
+            .subscribe(result => this.worker = result);
+
     }
 }

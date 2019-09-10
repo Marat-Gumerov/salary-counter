@@ -52,7 +52,7 @@ export class EditWorkerDialogComponent {
         observable.subscribe({
             next: (worker) => {
                 this.worker = worker;
-                this.dialogRef.close();
+                this.dialogRef.close(worker);
             },
             error: (error) => console.error(error)
         });
@@ -75,9 +75,7 @@ export class EditWorkerDialogComponent {
             .subscribe({
                 next: (workerTypes) => {
                     this.workerTypes = workerTypes;
-                    if (this.worker.workerType === null) {
-                        this.worker.workerType = this.workerTypes[0];
-                    }
+                    this.worker.workerType = this.worker.workerType ? undefined : this.workerTypes[0];
                 },
                 error: (error) => console.error(error)
             });

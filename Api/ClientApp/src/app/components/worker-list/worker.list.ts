@@ -27,7 +27,6 @@ export default class WorkerListComponent {
 
     add(): void {
         const dialogRef = this.dialog.open(EditWorkerDialogComponent, {
-            width: '500px',
             data: new Worker()
         })
         dialogRef.afterClosed()
