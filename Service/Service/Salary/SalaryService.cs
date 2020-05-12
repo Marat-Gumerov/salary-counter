@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Service
+namespace Service.Service.Salary
 {
     public class SalaryService : ISalaryService
     {
@@ -60,14 +59,16 @@ namespace Service
 
             var worker = WorkerService.Get(workerId);
             var subordinates = WorkerService.GetSubordinates(worker, date);
-            var workers = subordinates.ToList();
-            workers.Add(worker);
-            var workerTreeItemsDictionary = AsTreeItems(workers);
+            var workerTreeItemsDictionary = AsTreeItems(subordinates);
             var roots = workerTreeItemsDictionary
                 .Values
-                .Where(element => element.Worker.Id == worker.Id)
+                .Where(element => element.Worker.Chief == worker.Id)
                 .ToDictionary(root => root.Worker.Id);
-            return GetSalary(workerTreeItemsDictionary, roots, date);
+            var workerTreeItem = new WorkerTreeItem(worker)
+            {
+                SubordinateSalarySum = GetSalary(workerTreeItemsDictionary, roots, date)
+            };
+            return workerTreeItem.GetSalary(date);
         }
 
         public decimal GetSalary(DateTime date)
@@ -81,23 +82,22 @@ namespace Service
             return GetSalary(workerTreeItemsDictionary, roots, date);
         }
 
-        private decimal GetSalary(
+        private static decimal GetSalary(
             IDictionary<Guid, WorkerTreeItem> workerTreeItemsDictionary,
             IDictionary<Guid, WorkerTreeItem> roots,
             DateTime date)
         {
             foreach (var treeItem in workerTreeItemsDictionary.Values)
             {
-                if (!roots.ContainsKey(treeItem.Worker.Id))
+                if (roots.ContainsKey(treeItem.Worker.Id)) continue;
+                if (treeItem.Worker.Chief == null) throw new InvalidOperationException("Logical error");
+                if (!workerTreeItemsDictionary.ContainsKey(treeItem.Worker.Chief.Value))
                 {
-                    if (!workerTreeItemsDictionary.ContainsKey(treeItem.Worker.Chief.Value))
-                    {
-                        throw new InvalidOperationException($"Can't determine chief for {treeItem.Worker.Name}");
-                    }
-                    workerTreeItemsDictionary[treeItem.Worker.Chief.Value]
-                        .Subordinates
-                        .Push(treeItem);
+                    throw new InvalidOperationException($"Can't determine chief for {treeItem.Worker.Name}");
                 }
+                workerTreeItemsDictionary[treeItem.Worker.Chief.Value]
+                    .Subordinates
+                    .Push(treeItem);
             }
             decimal salary = 0;
             foreach (var root in roots.Values)
@@ -113,11 +113,9 @@ namespace Service
                         continue;
                     }
                     snake.Pop();
-                    if (!roots.ContainsKey(current.Worker.Id))
-                    {
-                        var currentSalary = current.GetSalary(date);
-                        snake.Peek().SubordinateSalarySum += currentSalary + current.SubordinateSalarySum;
-                    }
+                    if (roots.ContainsKey(current.Worker.Id)) continue;
+                    var currentSalary = current.GetSalary(date);
+                    snake.Peek().SubordinateSalarySum += currentSalary + current.SubordinateSalarySum;
                 }
                 var rootSalary = root.GetSalary(date);
                 salary += rootSalary + root.SubordinateSalarySum;
@@ -125,7 +123,7 @@ namespace Service
             return salary;
         }
 
-        private static Dictionary<Guid, WorkerTreeItem> AsTreeItems(IList<Worker> workers)
+        private static Dictionary<Guid, WorkerTreeItem> AsTreeItems(IEnumerable<Worker> workers)
         {
             return workers
                 .Select(worker => new WorkerTreeItem(worker))

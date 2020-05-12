@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +17,8 @@ namespace Api
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        // ReSharper disable once UnusedAutoPropertyAccessor.Local
+        private IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -55,10 +56,11 @@ namespace Api
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
+                spa.Options.StartupTimeout = TimeSpan.FromSeconds(120);
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseAngularCliServer(npmScript: "start");
+                    spa.UseAngularCliServer("start");
                 }
             });
         }

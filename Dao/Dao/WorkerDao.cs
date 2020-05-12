@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using Service;
+using System.Linq;
 using System.Threading;
 using Force.DeepCloner;
-using System.Linq;
+using Service;
 
-namespace Dao
+namespace Dao.Dao
 {
     public class WorkerDao : IWorkerDao
     {
-        private Dictionary<Guid, Worker> workers;
-        private ReaderWriterLockSlim workersLock;
+        private readonly Dictionary<Guid, Worker> workers;
+        private readonly ReaderWriterLockSlim workersLock;
 
         public WorkerDao()
         {
@@ -20,7 +20,7 @@ namespace Dao
 
         public Worker Get(Guid id)
         {
-            using(var lockToken = workersLock.Read())
+            using(workersLock.Read())
             {
                 try
                 {
@@ -35,7 +35,7 @@ namespace Dao
 
         public IList<Worker> Get(DateTime date)
         {
-            using (var lockToken = workersLock.Read())
+            using (workersLock.Read())
             {
                 return workers
                     .Values
@@ -49,7 +49,7 @@ namespace Dao
         public IList<Worker> GetSubordinates(Worker worker, DateTime date)
         {
             var allSubordinates = new List<Worker>();
-            using (var lockToken = workersLock.Read())
+            using (workersLock.Read())
             {
                 var currentLevel = GetNearestSubordinates(worker, date);
                 allSubordinates.AddRange(currentLevel);
@@ -71,7 +71,7 @@ namespace Dao
         {
             var current = worker;
             var workerId = worker.Id;
-            using (var lockToken = workersLock.Read())
+            using (workersLock.Read())
             {
                 while(current.Chief != null)
                 {
@@ -87,7 +87,7 @@ namespace Dao
 
         public bool HasSubordinates(Worker worker)
         {
-            using (var lockToken = workersLock.Read())
+            using (workersLock.Read())
             {
                 return workers
                     .Values
@@ -98,7 +98,7 @@ namespace Dao
         public Worker Save(Worker worker)
         {
             var workerClone = worker.DeepClone();
-            using (var lockToken = workersLock.Write())
+            using (workersLock.Write())
             {
                 if (workerClone.Id == Guid.Empty)
                 {
@@ -117,7 +117,7 @@ namespace Dao
         {
             //Read lock is better than write lock, so call Get to check if id exists
             _ = Get(id);
-            using (var lockToken = workersLock.Write())
+            using (workersLock.Write())
             {
                 workers.Remove(id);
             }
@@ -125,11 +125,11 @@ namespace Dao
 
         private IList<Worker> GetNearestSubordinates(Worker worker, DateTime date)
         {
-            using (var lockToken = workersLock.Read())
+            using (workersLock.Read())
             {
                 return workers
                     .Values
-                    .Where(element => element.Chief == worker.Id && element.EmploymentDate >= date)
+                    .Where(element => element.Chief == worker.Id && element.EmploymentDate <= date)
                     .ToList();
             }
         }

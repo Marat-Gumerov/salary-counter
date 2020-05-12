@@ -1,4 +1,6 @@
 ﻿using System;
+using Service.Service.Salary;
+
 namespace Service
 {
     public static class DependencyInjection

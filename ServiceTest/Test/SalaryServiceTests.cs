@@ -5,6 +5,7 @@ using System.Linq;
 using Moq;
 using NUnit.Framework;
 using Service;
+using Service.Service.Salary;
 
 namespace ServiceTest
 {

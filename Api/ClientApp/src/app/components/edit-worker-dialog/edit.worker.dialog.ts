@@ -59,7 +59,7 @@ export class EditWorkerDialogComponent {
         }
         observable.subscribe({
             next: (worker) => {
-                this.worker = Worker.fromData(worker);
+                this.worker = worker;
                 this.dialogRef.close(worker);
             },
             error: (error) => console.error(error)
@@ -75,7 +75,7 @@ export class EditWorkerDialogComponent {
     }
 
     onChiefChange(value: string): void {
-        this.worker.chief = value;
+        this.worker.chief = value.length > 0 ? value : undefined;
     }
 
     private getWorkerTypes(): void {
@@ -96,9 +96,8 @@ export class EditWorkerDialogComponent {
         this.workerService.get(this.worker.employmentDate)
             .subscribe({
                 next: (workers) => {
-                    this.chiefs = Worker.fromDataList(workers);
-                    if (this.chiefs.length > 1)
-                        this.chiefs.unshift(undefined);
+                    this.chiefs = workers;
+                    this.chiefs.unshift(undefined);
                     this.chiefControl.setValue(this.worker?.chief);
                 },
                 error: (error) => console.error(error)

@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Worker} from '../models/worker';
+import {map} from "rxjs/operators";
 
 @Injectable()
 export class WorkerService {
@@ -23,23 +24,27 @@ export class WorkerService {
                 params: {
                     selectionDate: dateString
                 }
-            });
+            })
+            .pipe(map(workers => Worker.fromDataList(workers)));
     }
 
     getById(id: string): Observable<Worker> {
         const url = `${this.backend}/${id}`;
         return this.http
-            .get<Worker>(url);
+            .get<Worker>(url)
+            .pipe(map(worker => Worker.fromData(worker)));
     }
 
     add(worker: Worker): Observable<Worker> {
         return this.http
-            .post<Worker>(this.backend, worker);
+            .post<Worker>(this.backend, worker)
+            .pipe(map(worker => Worker.fromData(worker)));
     }
 
     update(worker: Worker): Observable<Worker> {
         return this.http
-            .put<Worker>(this.backend, worker);
+            .put<Worker>(this.backend, worker)
+            .pipe(map(worker => Worker.fromData(worker)));
     }
 
     delete(id: string): Observable<{}> {

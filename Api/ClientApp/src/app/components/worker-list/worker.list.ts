@@ -32,7 +32,7 @@ export class WorkerListComponent {
     get(): void {
         this.workerService.get(this.dateControl.value)
             .subscribe({
-                next: (workers) => this.workers = Worker.fromDataList(workers),
+                next: (workers) => this.workers = workers,
                 error: (error) => console.error(error)
             });
     }

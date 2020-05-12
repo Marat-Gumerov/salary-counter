@@ -7,7 +7,7 @@
   },
   "readme": "../../README.md",
   "scripts": {
-    "start": "ng serve",
+    "start": "echo hello && ng serve --host 0.0.0.0",
     "build": "ng build"
   },
   "dependencies": {

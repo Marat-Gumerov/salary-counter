@@ -37,8 +37,8 @@
     <p>Chief</p>
     <label>
         <select #chiefSelect (change)="onChiefChange(chiefSelect.value)" [formControl]="chiefControl">
-            <option *ngFor="let chief of chiefs" [value]="chief ? chief.id : undefined">
-                {{ chief ? chief.name : undefined}}
+            <option *ngFor="let chief of chiefs" [value]="chief?.id || ''">
+                {{ chief?.name }}
             </option>
         </select>
     </label>

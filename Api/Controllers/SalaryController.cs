@@ -23,20 +23,15 @@ namespace Api.Controllers
         {
             try
             {
-                if (workerId.HasValue)
-                {
-                    return Ok(SalaryService.GetSalary(workerId.Value, date));
-                }
-                else
-                {
-                    return Ok(SalaryService.GetSalary(date));
-                }
+                return Ok(workerId.HasValue
+                    ? SalaryService.GetSalary(workerId.Value, date)
+                    : SalaryService.GetSalary(date));
             }
-            catch(ArgumentException exception)
+            catch (ArgumentException exception)
             {
                 return NotFound(new ErrorDto(exception.Message));
             }
-            catch(InvalidOperationException exception)
+            catch (InvalidOperationException exception)
             {
                 return BadRequest(new ErrorDto(exception.Message));
             }
