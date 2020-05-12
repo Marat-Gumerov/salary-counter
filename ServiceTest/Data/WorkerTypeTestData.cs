@@ -1,13 +1,21 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Service;
+using Service.Enumeration;
+using Service.Model;
 
-namespace ServiceTest
+namespace ServiceTest.Data
 {
     public static class WorkerTypeTestData
     {
+        private static readonly Dictionary<string, WorkerType> types =
+            new Dictionary<string, WorkerType>
+            {
+                {"employee", Employee},
+                {"manager", Manager},
+                {"sales", Sales}
+            };
+
         public static WorkerType Employee { get; } = new WorkerType
         {
             Id = Guid.NewGuid(),
@@ -45,13 +53,6 @@ namespace ServiceTest
                 ExperienceBonusMaximum = 0.35m,
                 SubordinateBonus = 0.003m
             }
-        };
-
-        private static readonly Dictionary<string, WorkerType> types = new Dictionary<string, WorkerType>
-        {
-            { "employee", Employee },
-            { "manager", Manager },
-            { "sales", Sales },
         };
 
         public static WorkerType GetByName(string name)

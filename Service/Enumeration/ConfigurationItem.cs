@@ -1,5 +1,4 @@
-﻿using System;
-namespace Service
+﻿namespace Service.Enumeration
 {
     public enum ServiceConfigurationItem
     {

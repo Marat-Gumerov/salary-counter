@@ -1,10 +1,9 @@
-﻿using System;
-using Microsoft.Extensions.Configuration;
-using Service;
+﻿using Microsoft.Extensions.Configuration;
+using Service.Util;
 
-namespace Api
+namespace Api.Util
 {
-    public class AppConfiguration : IAppConfiguration
+    internal class AppConfiguration : IAppConfiguration
     {
         private readonly IConfiguration configuration;
 

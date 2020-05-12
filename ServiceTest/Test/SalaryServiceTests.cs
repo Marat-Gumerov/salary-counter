@@ -1,19 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Moq;
 using NUnit.Framework;
-using Service;
+using Service.Model;
 using Service.Service.Salary;
+using Service.Service.Worker;
+using ServiceTest.Data;
 
-namespace ServiceTest
+namespace ServiceTest.Test
 {
     public class SalaryServiceTests
     {
-        
-        private Mock<IWorkerService> workerMock;
         private SalaryService salaryService;
+
+        private Mock<IWorkerService> workerMock;
+
         [SetUp]
         public void SetUp()
         {
@@ -37,7 +38,7 @@ namespace ServiceTest
                 .Setup(
                     service => service.Get(
                         It.IsAny<DateTime>()))
-                .Returns(() => new List<Worker> { WorkerTestData.WorkersDictionary["first"], null });
+                .Returns(() => new List<Worker> {WorkerTestData.WorkersDictionary["first"], null});
             Assert.Throws<ArgumentException>(
                 () => salaryService.GetSalary(new DateTime(2025, 1, 1)));
         }
@@ -46,12 +47,13 @@ namespace ServiceTest
         [TestCase("2022-04-04", 7705.0709, 0.0001, "first, second, third, fourth")]
         [TestCase("2024-04-04", 8995.7018, 0.0001, "first, second, third, fourth, fifth")]
         [TestCase("1899-04-04", 0, 0.0001, "")]
-        public void GetSalaryForAll(DateTime date, double expected, double delta, string workerNames)
+        public void GetSalaryForAll(DateTime date, double expected, double delta,
+            string workerNames)
         {
             SetupWorkerServiceGet(workerNames);
 
             var salary = salaryService.GetSalary(date);
-            Assert.AreEqual(expected, (double)salary, delta);
+            Assert.AreEqual(expected, (double) salary, delta);
         }
 
         [Test]
@@ -67,14 +69,16 @@ namespace ServiceTest
         [TestCase("2024-04-04", 2668.36, 0.01, "second", "third")]
         [TestCase("2024-04-04", 1120.0, 0.1, "third", "")]
         [TestCase("2024-04-04", 1000.0, 0.1, "fifth", "")]
-        public void GetWorkerSalary(DateTime date, double expected, double delta, string workerName, string subordinates)
+        public void GetWorkerSalary(DateTime date, double expected, double delta, string workerName,
+            string subordinates)
         {
             SetupWorkerServiceGet("first, second, third, fourth, fifth");
             SetupWorkerServiceGetSubordinates(subordinates);
             SetupWorkerServiceGetById(workerName);
 
-            var salary = salaryService.GetSalary(WorkerTestData.WorkersDictionary[workerName].Id, date);
-            Assert.AreEqual(expected, (double)salary, delta);
+            var salary =
+                salaryService.GetSalary(WorkerTestData.WorkersDictionary[workerName].Id, date);
+            Assert.AreEqual(expected, (double) salary, delta);
         }
 
         [Test]

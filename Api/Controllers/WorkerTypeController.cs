@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Service;
+﻿using Microsoft.AspNetCore.Mvc;
+using Service.Service.WorkerType;
 
 namespace Api.Controllers
 {
@@ -11,17 +7,17 @@ namespace Api.Controllers
     [ApiController]
     public class WorkerTypeController : Controller
     {
-        public IWorkerTypeService WorkerTypeService { get; }
+        private readonly IWorkerTypeService workerTypeService;
 
         public WorkerTypeController(IWorkerTypeService workerTypeService)
         {
-            WorkerTypeService = workerTypeService;
+            this.workerTypeService = workerTypeService;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(WorkerTypeService.Get());
+            return Ok(workerTypeService.Get());
         }
     }
 }

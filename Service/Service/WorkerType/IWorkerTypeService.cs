@@ -1,8 +1,10 @@
-namespace Service
+using System.Collections.Generic;
+
+namespace Service.Service.WorkerType
 {
     public interface IWorkerTypeService
     {
-        System.Collections.Generic.IList<WorkerType> Get();
-        bool IsValid(WorkerType workerType);
+        IList<Model.WorkerType> Get();
+        bool IsValid(Model.WorkerType workerType);
     }
 }

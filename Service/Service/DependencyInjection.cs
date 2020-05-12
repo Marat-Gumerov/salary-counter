@@ -1,7 +1,9 @@
-﻿using System;
-using Service.Service.Salary;
+﻿using Service.Service.Salary;
+using Service.Service.Worker;
+using Service.Service.WorkerType;
+using Service.Util;
 
-namespace Service
+namespace Service.Service
 {
     public static class DependencyInjection
     {

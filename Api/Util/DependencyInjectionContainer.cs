@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Service;
-namespace Api
+using Service.Util;
+
+namespace Api.Util
 {
     public class DependencyInjectionContainer : IDependencyInjectionContainer
     {
@@ -11,12 +12,14 @@ namespace Api
             this.services = services;
         }
 
-        public void AddSingleton<TService, TImplementation>() where TService : class where TImplementation : class, TService
+        public void AddSingleton<TService, TImplementation>() where TService : class
+            where TImplementation : class, TService
         {
             services.AddSingleton<TService, TImplementation>();
         }
 
-        public void AddTransient<TService, TImplementation>() where TService : class where TImplementation : class, TService
+        public void AddTransient<TService, TImplementation>() where TService : class
+            where TImplementation : class, TService
         {
             services.AddTransient<TService, TImplementation>();
         }

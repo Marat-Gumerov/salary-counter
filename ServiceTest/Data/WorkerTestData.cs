@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Service;
+using Service.Model;
 
-namespace ServiceTest
+namespace ServiceTest.Data
 {
     public static class WorkerTestData
     {
@@ -11,69 +11,70 @@ namespace ServiceTest
         private static readonly Guid second = Guid.Parse("fefaea84-b877-4670-a969-4f04942e46bb");
         private static readonly Guid third = Guid.Parse("79e9d4b3-173b-40e9-a1a0-4c87bf753a4e");
 
-        public static Dictionary<string, Worker> WorkersDictionary { get; } = new Dictionary<string, Worker>
-        {
+        public static Dictionary<string, Worker> WorkersDictionary { get; } =
+            new Dictionary<string, Worker>
             {
-                "first",
-                new Worker
                 {
-                    Chief = null,
-                    EmploymentDate = new DateTime(2018, 11, 1),
-                    Id = first,
-                    Name = "first",
-                    SalaryBase = 2000m,
-                    WorkerType = WorkerTypeTestData.Manager
-                }
-            },
-            {
-                "second",
-                new Worker
+                    "first",
+                    new Worker
+                    {
+                        Chief = null,
+                        EmploymentDate = new DateTime(2018, 11, 1),
+                        Id = first,
+                        Name = "first",
+                        SalaryBase = 2000m,
+                        WorkerType = WorkerTypeTestData.Manager
+                    }
+                },
                 {
-                    Chief = first,
-                    EmploymentDate = new DateTime(2020, 5, 5),
-                    Id = second,
-                    Name = "second",
-                    SalaryBase = 1500m,
-                    WorkerType = WorkerTypeTestData.Sales
-                }
-            },
-            {
-                "third",
-                new Worker
+                    "second",
+                    new Worker
+                    {
+                        Chief = first,
+                        EmploymentDate = new DateTime(2020, 5, 5),
+                        Id = second,
+                        Name = "second",
+                        SalaryBase = 1500m,
+                        WorkerType = WorkerTypeTestData.Sales
+                    }
+                },
                 {
-                    Chief = second,
-                    EmploymentDate = new DateTime(2019, 7, 1),
-                    Id = third,
-                    Name = "third",
-                    SalaryBase = 1000m,
-                    WorkerType = WorkerTypeTestData.Employee
-                }
-            },
-            {
-                "fourth",
-                new Worker
+                    "third",
+                    new Worker
+                    {
+                        Chief = second,
+                        EmploymentDate = new DateTime(2019, 7, 1),
+                        Id = third,
+                        Name = "third",
+                        SalaryBase = 1000m,
+                        WorkerType = WorkerTypeTestData.Employee
+                    }
+                },
                 {
-                    Chief = first,
-                    EmploymentDate = new DateTime(1900, 11, 11),
-                    Id = Guid.NewGuid(),
-                    Name = "fourth",
-                    SalaryBase = 2000m,
-                    WorkerType = WorkerTypeTestData.Manager
-                }
-            },
-            {
-                "fifth",
-                new Worker
+                    "fourth",
+                    new Worker
+                    {
+                        Chief = first,
+                        EmploymentDate = new DateTime(1900, 11, 11),
+                        Id = Guid.NewGuid(),
+                        Name = "fourth",
+                        SalaryBase = 2000m,
+                        WorkerType = WorkerTypeTestData.Manager
+                    }
+                },
                 {
-                    Chief = null,
-                    EmploymentDate = new DateTime(2023, 11, 11),
-                    Id = Guid.NewGuid(),
-                    Name = "fifth",
-                    SalaryBase = 1000m,
-                    WorkerType = WorkerTypeTestData.Employee
+                    "fifth",
+                    new Worker
+                    {
+                        Chief = null,
+                        EmploymentDate = new DateTime(2023, 11, 11),
+                        Id = Guid.NewGuid(),
+                        Name = "fifth",
+                        SalaryBase = 1000m,
+                        WorkerType = WorkerTypeTestData.Employee
+                    }
                 }
-            }
-        };
+            };
 
         public static IList<Worker> GetWorkersByNames(string workerNames)
         {
@@ -85,6 +86,5 @@ namespace ServiceTest
                 .Where(element => workersSplitted.Contains(element.Name))
                 .ToList();
         }
-
     }
 }

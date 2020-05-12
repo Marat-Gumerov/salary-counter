@@ -3,14 +3,17 @@ using System.Linq;
 using Force.DeepCloner;
 using Moq;
 using NUnit.Framework;
-using Service;
+using Service.Dao;
+using Service.Service.WorkerType;
+using ServiceTest.Data;
 
-namespace ServiceTest.src.Test
+namespace ServiceTest.Test
 {
     public class WorkerTypeServiceTests
     {
         private Mock<IWorkerTypeDao> workerTypeDaoMock;
         private WorkerTypeService workerTypeService;
+
         [SetUp]
         public void SetUp()
         {
@@ -32,10 +35,7 @@ namespace ServiceTest.src.Test
             var workerType = WorkerTypeTestData
                 .GetByName("employee")
                 .DeepClone();
-            if (!expected)
-            {
-                workerType.CanHaveSubordinates = true;
-            }
+            if (!expected) workerType.CanHaveSubordinates = true;
             var actual = workerTypeService.IsValid(workerType);
             Assert.AreEqual(expected, actual);
         }

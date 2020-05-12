@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Dao.Extension;
 using Force.DeepCloner;
-using Service;
+using Service.Dao;
+using Service.Model;
 
 namespace Dao.Dao
 {
-    public class WorkerDao : IWorkerDao
+    internal class WorkerDao : IWorkerDao
     {
         private readonly Dictionary<Guid, Worker> workers;
         private readonly ReaderWriterLockSlim workersLock;
@@ -20,13 +22,13 @@ namespace Dao.Dao
 
         public Worker Get(Guid id)
         {
-            using(workersLock.Read())
+            using (workersLock.Read())
             {
                 try
                 {
                     return workers[id].DeepClone();
                 }
-                catch(KeyNotFoundException)
+                catch (KeyNotFoundException)
                 {
                     throw new InvalidOperationException("Worker not found");
                 }
@@ -53,16 +55,16 @@ namespace Dao.Dao
             {
                 var currentLevel = GetNearestSubordinates(worker, date);
                 allSubordinates.AddRange(currentLevel);
-                while(currentLevel.Any())
+                while (currentLevel.Any())
                 {
                     var nextLevel = new List<Worker>();
-                    foreach(var subordinate in currentLevel)
-                    {
+                    foreach (var subordinate in currentLevel)
                         nextLevel.AddRange(GetNearestSubordinates(subordinate, date));
-                    }
+
                     currentLevel = nextLevel;
                     allSubordinates.AddRange(currentLevel);
                 }
+
                 return allSubordinates.DeepClone();
             }
         }
@@ -73,14 +75,13 @@ namespace Dao.Dao
             var workerId = worker.Id;
             using (workersLock.Read())
             {
-                while(current.Chief != null)
+                while (current.Chief != null)
                 {
-                    if (current.Chief.Value == workerId)
-                    {
-                        return true;
-                    }
+                    if (current.Chief.Value == workerId) return true;
+
                     current = workers[current.Chief.Value];
                 }
+
                 return false;
             }
         }
@@ -110,6 +111,7 @@ namespace Dao.Dao
                     workers[workerClone.Id] = workerClone;
                 }
             }
+
             return workerClone.DeepClone();
         }
 

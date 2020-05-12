@@ -1,36 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Api.Model;
 using Microsoft.AspNetCore.Mvc;
-using Service;
+using Service.Model;
+using Service.Service.Worker;
 
 namespace Api.Controllers
 {
     [Route("api/[controller]")]
     public class WorkerController : Controller
     {
-        public IWorkerService WorkerService { get; }
+        private readonly IWorkerService workerService;
 
         public WorkerController(IWorkerService workerService)
         {
-            WorkerService = workerService;
+            this.workerService = workerService;
         }
-        
+
         [HttpGet]
         public IActionResult Get([FromQuery] DateTime selectionDate)
         {
-            return Ok(WorkerService.Get(selectionDate));
+            return Ok(workerService.Get(selectionDate));
         }
 
-        
+
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
             try
             {
-                return Ok(WorkerService.Get(id));
+                return Ok(workerService.Get(id));
             }
             catch (ArgumentException exception)
             {
@@ -39,19 +37,16 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]Worker value)
+        public IActionResult Post([FromBody] Worker value)
         {
-            if (value == null)
-            {
-                return BadRequest(new ErrorDto("Worker is null"));
-            }
+            if (value == null) return BadRequest(new ErrorDto("Worker is null"));
+
             if (!value.Id.Equals(Guid.Empty))
-            {
                 return BadRequest(new ErrorDto("To create worker use empty guid"));
-            }
+
             try
             {
-                return Ok(WorkerService.Save(value));
+                return Ok(workerService.Save(value));
             }
             catch (ArgumentException exception)
             {
@@ -60,25 +55,22 @@ namespace Api.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody]Worker value)
+        public IActionResult Put([FromBody] Worker value)
         {
-            if (value == null)
-            {
-                return BadRequest(new ErrorDto("Worker is null"));
-            }
+            if (value == null) return BadRequest(new ErrorDto("Worker is null"));
+
             if (value.Id.Equals(Guid.Empty))
-            {
                 return NotFound(new ErrorDto("Worker id should not be empty when update"));
-            }
+
             try
             {
-                return Ok(WorkerService.Save(value));
+                return Ok(workerService.Save(value));
             }
             catch (ArgumentException exception)
             {
                 return BadRequest(new ErrorDto(exception.Message));
             }
-            catch(InvalidOperationException exception)
+            catch (InvalidOperationException exception)
             {
                 return NotFound(new ErrorDto(exception.Message));
             }
@@ -89,7 +81,7 @@ namespace Api.Controllers
         {
             try
             {
-                WorkerService.Delete(id);
+                workerService.Delete(id);
                 return Ok();
             }
             catch (InvalidOperationException exception)

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
-namespace Service
+using Service.Model;
+
+namespace Service.Dao
 {
     public interface IWorkerTypeDao
     {

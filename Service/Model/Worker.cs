@@ -1,6 +1,8 @@
 using System;
-namespace Service
+
+namespace Service.Model
 {
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class Worker
     {
         public virtual Guid Id { get; set; }

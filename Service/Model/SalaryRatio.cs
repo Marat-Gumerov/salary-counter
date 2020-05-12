@@ -1,5 +1,6 @@
-﻿namespace Service
+﻿namespace Service.Model
 {
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class SalaryRatio
     {
         public virtual decimal ExperienceBonus { get; set; }

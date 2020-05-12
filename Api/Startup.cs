@@ -1,4 +1,5 @@
 ﻿using System;
+using Api.Util;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Service.Service;
+using Service.Util;
 
 namespace Api
 {
@@ -34,21 +37,18 @@ namespace Api
                 configuration.RootPath = "ClientApp/dist";
             });
             var container = new DependencyInjectionContainer(services);
-            Service.DependencyInjection.Initialize(container);
-            Dao.DependencyInjection.Initialize(container);
-            container.AddSingleton<Service.IAppConfiguration, AppConfiguration>();
+            DependencyInjection.Initialize(container);
+            Dao.Dao.DependencyInjection.Initialize(container);
+            container.AddSingleton<IAppConfiguration, AppConfiguration>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
             else
-            {
                 app.UseHsts();
-            }
+
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
@@ -58,10 +58,7 @@ namespace Api
                 spa.Options.SourcePath = "ClientApp";
                 spa.Options.StartupTimeout = TimeSpan.FromSeconds(120);
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseAngularCliServer("start");
-                }
+                if (env.IsDevelopment()) spa.UseAngularCliServer("start");
             });
         }
     }

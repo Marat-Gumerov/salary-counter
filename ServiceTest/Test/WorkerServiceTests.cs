@@ -1,19 +1,24 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
 using Force.DeepCloner;
 using Moq;
 using NUnit.Framework;
-using Service;
+using Service.Dao;
+using Service.Model;
+using Service.Service.Worker;
+using Service.Service.WorkerType;
+using Service.Util;
+using ServiceTest.Data;
 
-namespace ServiceTest
+namespace ServiceTest.Test
 {
     public class WorkerServiceTests
     {
         private Mock<IAppConfiguration> configurationMock;
         private Mock<IWorkerDao> workerDaoMock;
-        private Mock<IWorkerTypeService> workerTypeServiceMock;
         private WorkerService workerService;
+        private Mock<IWorkerTypeService> workerTypeServiceMock;
+
         [SetUp]
         public void SetUp()
         {
@@ -47,7 +52,8 @@ namespace ServiceTest
             workerDaoMock
                 .Setup(dao => dao.HasWrongSubordination(It.IsAny<Worker>()))
                 .Returns(
-                    (Worker worker) => worker.Chief == WorkerTestData.WorkersDictionary["second"].Id);
+                    (Worker worker) =>
+                        worker.Chief == WorkerTestData.WorkersDictionary["second"].Id);
 
             workerService = new WorkerService(
                 configurationMock.Object,
@@ -94,9 +100,9 @@ namespace ServiceTest
                     It.IsAny<Worker>(),
                     It.IsAny<DateTime>()))
                 .Throws(new Exception());
-            var worker = workerName.Equals(string.Empty) ?
-                new Worker() :
-                WorkerTestData.WorkersDictionary[workerName];
+            var worker = workerName.Equals(string.Empty)
+                ? new Worker()
+                : WorkerTestData.WorkersDictionary[workerName];
             var subordinates = workerService.GetSubordinates(worker, new DateTime(2025, 1, 1));
             Assert.False(subordinates.Any());
         }
@@ -114,8 +120,8 @@ namespace ServiceTest
                     It.IsAny<DateTime>()))
                 .Returns(() => subordinates);
             var subordinatesFromService = workerService.GetSubordinates(
-                WorkerTestData.WorkersDictionary["first"],
-                new DateTime(2025, 1, 1))
+                    WorkerTestData.WorkersDictionary["first"],
+                    new DateTime(2025, 1, 1))
                 .OrderBy(worker => worker.Id)
                 .ToList();
             Assert.That(subordinates.SequenceEqual(subordinatesFromService));
@@ -135,27 +141,33 @@ namespace ServiceTest
                 .WorkersDictionary["first"]
                 .DeepClone();
             if (isGuidEmpty)
-            {
                 worker.Id = Guid.Empty;
-            }
             else
-            {
                 worker.Name = "new name";
-            }
             workerService.Save(worker);
             Assert.IsTrue(saved);
         }
 
-        [TestCase("Worker has wrong name", typeof(ArgumentException), "", "2019-05-01", 1000.0, "manager", "first", "")]
-        [TestCase("Worker has wrong name", typeof(ArgumentException), "   ", "2019-05-01", 1000.0, "manager", "first", "")]
-        [TestCase("Worker hired before company foundation date", typeof(ArgumentException), "newName", "1898-05-01", 1000.0, "manager", "first", "")]
-        [TestCase("Worker's salary base is less than zero", typeof(ArgumentException), "newName", "2019-05-01", -1000.0, "manager", "first", "")]
-        [TestCase("Worker position is wrong", typeof(ArgumentException), "newName", "2019-05-01", 1000.0, "", "first", "")]
-        [TestCase("Worker position is wrong", typeof(ArgumentException), "newName", "2019-05-01", 1000.0, "invalid", "first", "")]
-        [TestCase("Sequence contains no matching element", typeof(InvalidOperationException), "newName", "2019-05-01", 1000.0, "manager", "invalid", "")]
-        [TestCase("Employee should not have subordinates", typeof(ArgumentException), "newName", "2019-05-01", 1000.0, "employee", "first", "")]
-        [TestCase("Worker has cycle in subordination", typeof(ArgumentException), "newName", "2019-05-01", 1000.0, "manager", "first", "second")]
-        [TestCase("Sequence contains no matching element", typeof(InvalidOperationException), "newName", "2019-05-01", 1000.0, "manager", "first", "invalid")]
+        [TestCase("Worker has wrong name", typeof(ArgumentException), "", "2019-05-01", 1000.0,
+            "manager", "first", "")]
+        [TestCase("Worker has wrong name", typeof(ArgumentException), "   ", "2019-05-01", 1000.0,
+            "manager", "first", "")]
+        [TestCase("Worker hired before company foundation date", typeof(ArgumentException),
+            "newName", "1898-05-01", 1000.0, "manager", "first", "")]
+        [TestCase("Worker's salary base is less than zero", typeof(ArgumentException), "newName",
+            "2019-05-01", -1000.0, "manager", "first", "")]
+        [TestCase("Worker position is wrong", typeof(ArgumentException), "newName", "2019-05-01",
+            1000.0, "", "first", "")]
+        [TestCase("Worker position is wrong", typeof(ArgumentException), "newName", "2019-05-01",
+            1000.0, "invalid", "first", "")]
+        [TestCase("Sequence contains no matching element", typeof(InvalidOperationException),
+            "newName", "2019-05-01", 1000.0, "manager", "invalid", "")]
+        [TestCase("Employee should not have subordinates", typeof(ArgumentException), "newName",
+            "2019-05-01", 1000.0, "employee", "first", "")]
+        [TestCase("Worker has cycle in subordination", typeof(ArgumentException), "newName",
+            "2019-05-01", 1000.0, "manager", "first", "second")]
+        [TestCase("Sequence contains no matching element", typeof(InvalidOperationException),
+            "newName", "2019-05-01", 1000.0, "manager", "first", "invalid")]
         public void SaveWrongWorker(
             string message,
             Type exceptionType,
@@ -184,6 +196,7 @@ namespace ServiceTest
                     worker.WorkerType = WorkerTypeTestData.GetByName(workerType);
                     break;
             }
+
             worker.Id = GetTestGuid(newId);
             worker.Chief = GetTestGuid(chief);
 
@@ -196,7 +209,7 @@ namespace ServiceTest
         [Test]
         public void DeleteWorker()
         {
-            bool deleted = false;
+            var deleted = false;
             var id = WorkerTestData.WorkersDictionary["first"].Id;
             workerDaoMock
                 .Setup(dao => dao.Delete(It.Is<Guid>(idArgument => id == idArgument)))

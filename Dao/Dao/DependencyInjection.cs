@@ -1,8 +1,7 @@
-﻿using System;
-using Dao.Dao;
-using Service;
+﻿using Service.Dao;
+using Service.Util;
 
-namespace Dao
+namespace Dao.Dao
 {
     public static class DependencyInjection
     {

@@ -1,4 +1,4 @@
-﻿namespace Service
+﻿namespace Service.Util
 {
     public interface IAppConfiguration
     {

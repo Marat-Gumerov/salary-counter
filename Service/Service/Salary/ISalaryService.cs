@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Service
+namespace Service.Service.Salary
 {
     public interface ISalaryService
     {

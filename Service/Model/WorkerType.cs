@@ -1,6 +1,9 @@
 ﻿using System;
-namespace Service
+using Service.Enumeration;
+
+namespace Service.Model
 {
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class WorkerType
     {
         public virtual Guid Id { get; set; }

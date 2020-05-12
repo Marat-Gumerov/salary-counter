@@ -1,61 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Service.Extension;
+using Service.Service.Worker;
 
 namespace Service.Service.Salary
 {
-    public class SalaryService : ISalaryService
+    internal class SalaryService : ISalaryService
     {
-        private class WorkerTreeItem
-        {
-            public Worker Worker { get; }
-
-            public Stack<WorkerTreeItem> Subordinates { get; }
-
-            public decimal SubordinateSalarySum { get; set; }
-
-            public WorkerTreeItem(Worker worker)
-            {
-                Worker = worker ?? throw new ArgumentException("Wrong worker");
-                Subordinates = new Stack<WorkerTreeItem>();
-            }
-
-            public decimal GetSalary(DateTime date)
-            {
-                return Worker.SalaryBase +
-                    GetExperienceBonus(date) +
-                    SubordinateSalarySum * Worker.WorkerType.SalaryRatio.SubordinateBonus;
-            }
-
-            private decimal GetExperienceBonus(DateTime date)
-            {
-                var experience = Worker.EmploymentDate.GetYearsTo(date);
-                if (experience < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(date), "Wrong employment date");
-                }
-                var experienceBonus = Worker.WorkerType.SalaryRatio.ExperienceBonus * experience;
-
-                var experienceBonusPercent = Math.Min(Worker.WorkerType.SalaryRatio.ExperienceBonusMaximum, experienceBonus);
-
-                return Worker.SalaryBase * experienceBonusPercent;
-            }
-
-        }
-
-        private IWorkerService WorkerService { get; }
-
         public SalaryService(IWorkerService workerService)
         {
             WorkerService = workerService;
         }
 
+        private IWorkerService WorkerService { get; }
+
         public decimal GetSalary(Guid workerId, DateTime date)
         {
-            if (workerId.Equals(Guid.Empty))
-            {
-                throw new ArgumentException("Worker id is empty");
-            }
+            if (workerId.Equals(Guid.Empty)) throw new ArgumentException("Worker id is empty");
 
             var worker = WorkerService.Get(workerId);
             var subordinates = WorkerService.GetSubordinates(worker, date);
@@ -90,15 +52,16 @@ namespace Service.Service.Salary
             foreach (var treeItem in workerTreeItemsDictionary.Values)
             {
                 if (roots.ContainsKey(treeItem.Worker.Id)) continue;
-                if (treeItem.Worker.Chief == null) throw new InvalidOperationException("Logical error");
+                if (treeItem.Worker.Chief == null)
+                    throw new InvalidOperationException("Logical error");
                 if (!workerTreeItemsDictionary.ContainsKey(treeItem.Worker.Chief.Value))
-                {
-                    throw new InvalidOperationException($"Can't determine chief for {treeItem.Worker.Name}");
-                }
+                    throw new InvalidOperationException(
+                        $"Can't determine chief for {treeItem.Worker.Name}");
                 workerTreeItemsDictionary[treeItem.Worker.Chief.Value]
                     .Subordinates
                     .Push(treeItem);
             }
+
             decimal salary = 0;
             foreach (var root in roots.Values)
             {
@@ -112,22 +75,62 @@ namespace Service.Service.Salary
                         snake.Push(current.Subordinates.Pop());
                         continue;
                     }
+
                     snake.Pop();
                     if (roots.ContainsKey(current.Worker.Id)) continue;
                     var currentSalary = current.GetSalary(date);
-                    snake.Peek().SubordinateSalarySum += currentSalary + current.SubordinateSalarySum;
+                    snake.Peek().SubordinateSalarySum +=
+                        currentSalary + current.SubordinateSalarySum;
                 }
+
                 var rootSalary = root.GetSalary(date);
                 salary += rootSalary + root.SubordinateSalarySum;
             }
+
             return salary;
         }
 
-        private static Dictionary<Guid, WorkerTreeItem> AsTreeItems(IEnumerable<Worker> workers)
+        private static Dictionary<Guid, WorkerTreeItem> AsTreeItems(
+            IEnumerable<Model.Worker> workers)
         {
             return workers
                 .Select(worker => new WorkerTreeItem(worker))
                 .ToDictionary(treeItem => treeItem.Worker.Id);
+        }
+
+        private class WorkerTreeItem
+        {
+            public WorkerTreeItem(Model.Worker worker)
+            {
+                Worker = worker ?? throw new ArgumentException("Wrong worker");
+                Subordinates = new Stack<WorkerTreeItem>();
+            }
+
+            public Model.Worker Worker { get; }
+
+            public Stack<WorkerTreeItem> Subordinates { get; }
+
+            public decimal SubordinateSalarySum { get; set; }
+
+            public decimal GetSalary(DateTime date)
+            {
+                return Worker.SalaryBase +
+                       GetExperienceBonus(date) +
+                       SubordinateSalarySum * Worker.WorkerType.SalaryRatio.SubordinateBonus;
+            }
+
+            private decimal GetExperienceBonus(DateTime date)
+            {
+                var experience = Worker.EmploymentDate.GetYearsTo(date);
+                if (experience < 0)
+                    throw new ArgumentOutOfRangeException(nameof(date), "Wrong employment date");
+                var experienceBonus = Worker.WorkerType.SalaryRatio.ExperienceBonus * experience;
+
+                var experienceBonusPercent =
+                    Math.Min(Worker.WorkerType.SalaryRatio.ExperienceBonusMaximum, experienceBonus);
+
+                return Worker.SalaryBase * experienceBonusPercent;
+            }
         }
     }
 }

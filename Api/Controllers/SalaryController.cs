@@ -1,7 +1,7 @@
 ﻿using System;
 using Api.Model;
 using Microsoft.AspNetCore.Mvc;
-using Service;
+using Service.Service.Salary;
 
 namespace Api.Controllers
 {
@@ -9,12 +9,12 @@ namespace Api.Controllers
     [ApiController]
     public class SalaryController : Controller
     {
+        private readonly ISalaryService salaryService;
+
         public SalaryController(ISalaryService salaryService)
         {
-            SalaryService = salaryService;
+            this.salaryService = salaryService;
         }
-
-        public ISalaryService SalaryService { get; }
 
         [HttpGet]
         public IActionResult Get(
@@ -24,8 +24,8 @@ namespace Api.Controllers
             try
             {
                 return Ok(workerId.HasValue
-                    ? SalaryService.GetSalary(workerId.Value, date)
-                    : SalaryService.GetSalary(date));
+                    ? salaryService.GetSalary(workerId.Value, date)
+                    : salaryService.GetSalary(date));
             }
             catch (ArgumentException exception)
             {

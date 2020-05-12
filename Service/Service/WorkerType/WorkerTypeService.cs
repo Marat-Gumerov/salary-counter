@@ -1,20 +1,20 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using DeepEqual.Syntax;
+using Service.Dao;
 
-namespace Service
+namespace Service.Service.WorkerType
 {
     public class WorkerTypeService : IWorkerTypeService
     {
-        private IWorkerTypeDao WorkerTypeDao { get; }
-
         public WorkerTypeService(IWorkerTypeDao workerTypeDao)
         {
             WorkerTypeDao = workerTypeDao;
         }
 
-        public bool IsValid(WorkerType workerType)
+        private IWorkerTypeDao WorkerTypeDao { get; }
+
+        public bool IsValid(Model.WorkerType workerType)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace Service
             }
         }
 
-        public IList<WorkerType> Get()
+        public IList<Model.WorkerType> Get()
         {
             return WorkerTypeDao.Get();
         }

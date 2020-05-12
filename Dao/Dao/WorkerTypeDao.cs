@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Dao.Enumeration;
+using Dao.Extension;
 using Force.DeepCloner;
-using Service;
+using Service.Dao;
+using Service.Enumeration;
+using Service.Model;
+using Service.Util;
 
-namespace Dao
+namespace Dao.Dao
 {
-    public class WorkerTypeDao : IWorkerTypeDao
+    internal class WorkerTypeDao : IWorkerTypeDao
     {
         private readonly Dictionary<Guid, WorkerType> workerTypes;
         private readonly ReaderWriterLockSlim workerTypesLock;
@@ -18,7 +23,7 @@ namespace Dao
             var id = Guid.NewGuid();
             workerTypes.Add(id,
                 new WorkerType
-                { 
+                {
                     Value = WorkerTypeName.Employee,
                     CanHaveSubordinates = false,
                     Id = id,
@@ -47,7 +52,7 @@ namespace Dao
 
         public IList<WorkerType> Get()
         {
-            using(var lockToken = workerTypesLock.Read())
+            using (var lockToken = workerTypesLock.Read())
             {
                 return workerTypes
                     .Values
@@ -65,26 +70,27 @@ namespace Dao
                 {
                     return workerTypes[id].DeepClone();
                 }
-                catch(KeyNotFoundException)
+                catch (KeyNotFoundException)
                 {
-                    throw new InvalidOperationException("No such worker position"); 
+                    throw new InvalidOperationException("No such worker position");
                 }
             }
         }
 
-        private static SalaryRatio CreateSalaryRatioFor(WorkerTypeName workerType, IAppConfiguration configuration)
+        private static SalaryRatio CreateSalaryRatioFor(WorkerTypeName workerType,
+            IAppConfiguration configuration)
         {
             return new SalaryRatio
             {
                 ExperienceBonus =
-                            configuration.Get<decimal>(
-                                $"workerType:{workerType}:{DaoConfigurationItem.ExperienceBonus}"),
+                    configuration.Get<decimal>(
+                        $"workerType:{workerType}:{DaoConfigurationItem.ExperienceBonus}"),
                 ExperienceBonusMaximum =
-                            configuration.Get<decimal>(
-                                $"workerType:{workerType}:{DaoConfigurationItem.ExperienceBonusMaximum}"),
+                    configuration.Get<decimal>(
+                        $"workerType:{workerType}:{DaoConfigurationItem.ExperienceBonusMaximum}"),
                 SubordinateBonus =
-                            configuration.Get<decimal>(
-                                $"workerType:{workerType}:{DaoConfigurationItem.SubordinateBonus}"),
+                    configuration.Get<decimal>(
+                        $"workerType:{workerType}:{DaoConfigurationItem.SubordinateBonus}")
             };
         }
     }
