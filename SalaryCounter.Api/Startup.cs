@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using SalaryCounter.Api.Middleware;
 using SalaryCounter.Api.Util;
 using SalaryCounter.Service.Service;
 using SalaryCounter.Service.Util;
@@ -31,6 +33,7 @@ namespace SalaryCounter.Api
                 {
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 });
             services.AddSpaStaticFiles(configuration =>
             {
@@ -49,6 +52,7 @@ namespace SalaryCounter.Api
                 app.UseDeveloperExceptionPage();
             else
                 app.UseHsts();
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using SalaryCounter.Service.Exception;
 
 namespace SalaryCounter.Dao.Extension
 {
@@ -39,24 +40,24 @@ namespace SalaryCounter.Dao.Extension
                         sync.EnterWriteLock();
                         break;
                     default:
-                        throw new ArgumentException("Unexpected lock type");
+                        throw new SalaryCounterGeneralException("Unexpected lock type");
                 }
             }
 
             public void Dispose()
             {
-                if (sync != null)
-                    switch (lockType)
-                    {
-                        case LockType.Read:
-                            sync.ExitReadLock();
-                            break;
-                        case LockType.Write:
-                            sync.ExitWriteLock();
-                            break;
-                        default:
-                            throw new ArgumentException("Unexpected lock type");
-                    }
+                if (sync == null) return;
+                switch (lockType)
+                {
+                    case LockType.Read:
+                        sync.ExitReadLock();
+                        break;
+                    case LockType.Write:
+                        sync.ExitWriteLock();
+                        break;
+                    default:
+                        throw new ArgumentException("Unexpected lock type");
+                }
             }
         }
     }

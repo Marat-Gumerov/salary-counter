@@ -4,11 +4,14 @@ using System.Linq;
 using System.Threading;
 using SalaryCounter.Dao.Extension;
 using Force.DeepCloner;
+using JetBrains.Annotations;
 using SalaryCounter.Service.Dao;
+using SalaryCounter.Service.Exception;
 using SalaryCounter.Service.Model;
 
 namespace SalaryCounter.Dao.Dao
 {
+    [UsedImplicitly]
     internal class WorkerDao : IWorkerDao
     {
         private readonly Dictionary<Guid, Worker> workers;
@@ -30,7 +33,7 @@ namespace SalaryCounter.Dao.Dao
                 }
                 catch (KeyNotFoundException)
                 {
-                    throw new InvalidOperationException("Worker not found");
+                    throw new SalaryCounterNotFoundException("Worker not found");
                 }
             }
         }

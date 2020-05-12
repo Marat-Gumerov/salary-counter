@@ -4,14 +4,17 @@ using System.Linq;
 using System.Threading;
 using SalaryCounter.Dao.Extension;
 using Force.DeepCloner;
+using JetBrains.Annotations;
 using SalaryCounter.Dao.Enumeration;
 using SalaryCounter.Service.Dao;
 using SalaryCounter.Service.Enumeration;
+using SalaryCounter.Service.Exception;
 using SalaryCounter.Service.Model;
 using SalaryCounter.Service.Util;
 
 namespace SalaryCounter.Dao.Dao
 {
+    [UsedImplicitly]
     internal class WorkerTypeDao : IWorkerTypeDao
     {
         private readonly Dictionary<Guid, WorkerType> workerTypes;
@@ -52,7 +55,7 @@ namespace SalaryCounter.Dao.Dao
 
         public IList<WorkerType> Get()
         {
-            using (var lockToken = workerTypesLock.Read())
+            using (workerTypesLock.Read())
             {
                 return workerTypes
                     .Values
@@ -64,7 +67,7 @@ namespace SalaryCounter.Dao.Dao
 
         public WorkerType Get(Guid id)
         {
-            using (var lockToken = workerTypesLock.Read())
+            using (workerTypesLock.Read())
             {
                 try
                 {
@@ -72,7 +75,7 @@ namespace SalaryCounter.Dao.Dao
                 }
                 catch (KeyNotFoundException)
                 {
-                    throw new InvalidOperationException("No such worker position");
+                    throw new SalaryCounterNotFoundException("No such worker position");
                 }
             }
         }

@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using SalaryCounter.Service.Model;
 using SalaryCounter.Service.Service.WorkerType;
 
-namespace SalaryCounter.Api.Controllers
+namespace SalaryCounter.Api.Controller
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class WorkerTypeController : Controller
+    public class WorkerTypeController : BaseController
     {
         private readonly IWorkerTypeService workerTypeService;
 
@@ -15,9 +15,9 @@ namespace SalaryCounter.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IList<WorkerType> Get()
         {
-            return Ok(workerTypeService.Get());
+            return workerTypeService.Get();
         }
     }
 }

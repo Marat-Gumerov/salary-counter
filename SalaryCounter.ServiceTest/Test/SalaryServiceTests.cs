@@ -28,19 +28,19 @@ namespace ServiceTest.Test
             SetupWorkerServiceGetById("first");
 
             Assert.Throws<ArgumentException>(
-                () => salaryService.GetSalary(Guid.Empty, DateTime.Now));
+                () => salaryService?.GetSalary(Guid.Empty, DateTime.Now));
         }
 
         [Test]
         public void GetSalaryForNullWorker()
         {
-            workerMock
+            workerMock?
                 .Setup(
                     service => service.Get(
                         It.IsAny<DateTime>()))
                 .Returns(() => new List<Worker> {WorkerTestData.WorkersDictionary["first"], null});
             Assert.Throws<ArgumentException>(
-                () => salaryService.GetSalary(new DateTime(2025, 1, 1)));
+                () => salaryService?.GetSalary(new DateTime(2025, 1, 1)));
         }
 
         [TestCase("2024-04-04", 5181.7018, 0.0001, "first, second, third")]

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using SalaryCounter.Service.Dao;
 using SalaryCounter.Service.Enumeration;
+using SalaryCounter.Service.Exception;
 using SalaryCounter.Service.Service.WorkerType;
 using SalaryCounter.Service.Util;
 
@@ -28,7 +29,7 @@ namespace SalaryCounter.Service.Service.Worker
 
         public Model.Worker Get(Guid id)
         {
-            if (id == Guid.Empty) throw new ArgumentException("Worker id is empty");
+            if (id == Guid.Empty) throw new SalaryCounterNotFoundException("Worker id is empty");
             return WorkerDao.Get(id);
         }
 
@@ -42,21 +43,21 @@ namespace SalaryCounter.Service.Service.Worker
         public Model.Worker Save(Model.Worker worker)
         {
             if (string.IsNullOrWhiteSpace(worker.Name))
-                throw new ArgumentException("Worker has wrong name");
+                throw new SalaryCounterInvalidInputException("Worker has wrong name");
             var companyFoundationDate =
                 Configuration.Get<DateTime>(
                     ServiceConfigurationItem.CompanyFoundationDate.ToString());
             if (worker.EmploymentDate < companyFoundationDate)
-                throw new ArgumentException("Worker hired before company foundation date");
+                throw new SalaryCounterInvalidInputException("Worker hired before company foundation date");
             if (worker.SalaryBase < 0)
-                throw new ArgumentException("Worker's salary base is less than zero");
+                throw new SalaryCounterInvalidInputException("Worker's salary base is less than zero");
             if (worker.WorkerType == null || !WorkerTypeService.IsValid(worker.WorkerType))
-                throw new ArgumentException("Worker position is wrong");
+                throw new SalaryCounterInvalidInputException("Worker position is wrong");
             if (!worker.Id.Equals(Guid.Empty)) WorkerDao.Get(worker.Id);
             if (!worker.WorkerType.CanHaveSubordinates && WorkerDao.HasSubordinates(worker))
-                throw new ArgumentException("Employee should not have subordinates");
+                throw new SalaryCounterInvalidInputException("Employee should not have subordinates");
             if (WorkerDao.HasWrongSubordination(worker))
-                throw new ArgumentException("Worker has cycle in subordination");
+                throw new SalaryCounterInvalidInputException("Worker has cycle in subordination");
             if (worker.Chief.HasValue) WorkerDao.Get(worker.Chief.Value);
             return WorkerDao.Save(worker);
         }
