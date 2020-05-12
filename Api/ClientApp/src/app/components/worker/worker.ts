@@ -32,7 +32,6 @@ export class WorkerComponent {
             data: this.worker
         })
         dialogRef.afterClosed()
-            .subscribe(result => this.worker = result);
-
+            .subscribe(result => this.worker = result ?? this.worker);
     }
 }
