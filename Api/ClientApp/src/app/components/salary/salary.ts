@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { SalaryService } from "../../services/salary.service";
+import {Component} from "@angular/core";
+import {SalaryService} from "../../services/salary.service";
 
 @Component({
     templateUrl: "salary.html",
@@ -8,12 +8,13 @@ import { SalaryService } from "../../services/salary.service";
 export default class SalaryComponent {
     salary: number = -1;
     date: Date;
+
     constructor(private salaryService: SalaryService) {
         this.date = new Date();
         this.get();
     }
-    get(): void
-    {
+
+    get(): void {
         this.salaryService
             .get(this.date)
             .subscribe({

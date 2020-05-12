@@ -5,7 +5,7 @@ import {Component, ViewEncapsulation} from '@angular/core';
     templateUrl: 'application.html',
     encapsulation: ViewEncapsulation.None
 })
-export default class ApplicationComponent {
-    constructor(){
+export class ApplicationComponent {
+    constructor() {
     }
 }

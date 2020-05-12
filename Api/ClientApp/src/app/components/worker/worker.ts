@@ -1,17 +1,18 @@
-import { Component, Input } from "@angular/core";
-import { SalaryService } from "../../services/salary.service";
+import {Component, Input} from "@angular/core";
+import {SalaryService} from "../../services/salary.service";
 import Worker from "../../models/worker";
-import { MatDialog } from "@angular/material";
-import { EditWorkerDialogComponent } from "../edit-worker-dialog/edit.worker.dialog";
+import {MatDialog} from "@angular/material/dialog";
+import {EditWorkerDialogComponent} from "../edit-worker-dialog/edit.worker.dialog";
 
 @Component({
     templateUrl: "worker.html",
     selector: 'app-worker'
 })
-export default class WorkerComponent {
+export class WorkerComponent {
     @Input() worker: Worker;
     @Input() date: Date;
     salary: number;
+
     constructor(
         private salaryService: SalaryService,
         public dialog: MatDialog) {

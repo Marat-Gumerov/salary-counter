@@ -1,14 +1,14 @@
-import { Component } from "@angular/core";
-import { WorkerService } from "../../services/worker.service";
+import {Component} from "@angular/core";
+import {WorkerService} from "../../services/worker.service";
 import Worker from "../../models/worker";
-import { MatDialog } from "@angular/material";
-import { EditWorkerDialogComponent } from "../edit-worker-dialog/edit.worker.dialog";
+import {MatDialog} from "@angular/material/dialog";
+import {EditWorkerDialogComponent} from "../edit-worker-dialog/edit.worker.dialog";
 
 @Component({
-    templateUrl: "worker.list.html",
-    selector: 'app-worker-list'
+    selector: 'app-worker-list',
+    templateUrl: "worker.list.html"
 })
-export default class WorkerListComponent {
+export class WorkerListComponent {
     date: Date;
     workers: Worker[];
 
@@ -20,7 +20,7 @@ export default class WorkerListComponent {
         this.get();
     }
 
-    onDateChange(value: Date): void {
+    onDateChange(value: string): void {
         this.date = new Date(value);
         this.get();
     }
@@ -30,13 +30,13 @@ export default class WorkerListComponent {
             data: new Worker()
         })
         dialogRef.afterClosed()
-            .subscribe(result => this.get());
+            .subscribe(() => this.get());
     }
 
     get(): void {
         this.workerService.get(this.date)
             .subscribe({
-                next: (workers) => this.workers = workers,
+                next: (workers) => this.workers = Worker.fromDataList(workers),
                 error: (error) => console.error(error)
             });
     }

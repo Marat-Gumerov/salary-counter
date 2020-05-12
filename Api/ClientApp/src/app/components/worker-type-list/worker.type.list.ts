@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { WorkerTypeService } from "../../services/worker.type.service";
+import {Component} from "@angular/core";
+import {WorkerTypeService} from "../../services/worker.type.service";
 import WorkerType from "../../models/worker.type";
 
 @Component({

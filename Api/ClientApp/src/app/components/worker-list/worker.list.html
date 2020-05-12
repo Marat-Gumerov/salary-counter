@@ -2,13 +2,15 @@
     <div class="row">
         <span>Calculation date:&nbsp;</span>
         <mat-form-field>
-            <input
-                #getWorkerDateInput
-                matInput
-                [matDatepicker]="getWorkerDate"
-                placeholder="Choose a date"
-                (dateInput)="onDateChange(getWorkerDateInput.value)"
-                [value]="date">
+            <label>
+                <input
+                    #getWorkerDateInput
+                    matInput
+                    [matDatepicker]="getWorkerDate"
+                    placeholder="Choose a date"
+                    (dateInput)="onDateChange(getWorkerDateInput.value)"
+                    [value]="date.toDateString()">
+            </label>
             <mat-datepicker-toggle matSuffix [for]="getWorkerDate"></mat-datepicker-toggle>
             <mat-datepicker #getWorkerDate></mat-datepicker>
         </mat-form-field>
@@ -17,7 +19,7 @@
         <h4>List of workers on date {{ date.toDateString() }}</h4>
         <ul>
             <li *ngFor="let workerItem of workers">
-                    <app-worker [worker]="workerItem" [date]="date"></app-worker>
+                <app-worker [worker]="workerItem" [date]="date"></app-worker>
             </li>
         </ul>
     </div>

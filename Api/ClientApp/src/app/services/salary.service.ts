@@ -1,14 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class SalaryService {
-    private backend: string;
+    private readonly backend: string;
+
     constructor(private http: HttpClient) {
         this.backend = 'api/salary';
     }
-    get(date: Date) : Observable<number> {
+
+    get(date: Date): Observable<number> {
         return this.http
             .get<number>(this.backend, {
                 params: {
@@ -17,7 +19,7 @@ export class SalaryService {
             });
     }
 
-    getById(date: Date, workerId: string) : Observable<number> {
+    getById(date: Date, workerId: string): Observable<number> {
         return this.http
             .get<number>(this.backend, {
                 params: {

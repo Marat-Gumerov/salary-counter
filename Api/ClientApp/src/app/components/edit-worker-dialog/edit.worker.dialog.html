@@ -1,33 +1,46 @@
 <h1 mat-dialog-title>{{ state }} worker</h1>
 <div mat-dialog-content>
     <p>Name</p>
-    <input #workerNameInput [value]="worker.name" (input)="onNameInput(workerNameInput.value)" type="text">
+    <label>
+        <input #workerNameInput [value]="worker.name" (input)="onNameInput(workerNameInput.value)"
+               type="text">
+    </label>
     <p>Employment date</p>
     <mat-form-field>
-        <input
-            #employmentDateInput
-            matInput
-            [matDatepicker]="employmentDate"
-            placeholder="Choose a date"
-            (dateInput)="onEmploymentDateChange(employmentDateInput.value)"
-            [value]="worker.employmentDate">
+        <label>
+            <input
+                #employmentDateInput
+                matInput
+                [matDatepicker]="employmentDate"
+                placeholder="Choose a date"
+                (dateInput)="onEmploymentDateChange(employmentDateInput.value)"
+                [value]="worker.employmentDate">
+        </label>
         <mat-datepicker-toggle matSuffix [for]="employmentDate"></mat-datepicker-toggle>
         <mat-datepicker #employmentDate></mat-datepicker>
     </mat-form-field>
     <p>Salary base</p>
-    <input #salaryBaseInput [value]="worker.salaryBase" (input)="onSalaryBaseInput(salaryBaseInput.value)" type="number">
+    <label>
+        <input #salaryBaseInput [value]="worker.salaryBase"
+               (input)="onSalaryBaseInput(salaryBaseInput.value)" type="number">
+    </label>
     <p>Position</p>
-    <select #workerTypeSelect (change)="onWorkerTypeChange(workerTypeSelect.value)" [value]="worker.workerType ? worker.workerType.id : undefined">
-        <option *ngFor="let workerType of workerTypes" [value]="workerType.id">
-            {{ workerType.value }}
-        </option>
-    </select>
+    <label>
+        <select #workerTypeSelect (change)="onWorkerTypeChange(workerTypeSelect.value)"
+                [value]="worker.workerType ? worker.workerType.id : undefined">
+            <option *ngFor="let workerType of workerTypes" [value]="workerType.id">
+                {{ workerType.value }}
+            </option>
+        </select>
+    </label>
     <p>Chief</p>
-    <select #chiefSelect (change)="onChiefChange(chiefSelect.value)" [value]="worker.chief">
-        <option *ngFor="let chief of chiefs" [value]="chief ? chief.id : undefined">
-            {{ chief ? chief.name : undefined}}
-        </option>
-    </select>
-  <button (click)="onSaveClick()">Save</button>
-  <button (click)="onCancelClick()">Cansel</button>
+    <label>
+        <select #chiefSelect (change)="onChiefChange(chiefSelect.value)" [value]="worker.chief">
+            <option *ngFor="let chief of chiefs" [value]="chief ? chief.id : undefined">
+                {{ chief ? chief.name : undefined}}
+            </option>
+        </select>
+    </label>
+    <button (click)="onSaveClick()">Save</button>
+    <button (click)="onCancelClick()">Cancel</button>
 </div>

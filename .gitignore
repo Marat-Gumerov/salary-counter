@@ -1,6 +1,6 @@
 .DS_Store
 .vs
+.idea
 node_modules
-package-lock.json
 bin/
 obj/

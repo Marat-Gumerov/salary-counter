@@ -1,14 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import Worker from '../models/worker';
 
 @Injectable()
 export class WorkerService {
     private backend: string;
+
     constructor(private http: HttpClient) {
         this.backend = 'api/worker';
     }
+
     get(date: Date): Observable<Worker[]> {
         let dateString: string;
         if (date instanceof Date) {
