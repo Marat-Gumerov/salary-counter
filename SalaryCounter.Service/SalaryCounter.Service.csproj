@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Dao\" />
+    <Folder Include="Enumeration\" />
+    <Folder Include="Extension\" />
+    <Folder Include="Model\" />
+    <Folder Include="Service\" />
+    <Folder Include="Util\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="src\Exception\ServiceNoResultException.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DeepEqual" Version="2.0.0" />
+  </ItemGroup>
+</Project>
