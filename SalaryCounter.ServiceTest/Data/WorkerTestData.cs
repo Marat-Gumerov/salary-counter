@@ -7,9 +7,9 @@ namespace ServiceTest.Data
 {
     public static class WorkerTestData
     {
-        private static readonly Guid first = Guid.Parse("b0511795-4cca-4a32-b006-c0a6d3927614");
-        private static readonly Guid second = Guid.Parse("fefaea84-b877-4670-a969-4f04942e46bb");
-        private static readonly Guid third = Guid.Parse("79e9d4b3-173b-40e9-a1a0-4c87bf753a4e");
+        private static readonly Guid First = Guid.Parse("b0511795-4cca-4a32-b006-c0a6d3927614");
+        private static readonly Guid Second = Guid.Parse("fefaea84-b877-4670-a969-4f04942e46bb");
+        private static readonly Guid Third = Guid.Parse("79e9d4b3-173b-40e9-a1a0-4c87bf753a4e");
 
         public static Dictionary<string, Worker> WorkersDictionary { get; } =
             new Dictionary<string, Worker>
@@ -20,7 +20,7 @@ namespace ServiceTest.Data
                     {
                         Chief = null,
                         EmploymentDate = new DateTime(2018, 11, 1),
-                        Id = first,
+                        Id = First,
                         Name = "first",
                         SalaryBase = 2000m,
                         WorkerType = WorkerTypeTestData.Manager
@@ -30,9 +30,9 @@ namespace ServiceTest.Data
                     "second",
                     new Worker
                     {
-                        Chief = first,
+                        Chief = First,
                         EmploymentDate = new DateTime(2020, 5, 5),
-                        Id = second,
+                        Id = Second,
                         Name = "second",
                         SalaryBase = 1500m,
                         WorkerType = WorkerTypeTestData.Sales
@@ -42,9 +42,9 @@ namespace ServiceTest.Data
                     "third",
                     new Worker
                     {
-                        Chief = second,
+                        Chief = Second,
                         EmploymentDate = new DateTime(2019, 7, 1),
-                        Id = third,
+                        Id = Third,
                         Name = "third",
                         SalaryBase = 1000m,
                         WorkerType = WorkerTypeTestData.Employee
@@ -54,7 +54,7 @@ namespace ServiceTest.Data
                     "fourth",
                     new Worker
                     {
-                        Chief = first,
+                        Chief = First,
                         EmploymentDate = new DateTime(1900, 11, 11),
                         Id = Guid.NewGuid(),
                         Name = "fourth",

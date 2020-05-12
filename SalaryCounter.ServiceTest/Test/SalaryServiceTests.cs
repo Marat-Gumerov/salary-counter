@@ -65,8 +65,8 @@ namespace ServiceTest.Test
                 () => salaryService.GetSalary(new DateTime(2019, 8, 1)));
         }
 
-        [TestCase("2024-04-04", 7995.7018, 0.0001, "first", "second, third, fourth")]
-        [TestCase("2024-04-04", 2668.36, 0.01, "second", "third")]
+        [TestCase("2024-04-04", 2527.3418, 0.0001, "first", "second, third, fourth")]
+        [TestCase("2024-04-04", 1548.36, 0.01, "second", "third")]
         [TestCase("2024-04-04", 1120.0, 0.1, "third", "")]
         [TestCase("2024-04-04", 1000.0, 0.1, "fifth", "")]
         public void GetWorkerSalary(DateTime date, double expected, double delta, string workerName,

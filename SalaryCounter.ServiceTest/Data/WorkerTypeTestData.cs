@@ -8,14 +8,6 @@ namespace ServiceTest.Data
 {
     public static class WorkerTypeTestData
     {
-        private static readonly Dictionary<string, WorkerType> types =
-            new Dictionary<string, WorkerType>
-            {
-                {"employee", Employee},
-                {"manager", Manager},
-                {"sales", Sales}
-            };
-
         public static WorkerType Employee { get; } = new WorkerType
         {
             Id = Guid.NewGuid(),
@@ -55,21 +47,29 @@ namespace ServiceTest.Data
             }
         };
 
+        private static readonly Dictionary<string, WorkerType> Types =
+            new Dictionary<string, WorkerType>
+            {
+                {"employee", Employee},
+                {"manager", Manager},
+                {"sales", Sales}
+            };
+
         public static WorkerType GetByName(string name)
         {
-            return types[name];
+            return Types[name];
         }
 
         public static WorkerType Get(Guid id)
         {
-            return types
+            return Types
                 .Values
                 .First(type => type.Id == id);
         }
 
         public static IList<WorkerType> Get()
         {
-            return types.Values.ToList();
+            return Types.Values.ToList();
         }
     }
 }
