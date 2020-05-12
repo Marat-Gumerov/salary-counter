@@ -17,14 +17,17 @@ export class EditWorkerDialogComponent {
     workerTypes: WorkerType[];
     chiefs: Worker[];
     employmentDateControl: FormControl;
+    workerTypeControl: FormControl;
+    chiefControl: FormControl;
 
     constructor(
         public dialogRef: MatDialogRef<EditWorkerDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public worker: Worker,
         private workerService: WorkerService,
         private workerTypeService: WorkerTypeService) {
-        let self = this;
         this.employmentDateControl = new FormControl(worker.employmentDate);
+        this.workerTypeControl = new FormControl(worker.workerType?.id);
+        this.chiefControl = new FormControl(worker.chief);
         if (worker.id === Util.getEmptyId()) {
             this.state = 'Add';
         } else {
@@ -83,6 +86,7 @@ export class EditWorkerDialogComponent {
                     this.worker.workerType = this.worker.workerType
                         ? this.workerTypes.find(workerType => workerType.id === this.worker.workerType.id)
                         : this.workerTypes[0];
+                    this.workerTypeControl.setValue(this.worker?.workerType?.id);
                 },
                 error: (error) => console.error(error)
             });
@@ -93,7 +97,9 @@ export class EditWorkerDialogComponent {
             .subscribe({
                 next: (workers) => {
                     this.chiefs = Worker.fromDataList(workers);
-                    this.chiefs.unshift(undefined);
+                    if (this.chiefs.length > 1)
+                        this.chiefs.unshift(undefined);
+                    this.chiefControl.setValue(this.worker?.chief);
                 },
                 error: (error) => console.error(error)
             });

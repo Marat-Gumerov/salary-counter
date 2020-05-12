@@ -28,7 +28,7 @@
     <p>Position</p>
     <label>
         <select #workerTypeSelect (change)="onWorkerTypeChange(workerTypeSelect.value)"
-                [value]="worker.workerType ? worker.workerType.id : undefined">
+                [formControl]="workerTypeControl">
             <option *ngFor="let workerType of workerTypes" [value]="workerType.id">
                 {{ workerType.value }}
             </option>
@@ -36,7 +36,7 @@
     </label>
     <p>Chief</p>
     <label>
-        <select #chiefSelect (change)="onChiefChange(chiefSelect.value)" [value]="worker.chief">
+        <select #chiefSelect (change)="onChiefChange(chiefSelect.value)" [formControl]="chiefControl">
             <option *ngFor="let chief of chiefs" [value]="chief ? chief.id : undefined">
                 {{ chief ? chief.name : undefined}}
             </option>

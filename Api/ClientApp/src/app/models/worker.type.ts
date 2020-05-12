@@ -20,7 +20,7 @@ export class WorkerType {
     }
 
     static fromDataList(other: any[]): WorkerType[] {
-        return other.map(function (workerType: any, index: Number, workerTypes: any[]) {
+        return other.map(function (workerType: any, _index: Number, _workerTypes: any[]) {
             return WorkerType.fromData(workerType);
         })
     }
