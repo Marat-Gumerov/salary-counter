@@ -1,5 +1,6 @@
 import {Component} from "@angular/core";
 import {SalaryService} from "../../services/salary.service";
+import {FormControl} from "@angular/forms";
 
 @Component({
     templateUrl: "salary.html",
@@ -7,24 +8,19 @@ import {SalaryService} from "../../services/salary.service";
 })
 export default class SalaryComponent {
     salary: number = -1;
-    date: Date;
+    dateControl: FormControl;
 
     constructor(private salaryService: SalaryService) {
-        this.date = new Date();
+        this.dateControl = new FormControl(new Date);
         this.get();
     }
 
     get(): void {
         this.salaryService
-            .get(this.date)
+            .get(this.dateControl.value)
             .subscribe({
                 next: (salary) => this.salary = salary,
                 error: (error) => console.error(error)
             });
-    }
-
-    onDateChange(value: Date): void {
-        this.date = new Date(value);
-        this.get();
     }
 }

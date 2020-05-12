@@ -20,6 +20,7 @@ import {WorkerComponent} from './components/worker/worker';
 import {WorkerService} from './services/worker.service';
 import {MatDialogModule} from '@angular/material/dialog';
 import {EditWorkerDialogComponent} from './components/edit-worker-dialog/edit.worker.dialog';
+import {ReactiveFormsModule} from "@angular/forms";
 
 const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -33,7 +34,8 @@ const routes: Routes = [
         RouterModule.forRoot(routes),
         HttpClientModule,
         MaterialModule,
-        MatDialogModule
+        MatDialogModule,
+        ReactiveFormsModule
     ],
     declarations: [
         ApplicationComponent,

@@ -14,7 +14,8 @@
                 [matDatepicker]="employmentDate"
                 placeholder="Choose a date"
                 (dateInput)="onEmploymentDateChange(employmentDateInput.value)"
-                [value]="worker.employmentDate">
+                (dateChange)="onEmploymentDateChange(employmentDateInput.value)"
+                [formControl]="employmentDateControl">
         </label>
         <mat-datepicker-toggle matSuffix [for]="employmentDate"></mat-datepicker-toggle>
         <mat-datepicker #employmentDate></mat-datepicker>

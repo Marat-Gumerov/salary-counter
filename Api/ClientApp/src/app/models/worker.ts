@@ -1,7 +1,7 @@
 import Util from "../util/util";
-import WorkerType from "./worker.type";
+import {WorkerType} from "./worker.type";
 
-export default class Worker {
+export class Worker {
     id: string;
     name: string;
     employmentDate: Date;

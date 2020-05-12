@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {WorkerTypeService} from "../../services/worker.type.service";
-import WorkerType from "../../models/worker.type";
+import {WorkerType} from "../../models/worker.type";
 
 @Component({
     templateUrl: "worker.type.list.html",

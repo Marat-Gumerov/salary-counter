@@ -1,7 +1,7 @@
 import {SalaryRatio} from "./salary.ratio";
 import Util from "../util/util";
 
-export default class WorkerType {
+export class WorkerType {
     id: string;
     value: string;
     canHaveSubordinates: boolean;

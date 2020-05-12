@@ -4,22 +4,20 @@
         <mat-form-field>
             <label>
                 <input
-                    #getWorkerDateInput
                     matInput
                     [matDatepicker]="getWorkerDate"
                     placeholder="Choose a date"
-                    (dateInput)="onDateChange(getWorkerDateInput.value)"
-                    [value]="date.toDateString()">
+                    [formControl]="dateControl">
             </label>
             <mat-datepicker-toggle matSuffix [for]="getWorkerDate"></mat-datepicker-toggle>
             <mat-datepicker #getWorkerDate></mat-datepicker>
         </mat-form-field>
     </div>
     <div class="row">
-        <h4>List of workers on date {{ date.toDateString() }}</h4>
+        <h4>List of workers on date {{ dateControl.value?.toDateString() }}</h4>
         <ul>
             <li *ngFor="let workerItem of workers">
-                <app-worker [worker]="workerItem" [date]="date"></app-worker>
+                <app-worker [worker]="workerItem" [date]="dateControl.value"></app-worker>
             </li>
         </ul>
     </div>

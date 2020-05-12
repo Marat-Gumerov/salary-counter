@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import Worker from '../models/worker';
+import {Worker} from '../models/worker';
 
 @Injectable()
 export class WorkerService {

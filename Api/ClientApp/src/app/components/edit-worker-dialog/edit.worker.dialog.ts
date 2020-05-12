@@ -1,11 +1,12 @@
 import {Component, Inject} from "@angular/core";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import Worker from "../../models/worker";
+import {Worker} from "../../models/worker";
 import Util from "../../util/util";
 import {WorkerService} from "../../services/worker.service";
 import {Observable} from "rxjs";
 import {WorkerTypeService} from "../../services/worker.type.service";
-import WorkerType from "../../models/worker.type";
+import {WorkerType} from "../../models/worker.type";
+import {FormControl} from "@angular/forms";
 
 @Component({
     selector: 'app-edit-worker-dialog',
@@ -15,12 +16,15 @@ export class EditWorkerDialogComponent {
     state: string;
     workerTypes: WorkerType[];
     chiefs: Worker[];
+    employmentDateControl: FormControl;
 
     constructor(
         public dialogRef: MatDialogRef<EditWorkerDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public worker: Worker,
         private workerService: WorkerService,
         private workerTypeService: WorkerTypeService) {
+        let self = this;
+        this.employmentDateControl = new FormControl(worker.employmentDate);
         if (worker.id === Util.getEmptyId()) {
             this.state = 'Add';
         } else {

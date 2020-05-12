@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import WorkerType from '../models/worker.type';
+import {WorkerType} from '../models/worker.type';
 
 @Injectable()
 export class WorkerTypeService {
