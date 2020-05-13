@@ -6,13 +6,15 @@ namespace SalaryCounter.Service.Exception
     {
         public string ErrorType { get; }
         public HttpStatusCode StatusCode { get; }
+        public bool ShouldBeLogged { get; }
 
         protected SalaryCounterWebException(string message, string errorType,
-            HttpStatusCode statusCode)
+            HttpStatusCode statusCode, bool shouldBeLogged)
             : base(message)
         {
             ErrorType = errorType;
             StatusCode = statusCode;
+            ShouldBeLogged = shouldBeLogged;
         }
     }
 }

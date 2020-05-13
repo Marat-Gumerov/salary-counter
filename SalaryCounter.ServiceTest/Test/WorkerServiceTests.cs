@@ -4,6 +4,8 @@ using Force.DeepCloner;
 using Moq;
 using NUnit.Framework;
 using SalaryCounter.Service.Dao;
+using SalaryCounter.Service.Enumeration;
+using SalaryCounter.Service.Exception;
 using SalaryCounter.Service.Model;
 using SalaryCounter.Service.Service.Worker;
 using SalaryCounter.Service.Service.WorkerType;
@@ -14,10 +16,10 @@ namespace ServiceTest.Test
 {
     public class WorkerServiceTests
     {
-        private Mock<IAppConfiguration> configurationMock;
-        private Mock<IWorkerDao> workerDaoMock;
-        private WorkerService workerService;
-        private Mock<IWorkerTypeService> workerTypeServiceMock;
+        private Mock<IAppConfiguration> configurationMock = null!;
+        private Mock<IWorkerDao> workerDaoMock = null!;
+        private WorkerService workerService = null!;
+        private Mock<IWorkerTypeService> workerTypeServiceMock = null!;
 
         [SetUp]
         public void SetUp()
@@ -87,7 +89,7 @@ namespace ServiceTest.Test
         [Test]
         public void GetWithEmptyId()
         {
-            Assert.Throws<ArgumentException>(
+            Assert.Throws<SalaryCounterNotFoundException>(
                 () => workerService.Get(Guid.Empty));
         }
 
@@ -101,7 +103,7 @@ namespace ServiceTest.Test
                     It.IsAny<DateTime>()))
                 .Throws(new Exception());
             var worker = workerName.Equals(string.Empty)
-                ? new Worker()
+                ? new Worker("Some name", DateTime.Today, 1000m, WorkerTypeTestData.Employee)
                 : WorkerTestData.WorkersDictionary[workerName];
             var subordinates = workerService.GetSubordinates(worker, new DateTime(2025, 1, 1));
             Assert.False(subordinates.Any());
@@ -138,7 +140,7 @@ namespace ServiceTest.Test
                 .Returns((Worker savedWorker) => savedWorker);
 
             var worker = WorkerTestData
-                .WorkersDictionary["first"]
+                .WorkersDictionary["second"]
                 .DeepClone();
             if (isGuidEmpty)
                 worker.Id = Guid.Empty;
@@ -148,34 +150,29 @@ namespace ServiceTest.Test
             Assert.IsTrue(saved);
         }
 
-        [TestCase("Worker has wrong name", typeof(ArgumentException), "", "2019-05-01", 1000.0,
+        [TestCase("Worker has wrong name", typeof(SalaryCounterInvalidInputException), "",
+            "2019-05-01", 1000.0,
             "manager", "first", "")]
-        [TestCase("Worker has wrong name", typeof(ArgumentException), "   ", "2019-05-01", 1000.0,
+        [TestCase("Worker has wrong name", typeof(SalaryCounterInvalidInputException), "   ",
+            "2019-05-01", 1000.0,
             "manager", "first", "")]
-        [TestCase("Worker hired before company foundation date", typeof(ArgumentException),
+        [TestCase("Worker hired before company foundation date",
+            typeof(SalaryCounterInvalidInputException),
             "newName", "1898-05-01", 1000.0, "manager", "first", "")]
-        [TestCase("Worker's salary base is less than zero", typeof(ArgumentException), "newName",
+        [TestCase("Worker's salary base is less than zero",
+            typeof(SalaryCounterInvalidInputException), "newName",
             "2019-05-01", -1000.0, "manager", "first", "")]
-        [TestCase("Worker position is wrong", typeof(ArgumentException), "newName", "2019-05-01",
-            1000.0, "", "first", "")]
-        [TestCase("Worker position is wrong", typeof(ArgumentException), "newName", "2019-05-01",
+        [TestCase("Worker position is wrong", typeof(SalaryCounterInvalidInputException), "newName",
+            "2019-05-01",
             1000.0, "invalid", "first", "")]
-        [TestCase("Sequence contains no matching element", typeof(InvalidOperationException),
-            "newName", "2019-05-01", 1000.0, "manager", "invalid", "")]
-        [TestCase("Employee should not have subordinates", typeof(ArgumentException), "newName",
-            "2019-05-01", 1000.0, "employee", "first", "")]
-        [TestCase("Worker has cycle in subordination", typeof(ArgumentException), "newName",
+        [TestCase("Employee should not have subordinates",
+            typeof(SalaryCounterInvalidInputException), "newName", "2019-05-01", 1000.0, "employee",
+            "first", "")]
+        [TestCase("Worker has cycle in subordination", typeof(SalaryCounterInvalidInputException),
+            "newName",
             "2019-05-01", 1000.0, "manager", "first", "second")]
-        [TestCase("Sequence contains no matching element", typeof(InvalidOperationException),
-            "newName", "2019-05-01", 1000.0, "manager", "first", "invalid")]
-        public void SaveWrongWorker(
-            string message,
-            Type exceptionType,
-            string name,
-            DateTime employmentDate,
-            decimal salaryBase,
-            string workerType,
-            string newId,
+        public void SaveWrongWorker(string message, Type exceptionType, string name,
+            DateTime employmentDate, decimal salaryBase, string workerType, string newId,
             string chief)
         {
             var worker = WorkerTestData
@@ -184,18 +181,12 @@ namespace ServiceTest.Test
             worker.Name = name;
             worker.EmploymentDate = employmentDate;
             worker.SalaryBase = salaryBase;
-            switch (workerType)
+            worker.WorkerType = workerType switch
             {
-                case "":
-                    worker.WorkerType = null;
-                    break;
-                case "invalid":
-                    worker.WorkerType = new WorkerType();
-                    break;
-                default:
-                    worker.WorkerType = WorkerTypeTestData.GetByName(workerType);
-                    break;
-            }
+                "invalid" => new WorkerType(Guid.Empty, WorkerTypeName.Employee, false,
+                    new SalaryRatio()),
+                _ => WorkerTypeTestData.GetByName(workerType)
+            };
 
             worker.Id = GetTestGuid(newId);
             worker.Chief = GetTestGuid(chief);
@@ -219,17 +210,14 @@ namespace ServiceTest.Test
             Assert.IsTrue(deleted);
         }
 
-        private Guid GetTestGuid(string name)
+        private static Guid GetTestGuid(string name)
         {
-            switch (name)
+            return name switch
             {
-                case "invalid":
-                    return Guid.NewGuid();
-                case "":
-                    return Guid.Empty;
-                default:
-                    return WorkerTestData.WorkersDictionary[name].Id;
-            }
+                "invalid" => Guid.NewGuid(),
+                "" => Guid.Empty,
+                _ => WorkerTestData.WorkersDictionary[name].Id
+            };
         }
     }
 }

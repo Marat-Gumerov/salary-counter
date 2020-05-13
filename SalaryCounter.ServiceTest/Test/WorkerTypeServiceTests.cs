@@ -11,8 +11,8 @@ namespace ServiceTest.Test
 {
     public class WorkerTypeServiceTests
     {
-        private Mock<IWorkerTypeDao> workerTypeDaoMock;
-        private WorkerTypeService workerTypeService;
+        private Mock<IWorkerTypeDao> workerTypeDaoMock = null!;
+        private WorkerTypeService workerTypeService = null!;
 
         [SetUp]
         public void SetUp()

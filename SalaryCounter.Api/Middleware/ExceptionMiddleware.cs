@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
@@ -28,12 +29,22 @@ namespace SalaryCounter.Api.Middleware
             }
             catch (SalaryCounterWebException exception)
             {
-                await ProcessException(httpContext, exception.Message, exception.StatusCode, exception.ErrorType);
+                if (exception.ShouldBeLogged)
+                    logger.LogError(exception, "Web exception that should never occur");
+                await ProcessException(httpContext, exception.Message, exception.StatusCode,
+                    exception.ErrorType);
             }
             catch (SalaryCounterException exception)
             {
-                logger.LogError(exception, "SalaryCounterException occured");
-                await ProcessException(httpContext, exception.Message, HttpStatusCode.BadRequest, "unexpected");
+                logger.LogError(exception, "SalaryCounterException exception occured");
+                await ProcessException(httpContext, exception.Message, HttpStatusCode.BadRequest,
+                    "unexpected");
+            }
+            catch (Exception exception)
+            {
+                logger.LogError(exception, "Unexpected exception occured");
+                await ProcessException(httpContext, exception.Message,
+                    HttpStatusCode.InternalServerError, "unexpected");
             }
         }
 

@@ -7,7 +7,7 @@
 
     <RootNamespace>ServiceTest</RootNamespace>
 
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

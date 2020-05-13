@@ -16,63 +16,28 @@ namespace ServiceTest.Data
             {
                 {
                     "first",
-                    new Worker
-                    {
-                        Chief = null,
-                        EmploymentDate = new DateTime(2018, 11, 1),
-                        Id = First,
-                        Name = "first",
-                        SalaryBase = 2000m,
-                        WorkerType = WorkerTypeTestData.Manager
-                    }
+                    new Worker("first", new DateTime(2018, 11, 1), 2000m,
+                        WorkerTypeTestData.Manager, First)
                 },
                 {
                     "second",
-                    new Worker
-                    {
-                        Chief = First,
-                        EmploymentDate = new DateTime(2020, 5, 5),
-                        Id = Second,
-                        Name = "second",
-                        SalaryBase = 1500m,
-                        WorkerType = WorkerTypeTestData.Sales
-                    }
+                    new Worker("second", new DateTime(2020, 5, 5), 1500m, WorkerTypeTestData.Sales,
+                        Second, First)
                 },
                 {
                     "third",
-                    new Worker
-                    {
-                        Chief = Second,
-                        EmploymentDate = new DateTime(2019, 7, 1),
-                        Id = Third,
-                        Name = "third",
-                        SalaryBase = 1000m,
-                        WorkerType = WorkerTypeTestData.Employee
-                    }
+                    new Worker("third", new DateTime(2019, 7, 1), 1000m,
+                        WorkerTypeTestData.Employee, Third, Second)
                 },
                 {
                     "fourth",
-                    new Worker
-                    {
-                        Chief = First,
-                        EmploymentDate = new DateTime(1900, 11, 11),
-                        Id = Guid.NewGuid(),
-                        Name = "fourth",
-                        SalaryBase = 2000m,
-                        WorkerType = WorkerTypeTestData.Manager
-                    }
+                    new Worker("fourth", new DateTime(1900, 11, 11), 2000m,
+                        WorkerTypeTestData.Manager, Guid.NewGuid(), First)
                 },
                 {
                     "fifth",
-                    new Worker
-                    {
-                        Chief = null,
-                        EmploymentDate = new DateTime(2023, 11, 11),
-                        Id = Guid.NewGuid(),
-                        Name = "fifth",
-                        SalaryBase = 1000m,
-                        WorkerType = WorkerTypeTestData.Employee
-                    }
+                    new Worker("fifth", new DateTime(2023, 11, 11), 1000m,
+                        WorkerTypeTestData.Employee, Guid.NewGuid())
                 }
             };
 

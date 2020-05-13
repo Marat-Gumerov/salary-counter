@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
+using SalaryCounter.Service.Exception;
 using SalaryCounter.Service.Model;
 using SalaryCounter.Service.Service.Salary;
 using SalaryCounter.Service.Service.Worker;
@@ -11,9 +12,9 @@ namespace ServiceTest.Test
 {
     public class SalaryServiceTests
     {
-        private SalaryService salaryService;
+        private SalaryService salaryService = null!;
 
-        private Mock<IWorkerService> workerMock;
+        private Mock<IWorkerService> workerMock = null!;
 
         [SetUp]
         public void SetUp()
@@ -27,20 +28,8 @@ namespace ServiceTest.Test
         {
             SetupWorkerServiceGetById("first");
 
-            Assert.Throws<ArgumentException>(
-                () => salaryService?.GetSalary(Guid.Empty, DateTime.Now));
-        }
-
-        [Test]
-        public void GetSalaryForNullWorker()
-        {
-            workerMock?
-                .Setup(
-                    service => service.Get(
-                        It.IsAny<DateTime>()))
-                .Returns(() => new List<Worker> {WorkerTestData.WorkersDictionary["first"], null});
-            Assert.Throws<ArgumentException>(
-                () => salaryService?.GetSalary(new DateTime(2025, 1, 1)));
+            Assert.Throws<SalaryCounterNotFoundException>(
+                () => salaryService.GetSalary(Guid.Empty, DateTime.Now));
         }
 
         [TestCase("2024-04-04", 5181.7018, 0.0001, "first, second, third")]
@@ -61,7 +50,7 @@ namespace ServiceTest.Test
         {
             SetupWorkerServiceGet("first, third, fourth");
 
-            Assert.Throws<InvalidOperationException>(
+            Assert.Throws<SalaryCounterGeneralException>(
                 () => salaryService.GetSalary(new DateTime(2019, 8, 1)));
         }
 
@@ -85,7 +74,7 @@ namespace ServiceTest.Test
         public void GetSalaryWithWrongEmploymentDate()
         {
             SetupWorkerServiceGet("fifth");
-            Assert.Throws<ArgumentOutOfRangeException>(
+            Assert.Throws<SalaryCounterInvalidInputException>(
                 () => salaryService.GetSalary(new DateTime(2023, 10, 10)));
         }
 

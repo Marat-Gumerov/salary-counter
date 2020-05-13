@@ -25,31 +25,16 @@ namespace SalaryCounter.Dao.Dao
             workerTypes = new Dictionary<Guid, WorkerType>();
             var id = Guid.NewGuid();
             workerTypes.Add(id,
-                new WorkerType
-                {
-                    Value = WorkerTypeName.Employee,
-                    CanHaveSubordinates = false,
-                    Id = id,
-                    SalaryRatio = CreateSalaryRatioFor(WorkerTypeName.Employee, configuration)
-                });
+                new WorkerType(id, WorkerTypeName.Employee, false,
+                    CreateSalaryRatioFor(WorkerTypeName.Employee, configuration)));
             id = Guid.NewGuid();
             workerTypes.Add(id,
-                new WorkerType
-                {
-                    Value = WorkerTypeName.Manager,
-                    CanHaveSubordinates = true,
-                    Id = id,
-                    SalaryRatio = CreateSalaryRatioFor(WorkerTypeName.Manager, configuration)
-                });
+                new WorkerType(id, WorkerTypeName.Manager, true,
+                    CreateSalaryRatioFor(WorkerTypeName.Manager, configuration)));
             id = Guid.NewGuid();
             workerTypes.Add(id,
-                new WorkerType
-                {
-                    Value = WorkerTypeName.Sales,
-                    CanHaveSubordinates = true,
-                    Id = id,
-                    SalaryRatio = CreateSalaryRatioFor(WorkerTypeName.Sales, configuration)
-                });
+                new WorkerType(id, WorkerTypeName.Sales, true,
+                    CreateSalaryRatioFor(WorkerTypeName.Sales, configuration)));
             workerTypesLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         }
 

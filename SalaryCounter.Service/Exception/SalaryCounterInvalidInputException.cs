@@ -4,8 +4,8 @@ namespace SalaryCounter.Service.Exception
 {
     public class SalaryCounterInvalidInputException : SalaryCounterWebException
     {
-        public SalaryCounterInvalidInputException(string message) : base(message, "Invalid input",
-            HttpStatusCode.BadRequest)
+        public SalaryCounterInvalidInputException(string message, bool shouldBeLogged = false) : base(message, "Invalid input",
+            HttpStatusCode.BadRequest, shouldBeLogged)
         {
         }
     }

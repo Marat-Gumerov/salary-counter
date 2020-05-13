@@ -3,12 +3,19 @@ using SalaryCounter.Service.Enumeration;
 
 namespace SalaryCounter.Service.Model
 {
-    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-    public class WorkerType
+    public sealed class WorkerType
     {
-        public virtual Guid Id { get; set; }
-        public virtual WorkerTypeName Value { get; set; }
-        public virtual bool CanHaveSubordinates { get; set; }
-        public virtual SalaryRatio SalaryRatio { get; set; }
+        public WorkerType(Guid id, WorkerTypeName value, bool canHaveSubordinates, SalaryRatio salaryRatio)
+        {
+            Id = id;
+            Value = value;
+            CanHaveSubordinates = canHaveSubordinates;
+            SalaryRatio = salaryRatio;
+        }
+
+        public Guid Id { get; set; }
+        public WorkerTypeName Value { get; set; }
+        public bool CanHaveSubordinates { get; set; }
+        public SalaryRatio SalaryRatio { get; set; }
     }
 }

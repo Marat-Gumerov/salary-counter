@@ -51,7 +51,7 @@ namespace SalaryCounter.Service.Service.Worker
                 throw new SalaryCounterInvalidInputException("Worker hired before company foundation date");
             if (worker.SalaryBase < 0)
                 throw new SalaryCounterInvalidInputException("Worker's salary base is less than zero");
-            if (worker.WorkerType == null || !WorkerTypeService.IsValid(worker.WorkerType))
+            if (!WorkerTypeService.IsValid(worker.WorkerType))
                 throw new SalaryCounterInvalidInputException("Worker position is wrong");
             if (!worker.Id.Equals(Guid.Empty)) WorkerDao.Get(worker.Id);
             if (!worker.WorkerType.CanHaveSubordinates && WorkerDao.HasSubordinates(worker))

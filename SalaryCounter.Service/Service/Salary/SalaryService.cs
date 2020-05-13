@@ -18,7 +18,8 @@ namespace SalaryCounter.Service.Service.Salary
 
         public decimal GetSalary(Guid workerId, DateTime date)
         {
-            if (workerId.Equals(Guid.Empty)) throw new SalaryCounterNotFoundException("Worker id is empty");
+            if (workerId.Equals(Guid.Empty))
+                throw new SalaryCounterNotFoundException("Worker id is empty");
 
             var worker = WorkerService.Get(workerId);
             var subordinates = WorkerService.GetSubordinates(worker, date);
@@ -54,9 +55,9 @@ namespace SalaryCounter.Service.Service.Salary
             {
                 if (roots.ContainsKey(treeItem.Worker.Id)) continue;
                 if (treeItem.Worker.Chief == null)
-                    throw new SalaryCounterGeneralException("Logical error");
+                    throw new SalaryCounterGeneralException("Logical error", true);
                 if (!workerTreeItemsDictionary.ContainsKey(treeItem.Worker.Chief.Value))
-                    throw new SalaryCounterInvalidInputException(
+                    throw new SalaryCounterGeneralException(
                         $"Can't determine chief for {treeItem.Worker.Name}");
                 workerTreeItemsDictionary[treeItem.Worker.Chief.Value]
                     .Subordinates
@@ -115,8 +116,6 @@ namespace SalaryCounter.Service.Service.Salary
 
             public decimal GetSalary(DateTime date)
             {
-                if (Worker?.WorkerType?.SalaryRatio == null)
-                    throw new SalaryCounterGeneralException("Can't determine salary ratio");
                 return Worker.SalaryBase +
                        GetExperienceBonus(date) +
                        SubordinateSalarySum * Worker.WorkerType.SalaryRatio.SubordinateBonus;
@@ -127,8 +126,6 @@ namespace SalaryCounter.Service.Service.Salary
                 var experience = Worker.EmploymentDate.GetYearsTo(date);
                 if (experience < 0)
                     throw new SalaryCounterInvalidInputException($"Wrong employment date {date}");
-                if (Worker?.WorkerType?.SalaryRatio == null)
-                    throw new SalaryCounterGeneralException("Can't determine salary ratio");
                 var experienceBonus = Worker.WorkerType.SalaryRatio.ExperienceBonus * experience;
 
                 var experienceBonusPercent =

@@ -1,10 +1,9 @@
 ﻿namespace SalaryCounter.Service.Model
 {
-    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-    public class SalaryRatio
+    public sealed class SalaryRatio
     {
-        public virtual decimal ExperienceBonus { get; set; }
-        public virtual decimal ExperienceBonusMaximum { get; set; }
-        public virtual decimal SubordinateBonus { get; set; }
+        public decimal ExperienceBonus { get; set; }
+        public decimal ExperienceBonusMaximum { get; set; }
+        public decimal SubordinateBonus { get; set; }
     }
 }
