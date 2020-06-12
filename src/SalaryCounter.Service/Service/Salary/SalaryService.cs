@@ -4,7 +4,6 @@ using System.Linq;
 using SalaryCounter.Model.Extension;
 using SalaryCounter.Service.Exception;
 using SalaryCounter.Service.Service.Employee;
-using SalaryCounter.Service.Extension;
 using Dto = SalaryCounter.Model.Dto;
 
 namespace SalaryCounter.Service.Service.Salary

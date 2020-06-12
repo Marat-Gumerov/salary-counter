@@ -7,10 +7,8 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using SalaryCounter.Api.Middleware;
+using SalaryCounter.Api.Swagger;
 using SalaryCounter.Api.Util;
 using SalaryCounter.Dao.Extension;
 using SalaryCounter.Model.Extension;
@@ -49,6 +47,7 @@ namespace SalaryCounter.Api
             });
             services.AddOpenApiDocument(document =>
             {
+                document.SchemaProcessors.Add(new FilterModelProcessor());
                 document.DocumentName = "v1.0";
                 document.ApiGroupNames = new[] {"1.0"};
             });
