@@ -7,10 +7,7 @@ namespace SalaryCounter.Api.Util
     {
         private readonly IServiceCollection services;
 
-        public DependencyInjectionContainer(IServiceCollection services)
-        {
-            this.services = services;
-        }
+        public DependencyInjectionContainer(IServiceCollection services) => this.services = services;
 
         public void AddSingleton<TService, TImplementation>() where TService : class
             where TImplementation : class, TService

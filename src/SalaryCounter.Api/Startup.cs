@@ -10,17 +10,15 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using SalaryCounter.Api.Middleware;
 using SalaryCounter.Api.Util;
-using SalaryCounter.Service.Service;
+using SalaryCounter.Dao.Extension;
+using SalaryCounter.Service.Extension;
 using SalaryCounter.Service.Util;
 
 namespace SalaryCounter.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         private IConfiguration Configuration { get; }
@@ -33,15 +31,17 @@ namespace SalaryCounter.Api
                 {
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    options.SerializerSettings.ContractResolver =
+                        new CamelCasePropertyNamesContractResolver();
                 });
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            services.AddOpenApiDocument();
             var container = new DependencyInjectionContainer(services);
-            DependencyInjection.Initialize(container);
-            Dao.Dao.DependencyInjection.Initialize(container);
+            container.ConfigureService();
+            container.ConfigureDao();
             container.AddSingleton<IAppConfiguration, AppConfiguration>();
         }
 
@@ -59,6 +59,8 @@ namespace SalaryCounter.Api
 
             app.UseRouting();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.UseOpenApi();
+            app.UseSwaggerUi3(config => config.DocumentTitle = "Salary counter");
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";

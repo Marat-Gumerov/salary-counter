@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "projects": {
-    "asposeFront": {
+    "salaryCounterFront": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -33,11 +33,11 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "asposeFront:build"
+            "browserTarget": "salaryCounterFront:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "asposeFront:build:production"
+              "browserTarget": "salaryCounterFront:build:production"
             }
           }
         },
@@ -70,6 +70,6 @@
       }
     }
   },
-  "defaultProject": "asposeFront"
+  "defaultProject": "salaryCounterFront"
 }
   
