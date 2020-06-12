@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace SalaryCounter.Api
 {
-    public static class Program
+    internal static class Program
     {
         public static void Main(string[] args)
         {

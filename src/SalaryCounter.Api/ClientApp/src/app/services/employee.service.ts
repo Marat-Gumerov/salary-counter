@@ -9,7 +9,7 @@ export class EmployeeService {
     private backend: string;
 
     constructor(private http: HttpClient) {
-        this.backend = 'api/employee';
+        this.backend = 'api/v1.0/employee';
     }
 
     get(date: Date): Observable<Employee[]> {

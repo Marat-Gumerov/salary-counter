@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +18,7 @@ using SalaryCounter.Service.Util;
 
 namespace SalaryCounter.Api
 {
-    public class Startup
+    internal class Startup
     {
         public Startup(IConfiguration configuration) => Configuration = configuration;
 
@@ -26,7 +28,7 @@ namespace SalaryCounter.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddMvc()
+            services.AddMvcCore()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
@@ -34,11 +36,27 @@ namespace SalaryCounter.Api
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver();
                 });
+            services.AddApiVersioning(config =>
+            {
+                config.DefaultApiVersion = new ApiVersion(1, 0);
+                config.AssumeDefaultVersionWhenUnspecified = true;
+                config.ApiVersionReader = new UrlSegmentApiVersionReader();
+            });
+            services.AddVersionedApiExplorer(options =>
+            {
+                // ReSharper disable once StringLiteralTypo
+                options.GroupNameFormat = "VVVV";
+                options.SubstituteApiVersionInUrl = true;
+            });
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-            services.AddOpenApiDocument();
+            services.AddOpenApiDocument(document =>
+            {
+                document.DocumentName = "v1.0";
+                document.ApiGroupNames = new[] {"1.0"};
+            });
             var container = new DependencyInjectionContainer(services);
             container.ConfigureService();
             container.ConfigureDao();

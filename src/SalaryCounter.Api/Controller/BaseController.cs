@@ -2,7 +2,10 @@
 
 namespace SalaryCounter.Api.Controller
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    ///     Base controller
+    /// </summary>
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {

@@ -7,7 +7,7 @@ export class SalaryService {
     private readonly backend: string;
 
     constructor(private http: HttpClient) {
-        this.backend = 'api/salary';
+        this.backend = 'api/v1.0/salary';
     }
 
     get(date: Date): Observable<number> {

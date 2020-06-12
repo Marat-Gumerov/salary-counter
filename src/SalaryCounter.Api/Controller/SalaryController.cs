@@ -4,12 +4,23 @@ using SalaryCounter.Service.Service.Salary;
 
 namespace SalaryCounter.Api.Controller
 {
+    /// <summary>
+    ///     Salary counter operations
+    /// </summary>
+    [ApiVersion("1.0")]
     public class SalaryController : BaseController
     {
         private readonly ISalaryService salaryService;
 
+        ///<inheritdoc cref="SalaryController"/>
         public SalaryController(ISalaryService salaryService) => this.salaryService = salaryService;
 
+        /// <summary>
+        ///     Get salary for employee or sum for all employees
+        /// </summary>
+        /// <param name="date">Date to count experience bonus</param>
+        /// <param name="employeeId">Employee identifier</param>
+        /// <returns>Salary amount</returns>
         [HttpGet]
         public decimal Get(
             [FromQuery] DateTime date,

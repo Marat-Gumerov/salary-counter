@@ -11,14 +11,11 @@ using SalaryCounter.Service.Exception;
 namespace SalaryCounter.Api.Middleware
 {
     [UsedImplicitly]
-    public class ExceptionMiddleware
+    internal class ExceptionMiddleware
     {
         private readonly RequestDelegate next;
 
-        public ExceptionMiddleware(RequestDelegate next)
-        {
-            this.next = next;
-        }
+        public ExceptionMiddleware(RequestDelegate next) => this.next = next;
 
         [UsedImplicitly]
         public async Task Invoke(HttpContext httpContext, ILogger<ExceptionMiddleware> logger)
@@ -27,35 +24,43 @@ namespace SalaryCounter.Api.Middleware
             {
                 await next(httpContext);
             }
-            catch (SalaryCounterWebException exception)
-            {
-                if (exception.ShouldBeLogged)
-                    logger.LogError(exception, "Web exception that should never occur");
-                await ProcessException(httpContext, exception.Message, exception.StatusCode,
-                    exception.ErrorType);
-            }
-            catch (SalaryCounterException exception)
-            {
-                logger.LogError(exception, "SalaryCounterException exception occured");
-                await ProcessException(httpContext, exception.Message, HttpStatusCode.BadRequest,
-                    "unexpected");
-            }
             catch (Exception exception)
             {
-                logger.LogError(exception, "Unexpected exception occured");
-                await ProcessException(httpContext, exception.Message,
-                    HttpStatusCode.InternalServerError, "unexpected");
+                var error = exception switch
+                {
+                    SalaryCounterWebException webException => ProcessException(logger, webException,
+                        webException.ErrorType, webException.ShouldBeLogged,
+                        "Web exception that should never occur"),
+                    SalaryCounterException salaryCounterException => ProcessException(logger,
+                        salaryCounterException, "unexpected", true,
+                        "SalaryCounterException exception occured"),
+                    _ => ProcessException(logger, exception, "unexpected", true,
+                        "Unexpected exception occured")
+                };
+                httpContext.Response.StatusCode = (int) GetStatusCodeForException(exception);
+                httpContext.Response.ContentType = "application/json";
+                await error.ToStream().CopyToAsync(httpContext.Response.Body);
             }
         }
 
-        private static async Task ProcessException(HttpContext httpContext,
-            string message, HttpStatusCode statusCode, string errorType)
+        private static HttpStatusCode GetStatusCodeForException(Exception exception)
         {
-            httpContext.Response.StatusCode = (int) statusCode;
-            httpContext.Response.ContentType = "application/json";
-            var body = httpContext.Response.Body;
-            var error = new ErrorDto(message, errorType).ToStream();
-            await error.CopyToAsync(body);
+            return exception switch
+            {
+                SalaryCounterWebException webException => webException.StatusCode,
+                SalaryCounterException _ => HttpStatusCode.BadRequest,
+                _ => HttpStatusCode.InternalServerError
+            };
+        }
+
+        private static ErrorDto ProcessException(ILogger logger, Exception exception,
+            string errorType, bool shouldBeLogged,
+            string logMessage)
+        {
+            if (shouldBeLogged)
+                logger.LogError(exception, logMessage);
+            var error = new ErrorDto(exception.Message, errorType);
+            return error;
         }
     }
 }

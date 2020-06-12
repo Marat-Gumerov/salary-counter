@@ -3,7 +3,7 @@ using SalaryCounter.Service.Util;
 
 namespace SalaryCounter.Api.Util
 {
-    public class DependencyInjectionContainer : IDependencyInjectionContainer
+    internal class DependencyInjectionContainer : IDependencyInjectionContainer
     {
         private readonly IServiceCollection services;
 

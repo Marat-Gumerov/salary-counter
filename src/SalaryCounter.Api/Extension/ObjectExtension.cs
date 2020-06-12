@@ -7,7 +7,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace SalaryCounter.Api.Extension
 {
-    public static class ObjectExtension
+    internal static class ObjectExtension
     {
         public static Stream ToStream(this object value)
         {

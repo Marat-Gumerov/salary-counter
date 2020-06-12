@@ -8,7 +8,7 @@ export class EmployeeTypeService {
     private readonly backend: string;
 
     constructor(private http: HttpClient) {
-        this.backend = 'api/employeeType';
+        this.backend = 'api/v1.0/employeeType';
     }
 
     get(): Observable<EmployeeType[]> {
