@@ -1,6 +1,6 @@
 ﻿using SalaryCounter.Service.Service.Salary;
-using SalaryCounter.Service.Service.Worker;
-using SalaryCounter.Service.Service.WorkerType;
+using SalaryCounter.Service.Service.Employee;
+using SalaryCounter.Service.Service.EmployeeType;
 using SalaryCounter.Service.Util;
 
 namespace SalaryCounter.Service.Service
@@ -9,8 +9,8 @@ namespace SalaryCounter.Service.Service
     {
         public static void Initialize(IDependencyInjectionContainer container)
         {
-            container.AddTransient<IWorkerTypeService, WorkerTypeService>();
-            container.AddTransient<IWorkerService, WorkerService>();
+            container.AddTransient<IEmployeeTypeService, EmployeeTypeService>();
+            container.AddTransient<IEmployeeService, EmployeeService>();
             container.AddTransient<ISalaryService, SalaryService>();
         }
     }

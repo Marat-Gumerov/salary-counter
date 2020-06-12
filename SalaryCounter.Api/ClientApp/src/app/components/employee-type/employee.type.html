@@ -1,0 +1,15 @@
+<div>
+    <div class="caption">
+        <h4>{{ employeeType.value }}</h4>
+        <p>Salary modifications:</p>
+        <ul>
+            <li>Bonus for experience {{employeeType.salaryRatio.experienceBonus * 100}}%</li>
+            <li>Maximum of bonus for
+                experience {{employeeType.salaryRatio.experienceBonusMaximum * 100}}%
+            </li>
+            <li *ngIf="employeeType.canHaveSubordinates">Bonus for
+                subordinates {{employeeType.salaryRatio.subordinateBonus * 100}}%
+            </li>
+        </ul>
+    </div>
+</div>

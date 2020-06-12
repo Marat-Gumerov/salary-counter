@@ -10,22 +10,22 @@ import {ApplicationComponent} from './components/application/application';
 import NavbarComponent from './components/navbar/navbar';
 import HomeComponent from './components/home/home';
 import SalaryComponent from './components/salary/salary';
-import WorkerTypeListComponent from './components/worker-type-list/worker.type.list';
-import WorkerTypeComponent from './components/worker-type/worker.type';
+import EmployeeTypeListComponent from './components/employee-type-list/employee.type.list';
+import EmployeeTypeComponent from './components/employee-type/employee.type';
 
 import {SalaryService} from './services/salary.service';
-import {WorkerTypeService} from './services/worker.type.service';
-import {WorkerListComponent} from './components/worker-list/worker.list';
-import {WorkerComponent} from './components/worker/worker';
-import {WorkerService} from './services/worker.service';
+import {EmployeeTypeService} from './services/employee-type.service';
+import {EmployeeListComponent} from './components/employee-list/employee.list';
+import {EmployeeComponent} from './components/employee/employee';
+import {EmployeeService} from './services/employee.service';
 import {MatDialogModule} from '@angular/material/dialog';
-import {EditWorkerDialogComponent} from './components/edit-worker-dialog/edit.worker.dialog';
+import {EditEmployeeDialogComponent} from './components/edit-employee-dialog/edit.employee.dialog';
 import {ReactiveFormsModule} from "@angular/forms";
 
 const routes: Routes = [
     {path: '', component: HomeComponent},
-    {path: 'workerTypes', component: WorkerTypeListComponent},
-    {path: 'workers', component: WorkerListComponent}
+    {path: 'employeeTypes', component: EmployeeTypeListComponent},
+    {path: 'employees', component: EmployeeListComponent}
 ]
 
 @NgModule({
@@ -42,19 +42,19 @@ const routes: Routes = [
         NavbarComponent,
         HomeComponent,
         SalaryComponent,
-        WorkerTypeListComponent,
-        WorkerTypeComponent,
-        WorkerListComponent,
-        WorkerComponent,
-        EditWorkerDialogComponent
+        EmployeeTypeListComponent,
+        EmployeeTypeComponent,
+        EmployeeListComponent,
+        EmployeeComponent,
+        EditEmployeeDialogComponent
     ],
     entryComponents: [
-        EditWorkerDialogComponent
+        EditEmployeeDialogComponent
     ],
     providers: [
         SalaryService,
-        WorkerTypeService,
-        WorkerService,
+        EmployeeTypeService,
+        EmployeeService,
         {
             provide: LocationStrategy,
             useClass: HashLocationStrategy

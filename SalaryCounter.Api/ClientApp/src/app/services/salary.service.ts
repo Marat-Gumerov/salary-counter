@@ -19,12 +19,12 @@ export class SalaryService {
             });
     }
 
-    getById(date: Date, workerId: string): Observable<number> {
+    getById(date: Date, employeeId: string): Observable<number> {
         return this.http
             .get<number>(this.backend, {
                 params: {
                     date: date.toISOString(),
-                    workerId: workerId
+                    employeeId: employeeId
                 }
             });
     }

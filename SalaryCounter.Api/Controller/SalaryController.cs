@@ -8,19 +8,14 @@ namespace SalaryCounter.Api.Controller
     {
         private readonly ISalaryService salaryService;
 
-        public SalaryController(ISalaryService salaryService)
-        {
-            this.salaryService = salaryService;
-        }
+        public SalaryController(ISalaryService salaryService) => this.salaryService = salaryService;
 
         [HttpGet]
         public decimal Get(
-            [FromQuery(Name = "date")] DateTime date,
-            [FromQuery(Name = "workerId")] Guid? workerId = null)
-        {
-            return workerId.HasValue
-                ? salaryService.GetSalary(workerId.Value, date)
+            [FromQuery] DateTime date,
+            [FromQuery] Guid? employeeId = null) =>
+            employeeId.HasValue
+                ? salaryService.GetSalary(employeeId.Value, date)
                 : salaryService.GetSalary(date);
-        }
     }
 }

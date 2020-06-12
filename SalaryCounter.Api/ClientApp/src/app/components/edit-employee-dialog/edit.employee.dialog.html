@@ -1,0 +1,47 @@
+<h1 mat-dialog-title>{{ state }} employee</h1>
+<div mat-dialog-content>
+    <p>Name</p>
+    <label>
+        <input #employeeNameInput [value]="employee.name" (input)="onNameInput(employeeNameInput.value)"
+               type="text">
+    </label>
+    <p>Employment date</p>
+    <mat-form-field>
+        <label>
+            <input
+                #employmentDateInput
+                matInput
+                [matDatepicker]="employmentDate"
+                placeholder="Choose a date"
+                (dateInput)="onEmploymentDateChange(employmentDateInput.value)"
+                (dateChange)="onEmploymentDateChange(employmentDateInput.value)"
+                [formControl]="employmentDateControl">
+        </label>
+        <mat-datepicker-toggle matSuffix [for]="employmentDate"></mat-datepicker-toggle>
+        <mat-datepicker #employmentDate></mat-datepicker>
+    </mat-form-field>
+    <p>Salary base</p>
+    <label>
+        <input #salaryBaseInput [value]="employee.salaryBase"
+               (input)="onSalaryBaseInput(salaryBaseInput.value)" type="number">
+    </label>
+    <p>Position</p>
+    <label>
+        <select #employeeTypeSelect (change)="onEmployeeTypeChange(employeeTypeSelect.value)"
+                [formControl]="employeeTypeControl">
+            <option *ngFor="let employeeType of employeeTypes" [value]="employeeType.id">
+                {{ employeeType.value }}
+            </option>
+        </select>
+    </label>
+    <p>Chief</p>
+    <label>
+        <select #chiefSelect (change)="onChiefChange(chiefSelect.value)" [formControl]="chiefControl">
+            <option *ngFor="let chief of chiefs" [value]="chief?.id || ''">
+                {{ chief?.name }}
+            </option>
+        </select>
+    </label>
+    <button (click)="onSaveClick()">Save</button>
+    <button (click)="onCancelClick()">Cancel</button>
+</div>

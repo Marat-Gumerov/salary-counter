@@ -5,7 +5,7 @@ using NUnit.Framework;
 using SalaryCounter.Service.Exception;
 using SalaryCounter.Service.Model;
 using SalaryCounter.Service.Service.Salary;
-using SalaryCounter.Service.Service.Worker;
+using SalaryCounter.Service.Service.Employee;
 using ServiceTest.Data;
 
 namespace ServiceTest.Test
@@ -14,19 +14,19 @@ namespace ServiceTest.Test
     {
         private SalaryService salaryService = null!;
 
-        private Mock<IWorkerService> workerMock = null!;
+        private Mock<IEmployeeService> employeeMock = null!;
 
         [SetUp]
         public void SetUp()
         {
-            workerMock = new Mock<IWorkerService>(MockBehavior.Strict);
-            salaryService = new SalaryService(workerMock.Object);
+            employeeMock = new Mock<IEmployeeService>(MockBehavior.Strict);
+            salaryService = new SalaryService(employeeMock.Object);
         }
 
         [Test]
-        public void GetSalaryForNonSavedWorker()
+        public void GetSalaryForNonSavedEmployee()
         {
-            SetupWorkerServiceGetById("first");
+            SetupEmployeeServiceGetById("first");
 
             Assert.Throws<SalaryCounterNotFoundException>(
                 () => salaryService.GetSalary(Guid.Empty, DateTime.Now));
@@ -37,9 +37,9 @@ namespace ServiceTest.Test
         [TestCase("2024-04-04", 8995.7018, 0.0001, "first, second, third, fourth, fifth")]
         [TestCase("1899-04-04", 0, 0.0001, "")]
         public void GetSalaryForAll(DateTime date, double expected, double delta,
-            string workerNames)
+            string employeeNames)
         {
-            SetupWorkerServiceGet(workerNames);
+            SetupEmployeeServiceGet(employeeNames);
 
             var salary = salaryService.GetSalary(date);
             Assert.AreEqual(expected, (double) salary, delta);
@@ -48,7 +48,7 @@ namespace ServiceTest.Test
         [Test]
         public void GetSalaryWithIndefiniteChief()
         {
-            SetupWorkerServiceGet("first, third, fourth");
+            SetupEmployeeServiceGet("first, third, fourth");
 
             Assert.Throws<SalaryCounterGeneralException>(
                 () => salaryService.GetSalary(new DateTime(2019, 8, 1)));
@@ -58,51 +58,51 @@ namespace ServiceTest.Test
         [TestCase("2024-04-04", 1548.36, 0.01, "second", "third")]
         [TestCase("2024-04-04", 1120.0, 0.1, "third", "")]
         [TestCase("2024-04-04", 1000.0, 0.1, "fifth", "")]
-        public void GetWorkerSalary(DateTime date, double expected, double delta, string workerName,
+        public void GetEmployeeSalary(DateTime date, double expected, double delta, string employeeName,
             string subordinates)
         {
-            SetupWorkerServiceGet("first, second, third, fourth, fifth");
-            SetupWorkerServiceGetSubordinates(subordinates);
-            SetupWorkerServiceGetById(workerName);
+            SetupEmployeeServiceGet("first, second, third, fourth, fifth");
+            SetupEmployeeServiceGetSubordinates(subordinates);
+            SetupEmployeeServiceGetById(employeeName);
 
             var salary =
-                salaryService.GetSalary(WorkerTestData.WorkersDictionary[workerName].Id, date);
+                salaryService.GetSalary(EmployeeTestData.EmployeesDictionary[employeeName].Id, date);
             Assert.AreEqual(expected, (double) salary, delta);
         }
 
         [Test]
         public void GetSalaryWithWrongEmploymentDate()
         {
-            SetupWorkerServiceGet("fifth");
+            SetupEmployeeServiceGet("fifth");
             Assert.Throws<SalaryCounterInvalidInputException>(
                 () => salaryService.GetSalary(new DateTime(2023, 10, 10)));
         }
 
-        private void SetupWorkerServiceGetSubordinates(string workerNames)
+        private void SetupEmployeeServiceGetSubordinates(string employeeNames)
         {
-            workerMock
+            employeeMock
                 .Setup(
                     service => service.GetSubordinates(
-                        It.IsAny<Worker>(), It.IsAny<DateTime>()))
-                .Returns(() => WorkerTestData.GetWorkersByNames(workerNames));
+                        It.IsAny<Employee>(), It.IsAny<DateTime>()))
+                .Returns(() => EmployeeTestData.GetEmployeesByNames(employeeNames));
         }
 
-        private void SetupWorkerServiceGet(string workerNames)
+        private void SetupEmployeeServiceGet(string employeeNames)
         {
-            workerMock
+            employeeMock
                 .Setup(
                     service => service.Get(
                         It.IsAny<DateTime>()))
-                .Returns(() => WorkerTestData.GetWorkersByNames(workerNames));
+                .Returns(() => EmployeeTestData.GetEmployeesByNames(employeeNames));
         }
 
-        private void SetupWorkerServiceGetById(string workerName)
+        private void SetupEmployeeServiceGetById(string employeeName)
         {
-            workerMock
+            employeeMock
                 .Setup(
                     service => service.Get(
                         It.IsAny<Guid>()))
-                .Returns(() => WorkerTestData.WorkersDictionary[workerName]);
+                .Returns(() => EmployeeTestData.EmployeesDictionary[employeeName]);
         }
     }
 }

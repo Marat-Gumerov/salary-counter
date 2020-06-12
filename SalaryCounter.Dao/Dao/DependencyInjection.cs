@@ -8,8 +8,8 @@ namespace SalaryCounter.Dao.Dao
         public static void Initialize(IDependencyInjectionContainer container)
         {
             //All data stored inside Dao instance, so use singletons
-            container.AddSingleton<IWorkerTypeDao, WorkerTypeDao>();
-            container.AddSingleton<IWorkerDao, WorkerDao>();
+            container.AddSingleton<IEmployeeTypeDao, EmployeeTypeDao>();
+            container.AddSingleton<IEmployeeDao, EmployeeDao>();
         }
     }
 }

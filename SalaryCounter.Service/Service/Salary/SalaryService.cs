@@ -2,64 +2,61 @@
 using System.Collections.Generic;
 using System.Linq;
 using SalaryCounter.Service.Exception;
-using SalaryCounter.Service.Service.Worker;
+using SalaryCounter.Service.Service.Employee;
 using SalaryCounter.Service.Extension;
 
 namespace SalaryCounter.Service.Service.Salary
 {
     internal class SalaryService : ISalaryService
     {
-        public SalaryService(IWorkerService workerService)
+        private IEmployeeService EmployeeService { get; }
+
+        public SalaryService(IEmployeeService employeeService) => EmployeeService = employeeService;
+
+        public decimal GetSalary(Guid employeeId, DateTime date)
         {
-            WorkerService = workerService;
-        }
+            if (employeeId.Equals(Guid.Empty))
+                throw new SalaryCounterNotFoundException("Employee id is empty");
 
-        private IWorkerService WorkerService { get; }
-
-        public decimal GetSalary(Guid workerId, DateTime date)
-        {
-            if (workerId.Equals(Guid.Empty))
-                throw new SalaryCounterNotFoundException("Worker id is empty");
-
-            var worker = WorkerService.Get(workerId);
-            var subordinates = WorkerService.GetSubordinates(worker, date);
-            var workerTreeItemsDictionary = AsTreeItems(subordinates);
-            var roots = workerTreeItemsDictionary
+            var employee = EmployeeService.Get(employeeId);
+            var subordinates = EmployeeService.GetSubordinates(employee, date);
+            var treeItemsDictionary = AsTreeItems(subordinates);
+            var roots = treeItemsDictionary
                 .Values
-                .Where(element => element.Worker.Chief == worker.Id)
-                .ToDictionary(root => root.Worker.Id);
-            var workerTreeItem = new WorkerTreeItem(worker)
+                .Where(element => element.Employee.Chief == employee.Id)
+                .ToDictionary(root => root.Employee.Id);
+            var treeItem = new EmployeeTreeItem(employee)
             {
-                SubordinateSalarySum = GetSalary(workerTreeItemsDictionary, roots, date)
+                SubordinateSalarySum = GetSalary(treeItemsDictionary, roots, date)
             };
-            return workerTreeItem.GetSalary(date);
+            return treeItem.GetSalary(date);
         }
 
         public decimal GetSalary(DateTime date)
         {
-            var workers = WorkerService.Get(date);
-            var workerTreeItemsDictionary = AsTreeItems(workers);
-            var roots = workerTreeItemsDictionary
+            var employees = EmployeeService.Get(date);
+            var treeItemsDictionary = AsTreeItems(employees);
+            var roots = treeItemsDictionary
                 .Values
-                .Where(treeItem => treeItem.Worker.Chief == null)
-                .ToDictionary(root => root.Worker.Id);
-            return GetSalary(workerTreeItemsDictionary, roots, date);
+                .Where(treeItem => treeItem.Employee.Chief == null)
+                .ToDictionary(root => root.Employee.Id);
+            return GetSalary(treeItemsDictionary, roots, date);
         }
 
         private static decimal GetSalary(
-            IDictionary<Guid, WorkerTreeItem> workerTreeItemsDictionary,
-            IDictionary<Guid, WorkerTreeItem> roots,
+            IDictionary<Guid, EmployeeTreeItem> treeItemsDictionary,
+            IDictionary<Guid, EmployeeTreeItem> roots,
             DateTime date)
         {
-            foreach (var treeItem in workerTreeItemsDictionary.Values)
+            foreach (var treeItem in treeItemsDictionary.Values)
             {
-                if (roots.ContainsKey(treeItem.Worker.Id)) continue;
-                if (treeItem.Worker.Chief == null)
+                if (roots.ContainsKey(treeItem.Employee.Id)) continue;
+                if (treeItem.Employee.Chief == null)
                     throw new SalaryCounterGeneralException("Logical error", true);
-                if (!workerTreeItemsDictionary.ContainsKey(treeItem.Worker.Chief.Value))
+                if (!treeItemsDictionary.ContainsKey(treeItem.Employee.Chief.Value))
                     throw new SalaryCounterGeneralException(
-                        $"Can't determine chief for {treeItem.Worker.Name}");
-                workerTreeItemsDictionary[treeItem.Worker.Chief.Value]
+                        $"Can't determine chief for {treeItem.Employee.Name}");
+                treeItemsDictionary[treeItem.Employee.Chief.Value]
                     .Subordinates
                     .Push(treeItem);
             }
@@ -67,7 +64,7 @@ namespace SalaryCounter.Service.Service.Salary
             decimal salary = 0;
             foreach (var root in roots.Values)
             {
-                var snake = new Stack<WorkerTreeItem>();
+                var snake = new Stack<EmployeeTreeItem>();
                 snake.Push(root);
                 while (snake.Any())
                 {
@@ -79,7 +76,7 @@ namespace SalaryCounter.Service.Service.Salary
                     }
 
                     snake.Pop();
-                    if (roots.ContainsKey(current.Worker.Id)) continue;
+                    if (roots.ContainsKey(current.Employee.Id)) continue;
                     var currentSalary = current.GetSalary(date);
                     snake.Peek().SubordinateSalarySum +=
                         currentSalary + current.SubordinateSalarySum;
@@ -92,46 +89,46 @@ namespace SalaryCounter.Service.Service.Salary
             return salary;
         }
 
-        private static Dictionary<Guid, WorkerTreeItem> AsTreeItems(
-            IEnumerable<Model.Worker> workers)
+        private static Dictionary<Guid, EmployeeTreeItem> AsTreeItems(
+            IEnumerable<Model.Employee> employees)
         {
-            return workers
-                .Select(worker => new WorkerTreeItem(worker))
-                .ToDictionary(treeItem => treeItem.Worker.Id);
+            return employees
+                .Select(employee => new EmployeeTreeItem(employee))
+                .ToDictionary(treeItem => treeItem.Employee.Id);
         }
 
-        private class WorkerTreeItem
+        private class EmployeeTreeItem
         {
-            public WorkerTreeItem(Model.Worker worker)
+            public EmployeeTreeItem(Model.Employee employee)
             {
-                Worker = worker ?? throw new SalaryCounterGeneralException("Wrong worker");
-                Subordinates = new Stack<WorkerTreeItem>();
+                Employee = employee ?? throw new SalaryCounterGeneralException("Wrong employee");
+                Subordinates = new Stack<EmployeeTreeItem>();
             }
 
-            public Model.Worker Worker { get; }
+            public Model.Employee Employee { get; }
 
-            public Stack<WorkerTreeItem> Subordinates { get; }
+            public Stack<EmployeeTreeItem> Subordinates { get; }
 
             public decimal SubordinateSalarySum { get; set; }
 
             public decimal GetSalary(DateTime date)
             {
-                return Worker.SalaryBase +
+                return Employee.SalaryBase +
                        GetExperienceBonus(date) +
-                       SubordinateSalarySum * Worker.WorkerType.SalaryRatio.SubordinateBonus;
+                       SubordinateSalarySum * Employee.EmployeeType.SalaryRatio.SubordinateBonus;
             }
 
             private decimal GetExperienceBonus(DateTime date)
             {
-                var experience = Worker.EmploymentDate.GetYearsTo(date);
+                var experience = Employee.EmploymentDate.GetYearsTo(date);
                 if (experience < 0)
                     throw new SalaryCounterInvalidInputException($"Wrong employment date {date}");
-                var experienceBonus = Worker.WorkerType.SalaryRatio.ExperienceBonus * experience;
+                var experienceBonus = Employee.EmployeeType.SalaryRatio.ExperienceBonus * experience;
 
                 var experienceBonusPercent =
-                    Math.Min(Worker.WorkerType.SalaryRatio.ExperienceBonusMaximum, experienceBonus);
+                    Math.Min(Employee.EmployeeType.SalaryRatio.ExperienceBonusMaximum, experienceBonus);
 
-                return Worker.SalaryBase * experienceBonusPercent;
+                return Employee.SalaryBase * experienceBonusPercent;
             }
         }
     }
