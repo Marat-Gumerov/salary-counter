@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NJsonSchema.Generation;
+using SalaryCounter.Api.Util;
 using SalaryCounter.Service.Exception;
 
 namespace SalaryCounter.Api.Swagger
@@ -14,15 +15,7 @@ namespace SalaryCounter.Api.Swagger
             "SalaryCounter.Model.Enumeration",
         };
 
-        private readonly HashSet<Type> allowed = new HashSet<Type>
-        {
-            typeof(string),
-            typeof(int),
-            typeof(bool),
-            typeof(DateTime),
-            typeof(decimal),
-            typeof(Guid),
-        };
+        private readonly FirstTouch<Type> touched;
 
         private static readonly string[] Generics =
         {
@@ -30,15 +23,24 @@ namespace SalaryCounter.Api.Swagger
             "System.Collections.Generic.IList",
         };
 
+        public FilterModelProcessor()
+        {
+            touched = new FirstTouch<Type>();
+            touched.IsFirstTouch(typeof(string));
+            touched.IsFirstTouch(typeof(int));
+            touched.IsFirstTouch(typeof(bool));
+            touched.IsFirstTouch(typeof(DateTime));
+            touched.IsFirstTouch(typeof(decimal));
+            touched.IsFirstTouch(typeof(Guid));
+        }
+
         public void Process(SchemaProcessorContext context)
         {
-            if (allowed.Contains(context.Type)) return;
             foreach (var type in WithGenerics(context.Type))
             {
-                if (allowed.Contains(type)) continue;
+                if (!touched.IsFirstTouch(type)) continue;
                 if (Generics.Any(i => type.FullName?.StartsWith(i) == true))
                     continue;
-                allowed.Add(type);
                 if (Namespaces.All(n =>
                     type.Namespace?.StartsWith(n) != true))
                     throw new SalaryCounterGeneralException(

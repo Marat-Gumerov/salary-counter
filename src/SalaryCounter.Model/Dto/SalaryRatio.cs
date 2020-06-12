@@ -1,10 +1,13 @@
 ﻿using Newtonsoft.Json;
+using SalaryCounter.Model.Attribute;
+using SalaryCounter.Model.Util;
 
 namespace SalaryCounter.Model.Dto
 {
     /// <summary>
     ///     Salary bonus levels specification
     /// </summary>
+    [ModelExample(typeof(SalaryRatioExample))]
     public sealed class SalaryRatio
     {
         /// <summary>
@@ -19,5 +22,15 @@ namespace SalaryCounter.Model.Dto
         ///     Bonus coefficient for subordinates
         /// </summary>
         [JsonProperty]public decimal SubordinateBonus { get; set; }
+    }
+    
+    internal class SalaryRatioExample : Example<SalaryRatio>
+    {
+        protected override SalaryRatio Value => new SalaryRatio
+        {
+            ExperienceBonus = 0.05m,
+            ExperienceBonusMaximum = 0.4m,
+            SubordinateBonus = 0.005m
+        };
     }
 }

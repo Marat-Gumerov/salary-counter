@@ -48,6 +48,7 @@ namespace SalaryCounter.Api
             services.AddOpenApiDocument(document =>
             {
                 document.SchemaProcessors.Add(new FilterModelProcessor());
+                document.SchemaProcessors.Add(new ModelExampleProcessor());
                 document.DocumentName = "v1.0";
                 document.ApiGroupNames = new[] {"1.0"};
             });

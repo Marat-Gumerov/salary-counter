@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using SalaryCounter.Model.Dto;
+using SalaryCounter.Model.Exception;
 using SalaryCounter.Model.Extension;
 using SalaryCounter.Service.Exception;
 
@@ -34,6 +35,9 @@ namespace SalaryCounter.Api.Middleware
                     SalaryCounterException salaryCounterException => ProcessException(logger,
                         salaryCounterException, "unexpected", true,
                         "SalaryCounterException exception occured"),
+                    SalaryCounterModelException modelException => ProcessException(logger,
+                        modelException, "model error", modelException.ShouldBeLogged,
+                        "Model exception occured"),
                     _ => ProcessException(logger, exception, "unexpected", true,
                         "Unexpected exception occured")
                 };
@@ -49,6 +53,7 @@ namespace SalaryCounter.Api.Middleware
             {
                 SalaryCounterWebException webException => webException.StatusCode,
                 SalaryCounterException _ => HttpStatusCode.BadRequest,
+                SalaryCounterModelException _ => HttpStatusCode.BadRequest,
                 _ => HttpStatusCode.InternalServerError
             };
         }
