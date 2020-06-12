@@ -6,10 +6,10 @@ using SalaryCounter.Dao.Extension;
 using Force.DeepCloner;
 using JetBrains.Annotations;
 using SalaryCounter.Dao.Enumeration;
+using SalaryCounter.Model.Dto;
+using SalaryCounter.Model.Enumeration;
 using SalaryCounter.Service.Dao;
-using SalaryCounter.Service.Enumeration;
 using SalaryCounter.Service.Exception;
-using SalaryCounter.Service.Model;
 using SalaryCounter.Service.Util;
 
 namespace SalaryCounter.Dao.Dao

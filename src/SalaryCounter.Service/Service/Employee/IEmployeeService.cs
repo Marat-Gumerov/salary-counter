@@ -6,9 +6,9 @@ namespace SalaryCounter.Service.Service.Employee
     public interface IEmployeeService
     {
         void Delete(Guid id);
-        IList<Model.Employee> Get(DateTime date);
-        Model.Employee Get(Guid id);
-        IList<Model.Employee> GetSubordinates(Model.Employee employee, DateTime date);
-        Model.Employee Save(Model.Employee employee);
+        IList<Model.Dto.Employee> Get(DateTime date);
+        Model.Dto.Employee Get(Guid id);
+        IList<Model.Dto.Employee> GetSubordinates(Model.Dto.Employee employee, DateTime date);
+        Model.Dto.Employee Save(Model.Dto.Employee employee);
     }
 }

@@ -5,9 +5,9 @@ using Moq;
 using NUnit.Framework;
 using SalaryCounter.Service.Dao;
 using SalaryCounter.Service.Service.EmployeeType;
-using ServiceTest.Data;
+using SalaryCounter.ServiceTest.Data;
 
-namespace ServiceTest.Test
+namespace SalaryCounter.ServiceTest.Test
 {
     public class EmployeeTypeServiceTests
     {

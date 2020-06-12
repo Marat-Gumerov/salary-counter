@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SalaryCounter.Service.Model;
+using SalaryCounter.Model.Dto;
 
-namespace ServiceTest.Data
+namespace SalaryCounter.ServiceTest.Data
 {
     public static class EmployeeTestData
     {

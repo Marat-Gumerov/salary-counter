@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SalaryCounter.Service.Enumeration;
-using SalaryCounter.Service.Model;
+using SalaryCounter.Model.Dto;
+using SalaryCounter.Model.Enumeration;
 
-namespace ServiceTest.Data
+namespace SalaryCounter.ServiceTest.Data
 {
     public static class EmployeeTypeTestData
     {

@@ -1,13 +1,13 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
+using SalaryCounter.Model.Dto;
 using SalaryCounter.Service.Exception;
-using SalaryCounter.Service.Model;
-using SalaryCounter.Service.Service.Salary;
 using SalaryCounter.Service.Service.Employee;
-using ServiceTest.Data;
+using SalaryCounter.Service.Service.Salary;
+using SalaryCounter.ServiceTest.Data;
 
-namespace ServiceTest.Test
+namespace SalaryCounter.ServiceTest.Test
 {
     public class SalaryServiceTests
     {

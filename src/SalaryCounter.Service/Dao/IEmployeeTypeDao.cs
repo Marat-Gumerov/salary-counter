@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using SalaryCounter.Service.Model;
+using SalaryCounter.Model.Dto;
 
 namespace SalaryCounter.Service.Dao
 {

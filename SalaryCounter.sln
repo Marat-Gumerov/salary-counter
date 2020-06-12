@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalaryCounter.Api", "src\Sa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{C8D40C35-F1B5-4C63-9F7E-A972A5645C57}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalaryCounter.Model", "src\SalaryCounter.Model\SalaryCounter.Model.csproj", "{796CF350-2288-4B7E-AAB6-1A2B3D374C5F}"
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,5 +78,17 @@ Global
 		{950F5DDE-D88C-42ED-BA86-B1692339EB1C}.Release|x64.Build.0 = Release|Any CPU
 		{950F5DDE-D88C-42ED-BA86-B1692339EB1C}.Release|x86.ActiveCfg = Release|Any CPU
 		{950F5DDE-D88C-42ED-BA86-B1692339EB1C}.Release|x86.Build.0 = Release|Any CPU
+		{796CF350-2288-4B7E-AAB6-1A2B3D374C5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{796CF350-2288-4B7E-AAB6-1A2B3D374C5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{796CF350-2288-4B7E-AAB6-1A2B3D374C5F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{796CF350-2288-4B7E-AAB6-1A2B3D374C5F}.Debug|x64.Build.0 = Debug|Any CPU
+		{796CF350-2288-4B7E-AAB6-1A2B3D374C5F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{796CF350-2288-4B7E-AAB6-1A2B3D374C5F}.Debug|x86.Build.0 = Debug|Any CPU
+		{796CF350-2288-4B7E-AAB6-1A2B3D374C5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{796CF350-2288-4B7E-AAB6-1A2B3D374C5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{796CF350-2288-4B7E-AAB6-1A2B3D374C5F}.Release|x64.ActiveCfg = Release|Any CPU
+		{796CF350-2288-4B7E-AAB6-1A2B3D374C5F}.Release|x64.Build.0 = Release|Any CPU
+		{796CF350-2288-4B7E-AAB6-1A2B3D374C5F}.Release|x86.ActiveCfg = Release|Any CPU
+		{796CF350-2288-4B7E-AAB6-1A2B3D374C5F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

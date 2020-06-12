@@ -4,6 +4,7 @@ using System.Linq;
 using SalaryCounter.Service.Exception;
 using SalaryCounter.Service.Service.Employee;
 using SalaryCounter.Service.Extension;
+using Dto = SalaryCounter.Model.Dto;
 
 namespace SalaryCounter.Service.Service.Salary
 {
@@ -90,7 +91,7 @@ namespace SalaryCounter.Service.Service.Salary
         }
 
         private static Dictionary<Guid, EmployeeTreeItem> AsTreeItems(
-            IEnumerable<Model.Employee> employees)
+            IEnumerable<Dto.Employee> employees)
         {
             return employees
                 .Select(employee => new EmployeeTreeItem(employee))
@@ -99,24 +100,22 @@ namespace SalaryCounter.Service.Service.Salary
 
         private class EmployeeTreeItem
         {
-            public EmployeeTreeItem(Model.Employee employee)
+            public EmployeeTreeItem(Dto.Employee employee)
             {
                 Employee = employee ?? throw new SalaryCounterGeneralException("Wrong employee");
                 Subordinates = new Stack<EmployeeTreeItem>();
             }
 
-            public Model.Employee Employee { get; }
+            public Dto.Employee Employee { get; }
 
             public Stack<EmployeeTreeItem> Subordinates { get; }
 
             public decimal SubordinateSalarySum { get; set; }
 
-            public decimal GetSalary(DateTime date)
-            {
-                return Employee.SalaryBase +
-                       GetExperienceBonus(date) +
-                       SubordinateSalarySum * Employee.EmployeeType.SalaryRatio.SubordinateBonus;
-            }
+            public decimal GetSalary(DateTime date) =>
+                Employee.SalaryBase +
+                GetExperienceBonus(date) +
+                SubordinateSalarySum * Employee.EmployeeType.SalaryRatio.SubordinateBonus;
 
             private decimal GetExperienceBonus(DateTime date)
             {

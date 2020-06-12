@@ -5,6 +5,7 @@ using SalaryCounter.Service.Enumeration;
 using SalaryCounter.Service.Exception;
 using SalaryCounter.Service.Service.EmployeeType;
 using SalaryCounter.Service.Util;
+using Dto = SalaryCounter.Model.Dto;
 
 namespace SalaryCounter.Service.Service.Employee
 {
@@ -14,7 +15,7 @@ namespace SalaryCounter.Service.Service.Employee
 
         private IEmployeeDao EmployeeDao { get; }
         private IEmployeeTypeService EmployeeTypeService { get; }
-        public IList<Model.Employee> Get(DateTime date) => EmployeeDao.Get(date);
+        public IList<Dto.Employee> Get(DateTime date) => EmployeeDao.Get(date);
 
         public EmployeeService(IAppConfiguration configuration, IEmployeeDao dao,
             IEmployeeTypeService typeService)
@@ -24,20 +25,20 @@ namespace SalaryCounter.Service.Service.Employee
             EmployeeTypeService = typeService;
         }
 
-        public Model.Employee Get(Guid id)
+        public Dto.Employee Get(Guid id)
         {
             if (id == Guid.Empty) throw new SalaryCounterNotFoundException("Employee id is empty");
             return EmployeeDao.Get(id);
         }
 
-        public IList<Model.Employee> GetSubordinates(Model.Employee employee, DateTime date)
+        public IList<Dto.Employee> GetSubordinates(Dto.Employee employee, DateTime date)
         {
             if (employee.Id.Equals(Guid.Empty) || !employee.EmployeeType.CanHaveSubordinates)
-                return new List<Model.Employee>();
+                return new List<Dto.Employee>();
             return EmployeeDao.GetSubordinates(employee, date);
         }
 
-        public Model.Employee Save(Model.Employee employee)
+        public Dto.Employee Save(Dto.Employee employee)
         {
             if (string.IsNullOrWhiteSpace(employee.Name))
                 throw new SalaryCounterInvalidInputException("Employee has wrong name");

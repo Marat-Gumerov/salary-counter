@@ -5,9 +5,9 @@ using System.Threading;
 using SalaryCounter.Dao.Extension;
 using Force.DeepCloner;
 using JetBrains.Annotations;
+using SalaryCounter.Model.Dto;
 using SalaryCounter.Service.Dao;
 using SalaryCounter.Service.Exception;
-using SalaryCounter.Service.Model;
 
 namespace SalaryCounter.Dao.Dao
 {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using SalaryCounter.Model.Dto;
 using SalaryCounter.Service.Exception;
-using SalaryCounter.Service.Model;
 using SalaryCounter.Service.Service.Employee;
 
 namespace SalaryCounter.Api.Controller

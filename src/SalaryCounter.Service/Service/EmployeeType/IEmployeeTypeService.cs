@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using Dto = SalaryCounter.Model.Dto;
 
 namespace SalaryCounter.Service.Service.EmployeeType
 {
     public interface IEmployeeTypeService
     {
-        IList<Model.EmployeeType> Get();
-        bool IsValid(Model.EmployeeType employeeType);
+        IList<Dto.EmployeeType> Get();
+        bool IsValid(Dto.EmployeeType employeeType);
     }
 }

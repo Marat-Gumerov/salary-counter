@@ -3,16 +3,16 @@ using System.Linq;
 using Force.DeepCloner;
 using Moq;
 using NUnit.Framework;
+using SalaryCounter.Model.Dto;
+using SalaryCounter.Model.Enumeration;
 using SalaryCounter.Service.Dao;
-using SalaryCounter.Service.Enumeration;
 using SalaryCounter.Service.Exception;
-using SalaryCounter.Service.Model;
 using SalaryCounter.Service.Service.Employee;
 using SalaryCounter.Service.Service.EmployeeType;
 using SalaryCounter.Service.Util;
-using ServiceTest.Data;
+using SalaryCounter.ServiceTest.Data;
 
-namespace ServiceTest.Test
+namespace SalaryCounter.ServiceTest.Test
 {
     public class EmployeeServiceTests
     {

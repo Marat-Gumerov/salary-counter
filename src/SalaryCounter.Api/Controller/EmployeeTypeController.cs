@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using SalaryCounter.Service.Model;
+using SalaryCounter.Model.Dto;
 using SalaryCounter.Service.Service.EmployeeType;
 
 namespace SalaryCounter.Api.Controller

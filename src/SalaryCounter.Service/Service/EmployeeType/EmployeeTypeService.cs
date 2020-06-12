@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DeepEqual.Syntax;
 using SalaryCounter.Service.Dao;
+using Dto = SalaryCounter.Model.Dto;
 
 namespace SalaryCounter.Service.Service.EmployeeType
 {
@@ -12,7 +13,7 @@ namespace SalaryCounter.Service.Service.EmployeeType
 
         private IEmployeeTypeDao EmployeeTypeDao { get; }
 
-        public bool IsValid(Model.EmployeeType employeeType)
+        public bool IsValid(Dto.EmployeeType employeeType)
         {
             try
             {
@@ -25,6 +26,6 @@ namespace SalaryCounter.Service.Service.EmployeeType
             }
         }
 
-        public IList<Model.EmployeeType> Get() => EmployeeTypeDao.Get();
+        public IList<Dto.EmployeeType> Get() => EmployeeTypeDao.Get();
     }
 }

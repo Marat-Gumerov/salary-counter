@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using SalaryCounter.Api.Extension;
-using SalaryCounter.Api.Model;
+using SalaryCounter.Model.Dto;
 using SalaryCounter.Service.Exception;
 
 namespace SalaryCounter.Api.Middleware
