@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SalaryCounter.Model.Extension;
 using SalaryCounter.Service.Exception;
 using SalaryCounter.Service.Service.Employee;
 using SalaryCounter.Service.Extension;

@@ -6,15 +6,11 @@ namespace SalaryCounter.Dao.Extension
 {
     public static class ReaderWriterLockSlimExtensions
     {
-        public static IDisposable Read(this ReaderWriterLockSlim lockObject)
-        {
-            return new LockToken(lockObject, LockType.Read);
-        }
+        public static IDisposable Read(this ReaderWriterLockSlim lockObject) =>
+            new LockToken(lockObject, LockType.Read);
 
-        public static IDisposable Write(this ReaderWriterLockSlim lockObject)
-        {
-            return new LockToken(lockObject, LockType.Write);
-        }
+        public static IDisposable Write(this ReaderWriterLockSlim lockObject) =>
+            new LockToken(lockObject, LockType.Write);
 
         private enum LockType
         {
@@ -56,7 +52,7 @@ namespace SalaryCounter.Dao.Extension
                         sync.ExitWriteLock();
                         break;
                     default:
-                        throw new ArgumentException("Unexpected lock type");
+                        throw new SalaryCounterGeneralException("Unexpected lock type");
                 }
             }
         }

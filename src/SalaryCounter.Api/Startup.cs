@@ -13,6 +13,7 @@ using Newtonsoft.Json.Serialization;
 using SalaryCounter.Api.Middleware;
 using SalaryCounter.Api.Util;
 using SalaryCounter.Dao.Extension;
+using SalaryCounter.Model.Extension;
 using SalaryCounter.Service.Extension;
 using SalaryCounter.Service.Util;
 
@@ -29,13 +30,7 @@ namespace SalaryCounter.Api
         {
             services.AddControllers();
             services.AddMvcCore()
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
-                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                    options.SerializerSettings.ContractResolver =
-                        new CamelCasePropertyNamesContractResolver();
-                });
+                .AddNewtonsoftJson(options => options.SerializerSettings.Configure());
             services.AddApiVersioning(config =>
             {
                 config.DefaultApiVersion = new ApiVersion(1, 0);

@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using SalaryCounter.Api.Extension;
 using SalaryCounter.Model.Dto;
+using SalaryCounter.Model.Extension;
 using SalaryCounter.Service.Exception;
 
 namespace SalaryCounter.Api.Middleware
@@ -39,7 +39,7 @@ namespace SalaryCounter.Api.Middleware
                 };
                 httpContext.Response.StatusCode = (int) GetStatusCodeForException(exception);
                 httpContext.Response.ContentType = "application/json";
-                await error.ToStream().CopyToAsync(httpContext.Response.Body);
+                await error.ToJsonStream().CopyToAsync(httpContext.Response.Body);
             }
         }
 
