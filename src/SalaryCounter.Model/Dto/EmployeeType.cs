@@ -2,14 +2,13 @@
 using Newtonsoft.Json;
 using SalaryCounter.Model.Attribute;
 using SalaryCounter.Model.Enumeration;
-using SalaryCounter.Model.Util;
 
 namespace SalaryCounter.Model.Dto
 {
     /// <summary>
     ///     Employee position
     /// </summary>
-    [ModelExample(typeof(EmployeeTypeExample))]
+    [ModelExample]
     public sealed class EmployeeType
     {
         ///<inheritdoc cref="EmployeeType"/>
@@ -45,11 +44,5 @@ namespace SalaryCounter.Model.Dto
         /// </summary>
         [JsonProperty]
         public SalaryRatio SalaryRatio { get; set; }
-    }
-
-    internal class EmployeeTypeExample : Example<EmployeeType>
-    {
-        protected override EmployeeType Value => new EmployeeType(Guid.Empty,
-            EmployeeTypeName.Sales, true, new SalaryRatioExample());
     }
 }

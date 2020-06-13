@@ -8,6 +8,6 @@
         /// <summary>
         ///     Example object
         /// </summary>
-        object ExampleObject { get; }
+        object GetExample(IExampleService exampleService);
     }
 }

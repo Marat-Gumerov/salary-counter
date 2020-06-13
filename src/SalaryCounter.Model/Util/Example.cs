@@ -4,17 +4,10 @@ namespace SalaryCounter.Model.Util
 {
     internal abstract class Example<T> : IExample
     {
-        protected abstract T Value { get; }
+        public abstract T Get(IExampleService exampleService);
 
-        public object ExampleObject
-        {
-            get
-            {
-                if (Value != null) return Value;
-                throw new SalaryCounterModelException($"Example for type {typeof(T)} is null");
-            }
-        }
-
-        public static implicit operator T(Example<T> value) => value.Value;
+        public object GetExample(IExampleService exampleService) =>
+            Get(exampleService) ??
+            throw new SalaryCounterModelException($"Example for type {typeof(T)} is null");
     }
 }

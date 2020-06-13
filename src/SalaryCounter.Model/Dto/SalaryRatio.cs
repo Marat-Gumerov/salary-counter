@@ -13,20 +13,25 @@ namespace SalaryCounter.Model.Dto
         /// <summary>
         ///     Bonus coefficient for experience
         /// </summary>
-        [JsonProperty]public decimal ExperienceBonus { get; set; }
+        [JsonProperty]
+        public decimal ExperienceBonus { get; set; }
+
         /// <summary>
         ///     Maximum level of bonus for experience
         /// </summary>
-        [JsonProperty]public decimal ExperienceBonusMaximum { get; set; }
+        [JsonProperty]
+        public decimal ExperienceBonusMaximum { get; set; }
+
         /// <summary>
         ///     Bonus coefficient for subordinates
         /// </summary>
-        [JsonProperty]public decimal SubordinateBonus { get; set; }
+        [JsonProperty]
+        public decimal SubordinateBonus { get; set; }
     }
-    
+
     internal class SalaryRatioExample : Example<SalaryRatio>
     {
-        protected override SalaryRatio Value => new SalaryRatio
+        public override SalaryRatio Get(IExampleService exampleService) => new SalaryRatio
         {
             ExperienceBonus = 0.05m,
             ExperienceBonusMaximum = 0.4m,

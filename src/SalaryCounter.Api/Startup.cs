@@ -45,10 +45,10 @@ namespace SalaryCounter.Api
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-            services.AddOpenApiDocument(document =>
+            services.AddOpenApiDocument((document, serviceProvider) =>
             {
                 document.SchemaProcessors.Add(new FilterModelProcessor());
-                document.SchemaProcessors.Add(new ModelExampleProcessor());
+                document.SchemaProcessors.Add(new ModelExampleProcessor(serviceProvider));
                 document.DocumentName = "v1.0";
                 document.ApiGroupNames = new[] {"1.0"};
             });

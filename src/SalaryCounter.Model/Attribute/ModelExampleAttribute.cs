@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Linq;
-using SalaryCounter.Model.Exception;
-using SalaryCounter.Model.Util;
 
 namespace SalaryCounter.Model.Attribute
 {
@@ -12,19 +9,16 @@ namespace SalaryCounter.Model.Attribute
     public class ModelExampleAttribute : System.Attribute
     {
         /// <summary>
-        ///     An example for Swagger
+        ///     IExample provider
         /// </summary>
-        public object Example { get; }
-        
+        public Type? Type { get; }
+
         /// <inheritdoc />
-        public ModelExampleAttribute(Type exampleType)
+        public ModelExampleAttribute()
         {
-            if (!exampleType.GetInterfaces().ToList().Contains(typeof(IExample)))
-                throw new SalaryCounterModelException("Wrong ModelExample attribute");
-            var exampleProvider = Activator.CreateInstance(exampleType) as IExample;
-            Example = exampleProvider?.ExampleObject ??
-                      throw new SalaryCounterModelException("Example generation error");
         }
 
+        /// <inheritdoc />
+        public ModelExampleAttribute(Type exampleType) : this() => Type = exampleType;
     }
 }
