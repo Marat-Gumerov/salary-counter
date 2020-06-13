@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using SalaryCounter.Api.Attribute;
 using SalaryCounter.Model.Dto;
 using SalaryCounter.Service.Exception;
 using SalaryCounter.Service.Service.Employee;
@@ -24,6 +25,7 @@ namespace SalaryCounter.Api.Controller
         /// </summary>
         /// <param name="selectionDate">Date to which employees should be already hired</param>
         /// <returns>A list of employees</returns>
+        [DateExample("selectionDate", -5)]
         [HttpGet]
         public IList<Employee> Get([FromQuery] DateTime selectionDate) =>
             employeeService.Get(selectionDate);

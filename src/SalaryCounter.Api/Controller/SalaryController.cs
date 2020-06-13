@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using SalaryCounter.Api.Attribute;
 using SalaryCounter.Service.Service.Salary;
 
 namespace SalaryCounter.Api.Controller
@@ -21,6 +22,7 @@ namespace SalaryCounter.Api.Controller
         /// <param name="date">Date to count experience bonus</param>
         /// <param name="employeeId">Employee identifier</param>
         /// <returns>Salary amount</returns>
+        [DateExample("date", 0)]
         [HttpGet]
         public decimal Get(
             [FromQuery] DateTime date,
