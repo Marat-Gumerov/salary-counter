@@ -56,10 +56,7 @@ const routes: Routes = [
         SalaryService,
         EmployeeTypeService,
         EmployeeService,
-        {
-            provide: LocationStrategy,
-            useClass: HashLocationStrategy
-        },
+        {provide: LocationStrategy, useClass: HashLocationStrategy},
         {provide: ErrorHandler, useClass: ConsoleErrorHandler}
     ],
     bootstrap: [ApplicationComponent]

@@ -1,8 +1,9 @@
-import {Component, Input} from "@angular/core";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {SalaryService} from "../../services/salary.service";
 import {Employee} from "../../models/employee";
 import {MatDialog} from "@angular/material/dialog";
 import {EditEmployeeDialogComponent} from "../edit-employee-dialog/edit.employee.dialog";
+import {EmployeeService} from "../../services/employee.service";
 
 @Component({
     templateUrl: "employee.html",
@@ -11,10 +12,12 @@ import {EditEmployeeDialogComponent} from "../edit-employee-dialog/edit.employee
 export class EmployeeComponent {
     @Input() employee: Employee;
     @Input() date: Date;
+    @Output() onDelete: EventEmitter<Employee> = new EventEmitter<Employee>();
     salary: number;
 
     constructor(
         private salaryService: SalaryService,
+        private employeeService: EmployeeService,
         public dialog: MatDialog) {
         this.salary = -1;
     }
@@ -23,11 +26,15 @@ export class EmployeeComponent {
         this.salary = await this.salaryService.getById(this.date, this.employee.id);
     }
 
-    onEdit(): void {
-        const dialogRef = this.dialog.open(EditEmployeeDialogComponent, {
+    async onEdit(): Promise<void> {
+        const result = await this.dialog.open(EditEmployeeDialogComponent, {
             data: this.employee
-        })
-        dialogRef.afterClosed()
-            .subscribe(result => this.employee = result ?? this.employee);
+        }).afterClosed().toPromise();
+        this.employee = result ?? this.employee;
+    }
+
+    async delete(): Promise<void> {
+        await this.employeeService.delete(this.employee.id);
+        this.onDelete.emit(this.employee);
     }
 }

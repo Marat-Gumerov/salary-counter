@@ -1,47 +1,62 @@
 <h1 mat-dialog-title>{{ state }} employee</h1>
 <div mat-dialog-content>
-    <p>Name</p>
-    <label>
-        <input #employeeNameInput [value]="employee.name" (input)="onNameInput(employeeNameInput.value)"
-               type="text">
-    </label>
-    <p>Employment date</p>
-    <mat-form-field>
-        <label>
-            <input
-                #employmentDateInput
-                matInput
-                [matDatepicker]="employmentDate"
-                placeholder="Choose a date"
-                (dateInput)="onEmploymentDateChange(employmentDateInput.value)"
-                (dateChange)="onEmploymentDateChange(employmentDateInput.value)"
-                [formControl]="employmentDateControl">
-        </label>
-        <mat-datepicker-toggle matSuffix [for]="employmentDate"></mat-datepicker-toggle>
-        <mat-datepicker #employmentDate></mat-datepicker>
-    </mat-form-field>
-    <p>Salary base</p>
-    <label>
-        <input #salaryBaseInput [value]="employee.salaryBase"
-               (input)="onSalaryBaseInput(salaryBaseInput.value)" type="number">
-    </label>
-    <p>Position</p>
-    <label>
-        <select #employeeTypeSelect (change)="onEmployeeTypeChange(employeeTypeSelect.value)"
-                [formControl]="employeeTypeControl">
-            <option *ngFor="let employeeType of employeeTypes" [value]="employeeType.id">
-                {{ employeeType.value }}
-            </option>
-        </select>
-    </label>
-    <p>Chief</p>
-    <label>
-        <select #chiefSelect (change)="onChiefChange(chiefSelect.value)" [formControl]="chiefControl">
-            <option *ngFor="let chief of chiefs" [value]="chief?.id || ''">
-                {{ chief?.name }}
-            </option>
-        </select>
-    </label>
-    <button (click)="onSaveClick()">Save</button>
-    <button (click)="onCancelClick()">Cancel</button>
+    <div class="form-group row">
+        <label for="employeeNameInput" class="col-sm-4 col-form-label">Name</label>
+        <div class="col-sm-8">
+            <input #employeeNameInput [value]="employee.name" (input)="onNameInput(employeeNameInput.value)"
+                   type="text" class="form-control" id="employeeNameInput">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="employmentDateInput" class="col-sm-4 col-form-label">Employment date</label>
+        <div class="col-sm-8">
+            <mat-form-field>
+                <input
+                    #employmentDateInput
+                    matInput
+                    [matDatepicker]="employmentDate"
+                    placeholder="Choose a date"
+                    (dateInput)="onEmploymentDateChange(employmentDateInput.value)"
+                    (dateChange)="onEmploymentDateChange(employmentDateInput.value)"
+                    [formControl]="employmentDateControl"
+                    id="employmentDateInput">
+                <mat-datepicker-toggle matSuffix [for]="employmentDate"></mat-datepicker-toggle>
+                <mat-datepicker #employmentDate></mat-datepicker>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="salaryBaseInput" class="col-sm-4 col-form-label">Salary base</label>
+        <div class="col-sm-8">
+            <input #salaryBaseInput [value]="employee.salaryBase"
+                   (input)="onSalaryBaseInput(salaryBaseInput.value)" type="number"
+                   class="form-control" id="salaryBaseInput">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="employeeTypeSelect" class="col-sm-4 col-form-label">Position</label>
+        <div class="col-sm-8">
+            <select #employeeTypeSelect (change)="onEmployeeTypeChange(employeeTypeSelect.value)"
+                    [formControl]="employeeTypeControl" class="form-control" id="employeeTypeSelect">
+                <option *ngFor="let employeeType of employeeTypes" [value]="employeeType.id">
+                    {{ employeeType.value }}
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="chiefSelect" class="col-sm-4 col-form-label">Chief</label>
+        <div class="col-sm-8">
+            <select #chiefSelect (change)="onChiefChange(chiefSelect.value)" [formControl]="chiefControl"
+                    class="form-control" id="chiefSelect">
+                <option *ngFor="let chief of chiefs" [value]="chief?.id || ''">
+                    {{ chief?.name }}
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row float-right">
+        <button (click)="onSaveClick()"  type="button" class="btn btn-outline-primary mr-1">Save</button>
+        <button (click)="onCancelClick()" type="button" class="btn btn-outline-secondary">Cancel</button>
+    </div>
 </div>

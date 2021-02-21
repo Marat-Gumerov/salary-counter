@@ -21,12 +21,11 @@ export class EmployeeListComponent {
         this.get();
     }
 
-    add(): void {
-        const dialogRef = this.dialog.open(EditEmployeeDialogComponent, {
+    async add(): Promise<void> {
+        await this.dialog.open(EditEmployeeDialogComponent, {
             data: new Employee()
-        })
-        dialogRef.afterClosed()
-            .subscribe(() => this.get());
+        }).afterClosed().toPromise();
+        await this.get();
     }
 
     async get(): Promise<void> {
