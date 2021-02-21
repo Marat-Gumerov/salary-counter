@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {BrowserModule} from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http';
@@ -21,6 +21,7 @@ import {EmployeeService} from './services/employee.service';
 import {MatDialogModule} from '@angular/material/dialog';
 import {EditEmployeeDialogComponent} from './components/edit-employee-dialog/edit.employee.dialog';
 import {ReactiveFormsModule} from "@angular/forms";
+import {ConsoleErrorHandler} from "./util/console-error-handler";
 
 const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -58,7 +59,8 @@ const routes: Routes = [
         {
             provide: LocationStrategy,
             useClass: HashLocationStrategy
-        }
+        },
+        {provide: ErrorHandler, useClass: ConsoleErrorHandler}
     ],
     bootstrap: [ApplicationComponent]
 })

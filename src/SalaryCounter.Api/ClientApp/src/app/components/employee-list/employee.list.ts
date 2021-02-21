@@ -29,11 +29,7 @@ export class EmployeeListComponent {
             .subscribe(() => this.get());
     }
 
-    get(): void {
-        this.employeeService.get(this.dateControl.value)
-            .subscribe({
-                next: (employees) => this.employees = employees,
-                error: (error) => console.error(error)
-            });
+    async get(): Promise<void> {
+        this.employees = await this.employeeService.get(this.dateControl.value);
     }
 }

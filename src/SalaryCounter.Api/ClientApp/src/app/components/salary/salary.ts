@@ -15,12 +15,8 @@ export default class SalaryComponent {
         this.get();
     }
 
-    get(): void {
-        this.salaryService
-            .get(this.dateControl.value)
-            .subscribe({
-                next: (salary) => this.salary = salary,
-                error: (error) => console.error(error)
-            });
+    async get(): Promise<void> {
+        this.salary = await this.salaryService
+            .get(this.dateControl.value);
     }
 }

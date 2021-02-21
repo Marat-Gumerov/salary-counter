@@ -20,7 +20,7 @@ namespace SalaryCounter.Api.Swagger
         ///     Get service only when we really need it
         /// </summary>
         private IExampleService ExampleService =>
-            exampleService ??= serviceProvider.GetService<IExampleService>();
+            exampleService ??= serviceProvider.GetRequiredService<IExampleService>();
 
         public ModelExampleProcessor(IServiceProvider serviceProvider)
         {

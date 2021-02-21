@@ -12,44 +12,49 @@ export class EmployeeService {
         this.backend = 'api/v1.0/employee';
     }
 
-    get(date: Date): Observable<Employee[]> {
+    async get(date: Date): Promise<Employee[]> {
         let dateString: string;
         if (date instanceof Date) {
             dateString = date.toISOString();
         } else {
             dateString = new Date(date).toISOString();
         }
-        return this.http
+        return await this.http
             .get<Employee[]>(this.backend, {
                 params: {
                     selectionDate: dateString
                 }
             })
-            .pipe(map(employees => Employee.fromDataList(employees)));
+            .pipe(map(employees => Employee.fromDataList(employees)))
+            .toPromise();
     }
 
-    getById(id: string): Observable<Employee> {
+    async getById(id: string): Promise<Employee> {
         const url = `${this.backend}/${id}`;
-        return this.http
+        return await this.http
             .get<Employee>(url)
-            .pipe(map(employee => Employee.fromData(employee)));
+            .pipe(map(employee => Employee.fromData(employee)))
+            .toPromise();
     }
 
-    add(employee: Employee): Observable<Employee> {
-        return this.http
+    async add(employee: Employee): Promise<Employee> {
+        return await this.http
             .post<Employee>(this.backend, employee)
-            .pipe(map(employee => Employee.fromData(employee)));
+            .pipe(map(employee => Employee.fromData(employee)))
+            .toPromise();
     }
 
-    update(employee: Employee): Observable<Employee> {
-        return this.http
+    async update(employee: Employee): Promise<Employee> {
+        return await this.http
             .put<Employee>(this.backend, employee)
-            .pipe(map(employee => Employee.fromData(employee)));
+            .pipe(map(employee => Employee.fromData(employee)))
+            .toPromise();
     }
 
-    delete(id: string): Observable<{}> {
+    async delete(id: string): Promise<void> {
         const url = `${this.backend}/${id}`;
-        return this.http
-            .delete(url);
+        await this.http
+            .delete(url)
+            .toPromise();
     }
 }

@@ -11,8 +11,8 @@ export class EmployeeTypeService {
         this.backend = 'api/v1.0/employeeType';
     }
 
-    get(): Observable<EmployeeType[]> {
-        return this.http
-            .get<EmployeeType[]>(this.backend);
+    async get(): Promise<EmployeeType[]> {
+        return await this.http
+            .get<EmployeeType[]>(this.backend).toPromise();
     }
 }

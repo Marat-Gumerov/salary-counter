@@ -19,12 +19,8 @@ export class EmployeeComponent {
         this.salary = -1;
     }
 
-    onGetSalaryClick(): void {
-        this.salaryService.getById(this.date, this.employee.id)
-            .subscribe({
-                next: (salary) => this.salary = salary,
-                error: (error) => console.error(error)
-            });
+    async onGetSalaryClick(): Promise<void> {
+        this.salary = await this.salaryService.getById(this.date, this.employee.id);
     }
 
     onEdit(): void {

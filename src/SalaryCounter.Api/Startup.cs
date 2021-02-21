@@ -74,13 +74,14 @@ namespace SalaryCounter.Api
             app.UseEndpoints(endpoints => endpoints.MapControllers());
             app.UseOpenApi();
             app.UseSwaggerUi3(config => config.DocumentTitle = "Salary counter");
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
-                spa.Options.StartupTimeout = TimeSpan.FromSeconds(120);
+            if (env.IsDevelopment())
+                app.UseSpa(spa =>
+                {
+                    spa.Options.SourcePath = "ClientApp";
+                    spa.Options.StartupTimeout = TimeSpan.FromSeconds(120);
 
-                if (env.IsDevelopment()) spa.UseAngularCliServer("start");
-            });
+                    if (env.IsDevelopment()) spa.UseAngularCliServer("start");
+                });
         }
     }
 }

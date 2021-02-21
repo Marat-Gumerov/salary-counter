@@ -14,11 +14,7 @@ export default class EmployeeTypeListComponent {
         this.get();
     }
 
-    get(): void {
-        this.employeeTypeService.get()
-            .subscribe({
-                next: (employeeTypes) => this.employeeTypes = employeeTypes,
-                error: (error) => console.error(error)
-            });
+    async get(): Promise<void> {
+        this.employeeTypes = await this.employeeTypeService.get();
     }
 }

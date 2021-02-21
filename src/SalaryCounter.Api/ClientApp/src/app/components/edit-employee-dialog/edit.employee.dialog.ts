@@ -3,7 +3,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Employee} from "../../models/employee";
 import Util from "../../util/util";
 import {EmployeeService} from "../../services/employee.service";
-import {Observable} from "rxjs";
 import {EmployeeTypeService} from "../../services/employee-type.service";
 import {EmployeeType} from "../../models/employeeType";
 import {FormControl} from "@angular/forms";
@@ -50,20 +49,13 @@ export class EditEmployeeDialogComponent {
         this.employee.salaryBase = Number(value);
     }
 
-    onSaveClick(): void {
-        let observable: Observable<Employee>;
+    async onSaveClick(): Promise<void> {
         if (this.state === 'Add') {
-            observable = this.employeeService.add(this.employee);
+            this.employee = await this.employeeService.add(this.employee);
         } else {
-            observable = this.employeeService.update(this.employee);
+            this.employee = await this.employeeService.update(this.employee);
         }
-        observable.subscribe({
-            next: (employee) => {
-                this.employee = employee;
-                this.dialogRef.close(employee);
-            },
-            error: (error) => console.error(error)
-        });
+        this.dialogRef.close(this.employee);
     }
 
     onCancelClick(): void {
@@ -78,29 +70,17 @@ export class EditEmployeeDialogComponent {
         this.employee.chief = value.length > 0 ? value : undefined;
     }
 
-    private getEmployeeTypes(): void {
-        this.employeeTypeService.get()
-            .subscribe({
-                next: (employeeTypes) => {
-                    this.employeeTypes = EmployeeType.fromDataList(employeeTypes);
-                    this.employee.employeeType = this.employee.employeeType
-                        ? this.employeeTypes.find(employeeType => employeeType.id === this.employee.employeeType.id)
-                        : this.employeeTypes[0];
-                    this.employeeTypeControl.setValue(this.employee?.employeeType?.id);
-                },
-                error: (error) => console.error(error)
-            });
+    private async getEmployeeTypes(): Promise<void> {
+        this.employeeTypes = EmployeeType.fromDataList(await this.employeeTypeService.get());
+        this.employee.employeeType = this.employee.employeeType
+            ? this.employeeTypes.find(employeeType => employeeType.id === this.employee.employeeType.id)
+            : this.employeeTypes[0];
+        this.employeeTypeControl.setValue(this.employee?.employeeType?.id);
     }
 
-    private getChiefs(): void {
-        this.employeeService.get(this.employee.employmentDate)
-            .subscribe({
-                next: (employees) => {
-                    this.chiefs = employees;
-                    this.chiefs.unshift(undefined);
-                    this.chiefControl.setValue(this.employee?.chief);
-                },
-                error: (error) => console.error(error)
-            });
+    private async getChiefs(): Promise<void> {
+        this.chiefs = await this.employeeService.get(this.employee.employmentDate);
+        this.chiefs.unshift(undefined);
+        this.chiefControl.setValue(this.employee?.chief);
     }
 }

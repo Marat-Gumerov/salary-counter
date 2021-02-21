@@ -10,22 +10,24 @@ export class SalaryService {
         this.backend = 'api/v1.0/salary';
     }
 
-    get(date: Date): Observable<number> {
+    async get(date: Date): Promise<number> {
         return this.http
             .get<number>(this.backend, {
                 params: {
                     date: date.toISOString()
                 }
-            });
+            })
+            .toPromise();
     }
 
-    getById(date: Date, employeeId: string): Observable<number> {
+    async getById(date: Date, employeeId: string): Promise<number> {
         return this.http
             .get<number>(this.backend, {
                 params: {
                     date: date.toISOString(),
                     employeeId: employeeId
                 }
-            });
+            })
+            .toPromise();
     }
 }
