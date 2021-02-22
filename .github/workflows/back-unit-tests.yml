@@ -18,4 +18,16 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Run Nuke
-      run: ./build.sh UnitTest
+      run: ./build.sh UnitTest --Cover
+    - name: Create Badge
+      uses: simon-k/dotnet-code-coverage-badge@v1.0.0
+      with:
+        label: Unit Test Coverage
+        id: create_coverage_badge
+        color: brightgreen
+        path: coverage/report.xml
+        gist-filename: code-coverage.json
+        gist-id: 3375eaca628d8c57c854ebb56d2b6b14
+        gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}
+    - name: Print code coverage
+      run: echo "Code coverage percentage ${{steps.create_coverage_badge.outputs.percentage}}%"
