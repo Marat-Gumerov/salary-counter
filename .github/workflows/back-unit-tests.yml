@@ -18,7 +18,7 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Run Nuke
-      run: ./build.sh UnitTest --Cover
+      run: ./build.sh UnitTest --Cover --Configuration Debug
     - name: Create Badge
       uses: simon-k/dotnet-code-coverage-badge@v1.0.0
       with:
