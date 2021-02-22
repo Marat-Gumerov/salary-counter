@@ -194,7 +194,7 @@ namespace SalaryCounter.ServiceTest.Test
             var exception = Assert.Throws(
                 exceptionType,
                 () => employeeService.Save(employee));
-            Assert.AreEqual(message, exception.Message);
+            Assert.AreEqual(message, exception?.Message);
         }
 
         [Test]
