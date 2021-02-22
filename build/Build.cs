@@ -60,6 +60,7 @@ namespace NukeBuilder
         [UsedImplicitly]
         Target UnitTest => _ => _
             .DependsOn(Compile)
+            .Requires(() => Configuration.ToString() == Configuration.Debug)
             .Executes(() => DotNetTest(s => s
                 .SetProcessWorkingDirectory(Solution.Directory)
                 .SetProjectFile(Solution.Directory / "src" / "SalaryCounter.ServiceTest" /
