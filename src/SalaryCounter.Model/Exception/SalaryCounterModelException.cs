@@ -9,7 +9,7 @@ namespace SalaryCounter.Model.Exception
         public bool ShouldBeLogged { get; }
 
         /// <summary> </summary>
-        public SalaryCounterModelException(string message, bool shouldBeLogged = true) :
+        internal SalaryCounterModelException(string message, bool shouldBeLogged = true) :
             base(message) => ShouldBeLogged = shouldBeLogged;
     }
 }

@@ -23,7 +23,7 @@ namespace SalaryCounter.ServiceTest.Utils
                     .UseEnvironment("NoSpa")
                     .ConfigureTestServices(SetMocks))
                 .CreateClient(new WebApplicationFactoryClientOptions
-                    {BaseAddress = new Uri("http://localhost:53435/api/v1/")});
+                    {BaseAddress = new Uri("http://localhost:53435/")});
         }
         
         protected abstract void SetMocks(IServiceCollection services);

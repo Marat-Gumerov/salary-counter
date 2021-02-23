@@ -21,7 +21,7 @@ namespace SalaryCounter.ServiceTest.Test.Api
             employeeDaoMock.Setup(_ => _.Get(It.IsAny<DateTime>()))
                 .Returns(EmployeeTestData.GetEmployeesByNames("first, second, third"));
 
-            var response = await Client.GetAsync("salary?date=2024-04-04");
+            var response = await Client.GetAsync("api/v1/salary?date=2024-04-04");
             var result = await response.Content.ReadAsStringAsync();
             var salary = Convert.ToDouble(result, NumberFormatInfo.InvariantInfo);
             Assert.AreEqual(5181.7018, salary, 0.0001);
