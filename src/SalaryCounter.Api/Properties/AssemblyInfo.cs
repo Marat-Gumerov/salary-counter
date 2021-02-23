@@ -2,7 +2,7 @@
 
 [assembly: InternalsVisibleTo("SalaryCounter.Tests.Unit")]
 
-namespace SalaryCounter.Service.Properties
+namespace SalaryCounter.Api.Properties
 {
     // ReSharper disable once UnusedType.Global
     public static class AssemblyInfo

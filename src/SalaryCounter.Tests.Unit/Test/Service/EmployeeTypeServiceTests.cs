@@ -7,7 +7,7 @@ using SalaryCounter.Service.Dao;
 using SalaryCounter.Service.Service.EmployeeType;
 using SalaryCounter.ServiceTest.Data;
 
-namespace SalaryCounter.ServiceTest.Test
+namespace SalaryCounter.ServiceTest.Test.Service
 {
     public class EmployeeTypeServiceTests
     {

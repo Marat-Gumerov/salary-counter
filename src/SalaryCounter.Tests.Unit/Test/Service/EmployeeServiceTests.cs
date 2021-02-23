@@ -12,7 +12,7 @@ using SalaryCounter.Service.Service.EmployeeType;
 using SalaryCounter.Service.Util;
 using SalaryCounter.ServiceTest.Data;
 
-namespace SalaryCounter.ServiceTest.Test
+namespace SalaryCounter.ServiceTest.Test.Service
 {
     public class EmployeeServiceTests
     {

@@ -61,7 +61,7 @@ namespace SalaryCounter.Api
         // ReSharper disable once UnusedMember.Global
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (!env.IsProduction())
                 app.UseDeveloperExceptionPage();
             else
                 app.UseHsts();
@@ -74,7 +74,7 @@ namespace SalaryCounter.Api
             app.UseEndpoints(endpoints => endpoints.MapControllers());
             app.UseOpenApi();
             app.UseSwaggerUi3(config => config.DocumentTitle = "Salary counter");
-            if (env.IsDevelopment())
+            if (!env.IsEnvironment("NoSpa"))
                 app.UseSpa(spa =>
                 {
                     spa.Options.SourcePath = "ClientApp";

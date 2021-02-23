@@ -7,7 +7,7 @@ using SalaryCounter.Service.Service.Employee;
 using SalaryCounter.Service.Service.Salary;
 using SalaryCounter.ServiceTest.Data;
 
-namespace SalaryCounter.ServiceTest.Test
+namespace SalaryCounter.ServiceTest.Test.Service
 {
     public class SalaryServiceTests
     {

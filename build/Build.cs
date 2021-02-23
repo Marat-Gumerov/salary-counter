@@ -35,7 +35,7 @@ namespace NukeBuilder
 
         static AbsolutePath SourceDirectory => RootDirectory / "src";
 
-        static AbsolutePath TestsDirectory => SourceDirectory / "SalaryCounter.ServiceTest";
+        static AbsolutePath TestsDirectory => SourceDirectory / "SalaryCounter.Tests.Unit";
         static AbsolutePath OutputDirectory => RootDirectory / "output";
 
         static AbsolutePath CoverageResults => RootDirectory / "coverage" / "report.xml";
@@ -67,7 +67,7 @@ namespace NukeBuilder
             .Executes(() => DotNetTest(s => s
                 .SetProcessWorkingDirectory(Solution.Directory)
                 .SetProjectFile(TestsDirectory /
-                                "SalaryCounter.ServiceTest.csproj")
+                                "SalaryCounter.Tests.Unit.csproj")
                 .EnableNoBuild()
                 .When(Cover, _ => _
                     .EnableCollectCoverage()

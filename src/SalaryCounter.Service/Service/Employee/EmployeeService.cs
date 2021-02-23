@@ -9,7 +9,7 @@ using Dto = SalaryCounter.Model.Dto;
 
 namespace SalaryCounter.Service.Service.Employee
 {
-    public class EmployeeService : IEmployeeService
+    internal class EmployeeService : IEmployeeService
     {
         private IAppConfiguration Configuration { get; }
 

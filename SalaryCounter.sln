@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalaryCounter.Dao", "src\Sa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalaryCounter.Service", "src\SalaryCounter.Service\SalaryCounter.Service.csproj", "{0C5529A7-0B6C-4278-9ED8-1166D15E0D6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalaryCounter.ServiceTest", "src\SalaryCounter.ServiceTest\SalaryCounter.ServiceTest.csproj", "{C5E0DE49-6EB6-4807-9F83-CF651E9CB24E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalaryCounter.Tests.Unit", "src\SalaryCounter.Tests.Unit\SalaryCounter.Tests.Unit.csproj", "{C5E0DE49-6EB6-4807-9F83-CF651E9CB24E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalaryCounter.Api", "src\SalaryCounter.Api\SalaryCounter.Api.csproj", "{950F5DDE-D88C-42ED-BA86-B1692339EB1C}"
 EndProject

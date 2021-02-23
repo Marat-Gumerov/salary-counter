@@ -5,7 +5,7 @@ using SalaryCounter.Model.Dto;
 
 namespace SalaryCounter.ServiceTest.Data
 {
-    public static class EmployeeTestData
+    internal static class EmployeeTestData
     {
         private static readonly Guid First = Guid.Parse("b0511795-4cca-4a32-b006-c0a6d3927614");
         private static readonly Guid Second = Guid.Parse("fefaea84-b877-4670-a969-4f04942e46bb");

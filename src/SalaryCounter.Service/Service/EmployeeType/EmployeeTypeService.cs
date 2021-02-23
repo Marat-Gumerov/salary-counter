@@ -6,7 +6,7 @@ using Dto = SalaryCounter.Model.Dto;
 
 namespace SalaryCounter.Service.Service.EmployeeType
 {
-    public class EmployeeTypeService : IEmployeeTypeService
+    internal class EmployeeTypeService : IEmployeeTypeService
     {
         public EmployeeTypeService(IEmployeeTypeDao employeeTypeDao) =>
             EmployeeTypeDao = employeeTypeDao;
