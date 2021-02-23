@@ -23,7 +23,7 @@ jobs:
       uses: simon-k/dotnet-code-coverage-badge@v1.0.0
       id: create_coverage_badge
       with:
-        label: BackEnd Services Coverage
+        label: BackEnd Coverage
         color: brightgreen
         path: coverage/report.xml
         gist-filename: code-coverage.json
