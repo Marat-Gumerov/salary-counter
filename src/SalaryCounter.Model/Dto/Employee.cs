@@ -62,7 +62,7 @@ namespace SalaryCounter.Model.Dto
 
     internal class EmployeeExample : Example<Employee>
     {
-        public override Employee Get(IExampleService exampleService) => new Employee(
+        public override Employee Get(IExampleService exampleService) => new(
             "Employee Name", DateTime.Today.AddYears(-1),
             1000, exampleService.Get<EmployeeType>());
     }

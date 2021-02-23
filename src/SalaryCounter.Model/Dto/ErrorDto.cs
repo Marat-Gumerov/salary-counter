@@ -33,6 +33,6 @@ namespace SalaryCounter.Model.Dto
     internal class ErrorDtoExample : Example<ErrorDto>
     {
         public override ErrorDto Get(IExampleService exampleService) =>
-            new ErrorDto("Error message", "error-type");
+            new("Error message", "error-type");
     }
 }

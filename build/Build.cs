@@ -4,9 +4,11 @@ using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
+using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Utilities.Collections;
 using NukeBuilder.Enumerations;
+using NukeBuilder.Extensions;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
@@ -33,9 +35,10 @@ namespace NukeBuilder
 
         static AbsolutePath SourceDirectory => RootDirectory / "src";
 
+        static AbsolutePath TestsDirectory => SourceDirectory / "SalaryCounter.ServiceTest";
         static AbsolutePath OutputDirectory => RootDirectory / "output";
 
-        static AbsolutePath CoverageResults => RootDirectory / "coverage"  / "report.xml";
+        static AbsolutePath CoverageResults => RootDirectory / "coverage" / "report.xml";
 
         [UsedImplicitly]
         Target Clean => _ => _
@@ -63,12 +66,15 @@ namespace NukeBuilder
             .Requires(() => Configuration.ToString() == Configuration.Debug)
             .Executes(() => DotNetTest(s => s
                 .SetProcessWorkingDirectory(Solution.Directory)
-                .SetProjectFile(Solution.Directory / "src" / "SalaryCounter.ServiceTest" /
+                .SetProjectFile(TestsDirectory /
                                 "SalaryCounter.ServiceTest.csproj")
                 .EnableNoBuild()
                 .When(Cover, _ => _
-                    .AddProperty("CollectCoverage", true)
-                    .AddProperty("CoverletOutput", CoverageResults)
-                    .AddProperty("CoverletOutputFormat", "opencover"))));
+                    .EnableCollectCoverage()
+                    .SetCoverletOutput(CoverageResults)
+                    .SetCoverletOutputFormat(CoverletOutputFormat.opencover)
+                    .AddProperty("SkipAutoProps", true)
+                    .AddProperty("ExcludeByAttribute",
+                        "Obsolete,GeneratedCode,CompilerGenerated".EscapeMsBuildCommas()))));
     }
 }
