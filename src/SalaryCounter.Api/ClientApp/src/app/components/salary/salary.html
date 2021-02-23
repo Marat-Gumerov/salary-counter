@@ -7,7 +7,8 @@
                     matInput
                     [matDatepicker]="salaryDate"
                     placeholder="Choose a date"
-                    [formControl]="dateControl">
+                    [formControl]="dateControl"
+                    (dateChange)="get()">
                 <mat-datepicker-toggle matSuffix [for]="salaryDate"></mat-datepicker-toggle>
                 <mat-datepicker #salaryDate></mat-datepicker>
             </mat-form-field>
