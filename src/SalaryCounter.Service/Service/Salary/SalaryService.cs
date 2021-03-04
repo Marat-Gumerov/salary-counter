@@ -49,9 +49,9 @@ namespace SalaryCounter.Service.Service.Salary
             IDictionary<Guid, EmployeeTreeItem> roots,
             DateTime date)
         {
-            foreach (var treeItem in treeItemsDictionary.Values)
+            foreach (var treeItem in treeItemsDictionary.Values
+                .Where(treeItem => !roots.ContainsKey(treeItem.Employee.Id)))
             {
-                if (roots.ContainsKey(treeItem.Employee.Id)) continue;
                 if (treeItem.Employee.Chief == null)
                     throw new SalaryCounterGeneralException("Logical error", true);
                 if (!treeItemsDictionary.ContainsKey(treeItem.Employee.Chief.Value))

@@ -1,3 +1,4 @@
+using System.IO;
 using JetBrains.Annotations;
 using Nuke.Common;
 using Nuke.Common.Execution;
@@ -6,11 +7,13 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.ReportGenerator;
 using Nuke.Common.Utilities.Collections;
 using NukeBuilder.Enumerations;
 using NukeBuilder.Extensions;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 
 namespace NukeBuilder
 {
@@ -29,7 +32,7 @@ namespace NukeBuilder
         readonly Configuration Configuration =
             IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
-        [Parameter("Test with coverage")] readonly bool Cover;
+        [Parameter("Test with coverage")] readonly bool Cover = true;
 
         [Solution] readonly Solution Solution;
 
@@ -60,7 +63,6 @@ namespace NukeBuilder
                 .SetConfiguration(Configuration)
                 .EnableNoRestore()));
 
-        [UsedImplicitly]
         Target UnitTest => _ => _
             .DependsOn(Compile)
             .Requires(() => Configuration.ToString() == Configuration.Debug)
@@ -76,5 +78,21 @@ namespace NukeBuilder
                     .AddProperty("SkipAutoProps", true)
                     .AddProperty("ExcludeByAttribute",
                         "Obsolete,GeneratedCode,CompilerGenerated".EscapeMsBuildCommas()))));
+
+        [UsedImplicitly]
+        Target Report => _ => _
+            .DependsOn(UnitTest)
+            .OnlyWhenDynamic(() => Cover)
+            .Executes(() =>
+            {
+                var reportDirectory = Solution.Directory / "report";
+                if (DirectoryExists(reportDirectory)) Directory.Delete(reportDirectory, true);
+                Directory.CreateDirectory(reportDirectory);
+                ReportGenerator(_ => _
+                    .SetProcessWorkingDirectory(Solution.Directory)
+                    .SetReports(CoverageResults)
+                    .SetTargetDirectory(reportDirectory)
+                    .SetFramework("net5.0"));
+            });
     }
 }
