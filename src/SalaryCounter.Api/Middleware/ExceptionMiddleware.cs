@@ -41,9 +41,12 @@ namespace SalaryCounter.Api.Middleware
                     _ => ProcessException(logger, exception, "unexpected", true,
                         "Unexpected exception occured")
                 };
-                httpContext.Response.StatusCode = (int) GetStatusCodeForException(exception);
-                httpContext.Response.ContentType = "application/json";
-                await error.ToJsonStream().CopyToAsync(httpContext.Response.Body);
+                var response = httpContext.Response;
+                response.StatusCode = (int) GetStatusCodeForException(exception);
+                response.ContentType = "application/json";
+                var errorJsonStream = error.ToJsonStream();
+                var responseBodyStream = response.Body;
+                await errorJsonStream.CopyToAsync(responseBodyStream);
             }
         }
 
@@ -52,8 +55,8 @@ namespace SalaryCounter.Api.Middleware
             return exception switch
             {
                 SalaryCounterWebException webException => webException.StatusCode,
-                SalaryCounterException _ => HttpStatusCode.BadRequest,
-                SalaryCounterModelException _ => HttpStatusCode.BadRequest,
+                SalaryCounterException => HttpStatusCode.BadRequest,
+                SalaryCounterModelException => HttpStatusCode.BadRequest,
                 _ => HttpStatusCode.InternalServerError
             };
         }
@@ -63,6 +66,7 @@ namespace SalaryCounter.Api.Middleware
             string logMessage)
         {
             if (shouldBeLogged)
+                // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
                 logger.LogError(exception, logMessage);
             var error = new ErrorDto(exception.Message, errorType);
             return error;
