@@ -31,7 +31,8 @@ namespace SalaryCounter.Api.Middleware
             }
         }
 
-        private static async Task ProcessException(HttpContext httpContext, ILogger<ExceptionMiddleware> logger,
+        private static async Task ProcessException(HttpContext httpContext,
+            ILogger<ExceptionMiddleware> logger,
             Exception exception)
         {
             var error = ToErrorDto(logger, exception);

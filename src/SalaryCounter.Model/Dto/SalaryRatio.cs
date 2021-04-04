@@ -31,7 +31,7 @@ namespace SalaryCounter.Model.Dto
 
     internal class SalaryRatioExample : Example<SalaryRatio>
     {
-        public override SalaryRatio Get(IExampleService exampleService) => new SalaryRatio
+        protected override SalaryRatio Get(IExampleService exampleService) => new SalaryRatio
         {
             ExperienceBonus = 0.05m,
             ExperienceBonusMaximum = 0.4m,

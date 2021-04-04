@@ -1,6 +1,6 @@
 ﻿namespace SalaryCounter.Dao.Enumeration
 {
-    public enum DaoConfigurationItem
+    internal enum DaoConfigurationItem
     {
         ExperienceBonus,
         ExperienceBonusMaximum,

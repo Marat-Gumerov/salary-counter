@@ -76,9 +76,6 @@ namespace SalaryCounter.Api.Controller
         ///     Delete employee
         /// </summary>
         [HttpDelete("{id}")]
-        public void Delete(Guid id)
-        {
-            employeeService.Delete(id);
-        }
+        public void Delete(Guid id) => employeeService.Delete(id);
     }
 }

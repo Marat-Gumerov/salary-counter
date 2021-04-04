@@ -14,7 +14,7 @@ namespace SalaryCounter.ServiceTest.Test.Api
             Assert.True(spec.Contains("Employee Name"));
             Assert.True(spec.Contains("error-type"));
         }
-        
+
         protected override void SetMocks(IServiceCollection services)
         {
             //do nothing

@@ -87,11 +87,9 @@ namespace SalaryCounter.ServiceTest.Test.Service
         }
 
         [Test]
-        public void GetWithEmptyId()
-        {
+        public void GetWithEmptyId() =>
             Assert.Throws<SalaryCounterNotFoundException>(
                 () => employeeService.Get(Guid.Empty));
-        }
 
         [TestCase("third")]
         [TestCase("")]
@@ -162,7 +160,8 @@ namespace SalaryCounter.ServiceTest.Test.Service
         [TestCase("Employee's salary base is less than zero",
             typeof(SalaryCounterInvalidInputException), "newName",
             "2019-05-01", -1000.0, "manager", "first", "")]
-        [TestCase("Employee position is wrong", typeof(SalaryCounterInvalidInputException), "newName",
+        [TestCase("Employee position is wrong", typeof(SalaryCounterInvalidInputException),
+            "newName",
             "2019-05-01",
             1000.0, "invalid", "first", "")]
         [TestCase("Workman should not have subordinates",
@@ -210,14 +209,12 @@ namespace SalaryCounter.ServiceTest.Test.Service
             Assert.IsTrue(deleted);
         }
 
-        private static Guid GetTestGuid(string name)
-        {
-            return name switch
+        private static Guid GetTestGuid(string name) =>
+            name switch
             {
                 "invalid" => Guid.NewGuid(),
                 "" => Guid.Empty,
                 _ => EmployeeTestData.EmployeesDictionary[name].Id
             };
-        }
     }
 }

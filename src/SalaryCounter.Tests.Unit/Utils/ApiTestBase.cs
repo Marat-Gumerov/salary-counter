@@ -15,23 +15,20 @@ namespace SalaryCounter.ServiceTest.Utils
         protected HttpClient Client = null!;
 
         [OneTimeSetUp]
-        public void SetUpClient()
-        {
+        public void SetUpClient() =>
             Client = new WebApplicationFactory<Startup>()
                 .WithWebHostBuilder(builder => builder
                     .UseUrls("http://*:53435")
                     .UseEnvironment("NoSpa")
                     .ConfigureTestServices(SetMocks))
                 .CreateClient(new WebApplicationFactoryClientOptions
-                    {BaseAddress = new Uri("http://localhost:53435/")});
-        }
-        
+                {
+                    BaseAddress = new Uri("http://localhost:53435/")
+                });
+
         protected abstract void SetMocks(IServiceCollection services);
 
         [OneTimeTearDown]
-        public void TearDownClient()
-        {
-            Client.Dispose();
-        }
+        public void TearDownClient() => Client.Dispose();
     }
 }

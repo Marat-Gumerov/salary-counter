@@ -28,7 +28,10 @@ namespace SalaryCounter.Api.Swagger
                 throw new SalaryCounterGeneralException(
                     $"Parameter {name} not found in {operation.OperationId}", true);
             var examples = parameter.Examples ??= new Dictionary<string, OpenApiExample>();
-            examples.Add(exampleName, new OpenApiExample {Value = value});
+            examples.Add(exampleName, new OpenApiExample
+            {
+                Value = value
+            });
             return true;
         }
     }

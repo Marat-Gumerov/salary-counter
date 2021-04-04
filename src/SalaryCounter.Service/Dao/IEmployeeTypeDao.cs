@@ -7,6 +7,7 @@ namespace SalaryCounter.Service.Dao
     public interface IEmployeeTypeDao
     {
         IList<EmployeeType> Get();
+
         EmployeeType Get(Guid id);
     }
 }

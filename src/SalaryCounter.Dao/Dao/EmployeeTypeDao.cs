@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using SalaryCounter.Dao.Extension;
 using Force.DeepCloner;
 using JetBrains.Annotations;
 using SalaryCounter.Dao.Enumeration;
+using SalaryCounter.Dao.Extensions;
 using SalaryCounter.Model.Dto;
 using SalaryCounter.Model.Enumeration;
 using SalaryCounter.Service.Dao;
@@ -22,62 +22,69 @@ namespace SalaryCounter.Dao.Dao
 
         public EmployeeTypeDao(IAppConfiguration configuration)
         {
-            employeeTypes = new Dictionary<Guid, EmployeeType>();
-            var id = Guid.NewGuid();
-            employeeTypes.Add(id,
-                new EmployeeType(id, EmployeeTypeName.Workman, false,
-                    CreateSalaryRatioFor(EmployeeTypeName.Workman, configuration)));
-            id = Guid.NewGuid();
-            employeeTypes.Add(id,
-                new EmployeeType(id, EmployeeTypeName.Manager, true,
-                    CreateSalaryRatioFor(EmployeeTypeName.Manager, configuration)));
-            id = Guid.NewGuid();
-            employeeTypes.Add(id,
-                new EmployeeType(id, EmployeeTypeName.Sales, true,
-                    CreateSalaryRatioFor(EmployeeTypeName.Sales, configuration)));
+            employeeTypes = new[]
+                {
+                    EmployeeTypeName.Workman, EmployeeTypeName.Manager,
+                    EmployeeTypeName.Sales
+                }
+                .Select(type => new
+                {
+                    id = Guid.NewGuid(),
+                    type
+                })
+                .ToDictionary(
+                    withId => withId.id,
+                    withId => new EmployeeType(
+                        withId.id,
+                        withId.type,
+                        withId.type != EmployeeTypeName.Workman,
+                        CreateSalaryRatioFor(withId.type, configuration)));
             employeeTypesLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         }
 
         public IList<EmployeeType> Get()
         {
-            using (employeeTypesLock.Read())
-            {
-                return employeeTypes
-                    .Values
-                    .OrderBy(employeeType => employeeType.Value.ToString())
-                    .ToList()
-                    .DeepClone();
-            }
+            using var read = employeeTypesLock.Read();
+            return employeeTypes
+                .Values
+                .OrderBy(employeeType => employeeType.Value.ToString())
+                .ToList()
+                .DeepClone();
         }
 
         public EmployeeType Get(Guid id)
         {
-            using (employeeTypesLock.Read())
+            using var read = employeeTypesLock.Read();
+            try
             {
-                try
-                {
-                    return employeeTypes[id].DeepClone();
-                }
-                catch (KeyNotFoundException)
-                {
-                    throw new SalaryCounterNotFoundException("No such employee position");
-                }
+                return employeeTypes[id].DeepClone();
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new SalaryCounterNotFoundException("No such employee position");
             }
         }
 
         private static SalaryRatio CreateSalaryRatioFor(EmployeeTypeName employeeType,
-            IAppConfiguration configuration) =>
-            new SalaryRatio
+            IAppConfiguration configuration)
+        {
+            const DaoConfigurationItem experienceBonus = DaoConfigurationItem.ExperienceBonus;
+            const DaoConfigurationItem experienceBonusMaximum =
+                DaoConfigurationItem.ExperienceBonusMaximum;
+            const DaoConfigurationItem subordinateBonus = DaoConfigurationItem.SubordinateBonus;
+            const string employeeTypeName = nameof(employeeType);
+            return new SalaryRatio
             {
                 ExperienceBonus =
                     configuration.Get<decimal>(
-                        $"{nameof(employeeType)}:{employeeType}:{DaoConfigurationItem.ExperienceBonus}"),
+                        $"{employeeTypeName}:{employeeType}:{experienceBonus}"),
                 ExperienceBonusMaximum =
                     configuration.Get<decimal>(
-                        $"{nameof(employeeType)}:{employeeType}:{DaoConfigurationItem.ExperienceBonusMaximum}"),
+                        $"{employeeTypeName}:{employeeType}:{experienceBonusMaximum}"),
                 SubordinateBonus =
                     configuration.Get<decimal>(
-                        $"{nameof(employeeType)}:{employeeType}:{DaoConfigurationItem.SubordinateBonus}")
+                        $"{employeeTypeName}:{employeeType}:{subordinateBonus}")
             };
+        }
     }
 }

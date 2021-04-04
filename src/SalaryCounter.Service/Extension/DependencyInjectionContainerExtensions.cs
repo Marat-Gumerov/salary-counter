@@ -9,12 +9,12 @@ namespace SalaryCounter.Service.Extension
 {
     public static class DependencyInjectionContainerExtensions
     {
-        public static void ConfigureService(this IDependencyInjectionContainer container)
-        {
-            container.AddTransient<IEmployeeTypeService, EmployeeTypeService>();
-            container.AddTransient<IEmployeeService, EmployeeService>();
-            container.AddTransient<ISalaryService, SalaryService>();
-            container.AddTransient<IExampleService, ExampleService>();
-        }
+        public static IDependencyInjectionContainer ConfigureService(
+            this IDependencyInjectionContainer container) =>
+            container
+                .AddTransient<IEmployeeTypeService, EmployeeTypeService>()
+                .AddTransient<IEmployeeService, EmployeeService>()
+                .AddTransient<ISalaryService, SalaryService>()
+                .AddTransient<IExampleService, ExampleService>();
     }
 }

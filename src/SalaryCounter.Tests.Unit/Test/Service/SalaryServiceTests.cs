@@ -41,7 +41,7 @@ namespace SalaryCounter.ServiceTest.Test.Service
             SetupEmployeeServiceGet(employeeNames);
 
             var salary = salaryService.GetSalary(date);
-            Assert.AreEqual(expected, (double) salary, delta);
+            Assert.AreEqual(expected, (double)salary, delta);
         }
 
         [Test]
@@ -57,7 +57,8 @@ namespace SalaryCounter.ServiceTest.Test.Service
         [TestCase("2024-04-04", 1548.36, 0.01, "second", "third")]
         [TestCase("2024-04-04", 1120.0, 0.1, "third", "")]
         [TestCase("2024-04-04", 1000.0, 0.1, "fifth", "")]
-        public void GetEmployeeSalary(DateTime date, double expected, double delta, string employeeName,
+        public void GetEmployeeSalary(DateTime date, double expected, double delta,
+            string employeeName,
             string subordinates)
         {
             SetupEmployeeServiceGet("first, second, third, fourth, fifth");
@@ -65,8 +66,9 @@ namespace SalaryCounter.ServiceTest.Test.Service
             SetupEmployeeServiceGetById(employeeName);
 
             var salary =
-                salaryService.GetSalary(EmployeeTestData.EmployeesDictionary[employeeName].Id, date);
-            Assert.AreEqual(expected, (double) salary, delta);
+                salaryService.GetSalary(EmployeeTestData.EmployeesDictionary[employeeName].Id,
+                    date);
+            Assert.AreEqual(expected, (double)salary, delta);
         }
 
         [Test]
@@ -77,31 +79,25 @@ namespace SalaryCounter.ServiceTest.Test.Service
                 () => salaryService.GetSalary(new DateTime(2023, 10, 10)));
         }
 
-        private void SetupEmployeeServiceGetSubordinates(string employeeNames)
-        {
+        private void SetupEmployeeServiceGetSubordinates(string employeeNames) =>
             employeeMock
                 .Setup(
                     service => service.GetSubordinates(
                         It.IsAny<Employee>(), It.IsAny<DateTime>()))
                 .Returns(() => EmployeeTestData.GetEmployeesByNames(employeeNames));
-        }
 
-        private void SetupEmployeeServiceGet(string employeeNames)
-        {
+        private void SetupEmployeeServiceGet(string employeeNames) =>
             employeeMock
                 .Setup(
                     service => service.Get(
                         It.IsAny<DateTime>()))
                 .Returns(() => EmployeeTestData.GetEmployeesByNames(employeeNames));
-        }
 
-        private void SetupEmployeeServiceGetById(string employeeName)
-        {
+        private void SetupEmployeeServiceGetById(string employeeName) =>
             employeeMock
                 .Setup(
                     service => service.Get(
                         It.IsAny<Guid>()))
                 .Returns(() => EmployeeTestData.EmployeesDictionary[employeeName]);
-        }
     }
 }

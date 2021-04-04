@@ -10,7 +10,7 @@ using Microsoft.Extensions.Hosting;
 using SalaryCounter.Api.Middleware;
 using SalaryCounter.Api.Swagger;
 using SalaryCounter.Api.Util;
-using SalaryCounter.Dao.Extension;
+using SalaryCounter.Dao.Extensions;
 using SalaryCounter.Model.Extension;
 using SalaryCounter.Service.Extension;
 using SalaryCounter.Service.Util;
@@ -50,12 +50,15 @@ namespace SalaryCounter.Api
                 document.SchemaProcessors.Add(new FilterModelProcessor());
                 document.SchemaProcessors.Add(new ModelExampleProcessor(serviceProvider));
                 document.DocumentName = "v1.0";
-                document.ApiGroupNames = new[] {"1.0"};
+                document.ApiGroupNames = new[]
+                {
+                    "1.0"
+                };
             });
-            var container = new DependencyInjectionContainer(services);
-            container.ConfigureService();
-            container.ConfigureDao();
-            container.AddSingleton<IAppConfiguration, AppConfiguration>();
+            DependencyInjectionContainer.WrapServices(services)
+                .ConfigureService()
+                .ConfigureDao()
+                .AddSingleton<IAppConfiguration, AppConfiguration>();
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -72,14 +75,14 @@ namespace SalaryCounter.Api
             app.UseEndpoints(endpoints => endpoints.MapControllers());
             app.UseOpenApi();
             app.UseSwaggerUi3(config => config.DocumentTitle = "Salary counter");
-            if (!env.IsEnvironment("NoSpa"))
-                app.UseSpa(spa =>
-                {
-                    spa.Options.SourcePath = "ClientApp";
-                    spa.Options.StartupTimeout = TimeSpan.FromSeconds(120);
+            if (env.IsEnvironment("NoSpa")) return;
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+                spa.Options.StartupTimeout = TimeSpan.FromSeconds(120);
 
-                    if (env.IsDevelopment()) spa.UseAngularCliServer("start");
-                });
+                if (env.IsDevelopment()) spa.UseAngularCliServer("start");
+            });
         }
     }
 }

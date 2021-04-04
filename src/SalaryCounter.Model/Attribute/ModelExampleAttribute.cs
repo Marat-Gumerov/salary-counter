@@ -14,11 +14,11 @@ namespace SalaryCounter.Model.Attribute
         public Type? Type { get; }
 
         /// <inheritdoc />
-        public ModelExampleAttribute()
+        internal ModelExampleAttribute()
         {
         }
 
         /// <inheritdoc />
-        public ModelExampleAttribute(Type exampleType) : this() => Type = exampleType;
+        internal ModelExampleAttribute(Type exampleType) : this() => Type = exampleType;
     }
 }

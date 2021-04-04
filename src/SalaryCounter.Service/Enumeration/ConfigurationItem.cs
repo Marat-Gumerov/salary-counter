@@ -1,6 +1,6 @@
 ﻿namespace SalaryCounter.Service.Enumeration
 {
-    public enum ServiceConfigurationItem
+    internal enum ServiceConfigurationItem
     {
         CompanyFoundationDate
     }

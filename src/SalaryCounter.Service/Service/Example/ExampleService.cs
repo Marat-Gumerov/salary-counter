@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using JetBrains.Annotations;
 using SalaryCounter.Model.Attribute;
 using SalaryCounter.Model.Extension;
 using SalaryCounter.Model.Util;
@@ -8,6 +9,7 @@ using SalaryCounter.Service.Service.EmployeeType;
 
 namespace SalaryCounter.Service.Service.Example
 {
+    [UsedImplicitly]
     internal class ExampleService : IExampleService
     {
         private readonly IEmployeeTypeService employeeTypeService;
@@ -28,13 +30,11 @@ namespace SalaryCounter.Service.Service.Example
             GetExampleOrNull(typeof(T)) as T ??
             throw new SalaryCounterGeneralException("Example generation error");
 
-        private object? GetRealInstanceOrNull(Type type)
-        {
+        private object? GetRealInstanceOrNull(Type type) =>
             // ReSharper disable once ConvertIfStatementToReturnStatement
-            if (type == typeof(Model.Dto.EmployeeType))
-                return employeeTypeService.Get().First();
-            return null;
-        }
+            type == typeof(Model.Dto.EmployeeType)
+                ? employeeTypeService.Get().First()
+                : null;
 
         private object GetFromExampleProvider(Type type)
         {
@@ -42,7 +42,7 @@ namespace SalaryCounter.Service.Service.Example
                 throw new SalaryCounterGeneralException("Wrong ModelExample attribute");
             var exampleProvider = Activator.CreateInstance(type) as IExample;
             return exampleProvider?.GetExample(this) ??
-                   throw new SalaryCounterGeneralException("Example generation error");
+                throw new SalaryCounterGeneralException("Example generation error");
         }
     }
 }

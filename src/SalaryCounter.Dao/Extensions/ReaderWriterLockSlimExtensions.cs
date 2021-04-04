@@ -2,9 +2,9 @@
 using System.Threading;
 using SalaryCounter.Service.Exception;
 
-namespace SalaryCounter.Dao.Extension
+namespace SalaryCounter.Dao.Extensions
 {
-    public static class ReaderWriterLockSlimExtensions
+    internal static class ReaderWriterLockSlimExtensions
     {
         public static IDisposable Read(this ReaderWriterLockSlim lockObject) =>
             new LockToken(lockObject, LockType.Read);
@@ -42,7 +42,6 @@ namespace SalaryCounter.Dao.Extension
 
             public void Dispose()
             {
-                if (sync == null) return;
                 switch (lockType)
                 {
                     case LockType.Read:

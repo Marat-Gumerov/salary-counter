@@ -11,6 +11,7 @@ namespace SalaryCounter.Model.Util
         ///     Provides an example for a given type
         /// </summary>
         object? GetExampleOrNull(Type type);
+
         /// <summary>
         ///     Provides an example for a given type
         /// </summary>

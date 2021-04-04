@@ -4,7 +4,7 @@ namespace SalaryCounter.Model.Util
 {
     internal abstract class Example<T> : IExample
     {
-        public abstract T Get(IExampleService exampleService);
+        protected abstract T Get(IExampleService exampleService);
 
         public object GetExample(IExampleService exampleService) =>
             Get(exampleService) ??

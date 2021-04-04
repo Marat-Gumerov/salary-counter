@@ -21,14 +21,9 @@ namespace SalaryCounter.Service.Service.Salary
 
             var employee = EmployeeService.Get(employeeId);
             var subordinates = EmployeeService.GetSubordinates(employee, date);
-            var treeItemsDictionary = AsTreeItems(subordinates);
-            var roots = treeItemsDictionary
-                .Values
-                .Where(element => element.Employee.Chief == employee.Id)
-                .ToDictionary(root => root.Employee.Id);
             var treeItem = new EmployeeTreeItem(employee)
             {
-                SubordinateSalarySum = GetSalary(treeItemsDictionary, roots, date)
+                SubordinateSalarySum = GetSalary(date, subordinates, employee.Id)
             };
             return treeItem.GetSalary(date);
         }
@@ -36,10 +31,16 @@ namespace SalaryCounter.Service.Service.Salary
         public decimal GetSalary(DateTime date)
         {
             var employees = EmployeeService.Get(date);
+            return GetSalary(date, employees);
+        }
+
+        private static decimal GetSalary(DateTime date, IEnumerable<Dto.Employee> employees,
+            Guid? chiefId = null)
+        {
             var treeItemsDictionary = AsTreeItems(employees);
             var roots = treeItemsDictionary
                 .Values
-                .Where(treeItem => treeItem.Employee.Chief == null)
+                .Where(treeItem => treeItem.Employee.Chief == chiefId)
                 .ToDictionary(root => root.Employee.Id);
             return GetSalary(treeItemsDictionary, roots, date);
         }
@@ -49,18 +50,7 @@ namespace SalaryCounter.Service.Service.Salary
             IDictionary<Guid, EmployeeTreeItem> roots,
             DateTime date)
         {
-            foreach (var treeItem in treeItemsDictionary.Values
-                .Where(treeItem => !roots.ContainsKey(treeItem.Employee.Id)))
-            {
-                if (treeItem.Employee.Chief == null)
-                    throw new SalaryCounterGeneralException("Logical error", true);
-                if (!treeItemsDictionary.ContainsKey(treeItem.Employee.Chief.Value))
-                    throw new SalaryCounterGeneralException(
-                        $"Can't determine chief for {treeItem.Employee.Name}");
-                treeItemsDictionary[treeItem.Employee.Chief.Value]
-                    .Subordinates
-                    .Push(treeItem);
-            }
+            BuildTree(treeItemsDictionary, roots);
 
             decimal salary = 0;
             foreach (var root in roots.Values)
@@ -90,13 +80,28 @@ namespace SalaryCounter.Service.Service.Salary
             return salary;
         }
 
-        private static Dictionary<Guid, EmployeeTreeItem> AsTreeItems(
-            IEnumerable<Dto.Employee> employees)
+        private static void BuildTree(IDictionary<Guid, EmployeeTreeItem> treeItemsDictionary,
+            IDictionary<Guid, EmployeeTreeItem> roots)
         {
-            return employees
+            foreach (var treeItem in treeItemsDictionary.Values
+                .Where(treeItem => !roots.ContainsKey(treeItem.Employee.Id)))
+            {
+                if (treeItem.Employee.Chief == null)
+                    throw new SalaryCounterGeneralException("Logical error", true);
+                if (!treeItemsDictionary.ContainsKey(treeItem.Employee.Chief.Value))
+                    throw new SalaryCounterGeneralException(
+                        $"Can't determine chief for {treeItem.Employee.Name}");
+                treeItemsDictionary[treeItem.Employee.Chief.Value]
+                    .Subordinates
+                    .Push(treeItem);
+            }
+        }
+
+        private static Dictionary<Guid, EmployeeTreeItem> AsTreeItems(
+            IEnumerable<Dto.Employee> employees) =>
+            employees
                 .Select(employee => new EmployeeTreeItem(employee))
                 .ToDictionary(treeItem => treeItem.Employee.Id);
-        }
 
         private class EmployeeTreeItem
         {
@@ -122,10 +127,12 @@ namespace SalaryCounter.Service.Service.Salary
                 var experience = Employee.EmploymentDate.GetYearsTo(date);
                 if (experience < 0)
                     throw new SalaryCounterInvalidInputException($"Wrong employment date {date}");
-                var experienceBonus = Employee.EmployeeType.SalaryRatio.ExperienceBonus * experience;
+                var experienceBonus =
+                    Employee.EmployeeType.SalaryRatio.ExperienceBonus * experience;
 
                 var experienceBonusPercent =
-                    Math.Min(Employee.EmployeeType.SalaryRatio.ExperienceBonusMaximum, experienceBonus);
+                    Math.Min(Employee.EmployeeType.SalaryRatio.ExperienceBonusMaximum,
+                        experienceBonus);
 
                 return Employee.SalaryBase * experienceBonusPercent;
             }
