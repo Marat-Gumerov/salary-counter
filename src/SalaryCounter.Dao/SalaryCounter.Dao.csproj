@@ -1,16 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <LangVersion>9</LangVersion>
     <RootNamespace>SalaryCounter.Dao</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DeepCloner" Version="0.10.2" />
     <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\SalaryCounter.Service\SalaryCounter.Service.csproj" />
   </ItemGroup>
 </Project>

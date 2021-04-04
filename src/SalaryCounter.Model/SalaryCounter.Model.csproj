@@ -1,13 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>SalaryCounter.Model</RootNamespace>
-    <Nullable>enable</Nullable>
-    <LangVersion>9</LangVersion>
-  </PropertyGroup>
-  
-  <PropertyGroup>
     <DocumentationFile>bin\SalaryCounter.Model.xml</DocumentationFile>
   </PropertyGroup>
   

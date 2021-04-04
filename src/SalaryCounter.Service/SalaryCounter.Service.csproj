@@ -1,17 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <LangVersion>9</LangVersion>
     <RootNamespace>SalaryCounter.Service</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="DeepEqual" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SalaryCounter.Model\SalaryCounter.Model.csproj" />
   </ItemGroup>
 </Project>
