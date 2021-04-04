@@ -166,7 +166,7 @@ namespace SalaryCounter.ServiceTest.Test.Service
             1000.0, "invalid", "first", "")]
         [TestCase("Workman should not have subordinates",
             typeof(SalaryCounterInvalidInputException), "newName", "2019-05-01", 1000.0, "workman",
-            "first", "")]
+            "first", "second")]
         [TestCase("Employee has cycle in subordination", typeof(SalaryCounterInvalidInputException),
             "newName",
             "2019-05-01", 1000.0, "manager", "first", "second")]
