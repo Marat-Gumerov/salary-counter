@@ -7,12 +7,12 @@ namespace SalaryCounter.Api.Attribute
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     internal class ParameterExampleAttribute : OpenApiOperationProcessorAttribute
     {
-        public ParameterExampleAttribute(string name, string exampleName, string value)
+        protected ParameterExampleAttribute(string name, string exampleName, string value)
             : base(typeof(OperationParameterProcessor), name, exampleName, value)
         {
         }
-        
-        public ParameterExampleAttribute(string name, string value)
+
+        protected ParameterExampleAttribute(string name, string value)
             : base(typeof(OperationParameterProcessor), name, "default", value)
         {
         }

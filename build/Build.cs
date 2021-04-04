@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using JetBrains.Annotations;
 using Nuke.Common;
@@ -44,7 +45,8 @@ namespace NukeBuilder
 
         static AbsolutePath CoverageResults => RootDirectory / "coverage" / "report.xml";
 
-        SwaggerCodegenTool SwaggerCodegenTool => new SwaggerCodegenTool(Solution.Directory);
+        SwaggerCodegenTool SwaggerCodegenTool =>
+            new(Solution.Directory ?? throw new Exception("Solution is not set"));
 
         [UsedImplicitly]
         Target Clean => _ => _

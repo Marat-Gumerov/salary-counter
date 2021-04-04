@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 

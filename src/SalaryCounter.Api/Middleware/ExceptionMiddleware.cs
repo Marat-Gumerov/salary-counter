@@ -27,39 +27,46 @@ namespace SalaryCounter.Api.Middleware
             }
             catch (Exception exception)
             {
-                var error = exception switch
-                {
-                    SalaryCounterWebException webException => ProcessException(logger, webException,
-                        webException.ErrorType, webException.ShouldBeLogged,
-                        "Web exception that should never occur"),
-                    SalaryCounterException salaryCounterException => ProcessException(logger,
-                        salaryCounterException, "unexpected", true,
-                        "SalaryCounterException exception occured"),
-                    SalaryCounterModelException modelException => ProcessException(logger,
-                        modelException, "model error", modelException.ShouldBeLogged,
-                        "Model exception occured"),
-                    _ => ProcessException(logger, exception, "unexpected", true,
-                        "Unexpected exception occured")
-                };
-                var response = httpContext.Response;
-                response.StatusCode = (int) GetStatusCodeForException(exception);
-                response.ContentType = "application/json";
-                var errorJsonStream = error.ToJsonStream();
-                var responseBodyStream = response.Body;
-                await errorJsonStream.CopyToAsync(responseBodyStream);
+                await ProcessException(httpContext, logger, exception);
             }
         }
 
-        private static HttpStatusCode GetStatusCodeForException(Exception exception)
+        private static async Task ProcessException(HttpContext httpContext, ILogger<ExceptionMiddleware> logger,
+            Exception exception)
         {
-            return exception switch
+            var error = ToErrorDto(logger, exception);
+            var response = httpContext.Response;
+            response.StatusCode = (int)GetStatusCodeForException(exception);
+            response.ContentType = "application/json";
+            var errorJsonStream = error.ToJsonStream();
+            var responseBodyStream = response.Body;
+            await errorJsonStream.CopyToAsync(responseBodyStream);
+        }
+
+        private static ErrorDto ToErrorDto(ILogger logger, Exception exception) =>
+            exception switch
+            {
+                SalaryCounterWebException webException => ProcessException(logger, webException,
+                    webException.ErrorType, webException.ShouldBeLogged,
+                    "Web exception that should never occur"),
+                SalaryCounterException salaryCounterException => ProcessException(logger,
+                    salaryCounterException, "unexpected", true,
+                    "SalaryCounterException exception occured"),
+                SalaryCounterModelException modelException => ProcessException(logger,
+                    modelException, "model error", modelException.ShouldBeLogged,
+                    "Model exception occured"),
+                _ => ProcessException(logger, exception, "unexpected", true,
+                    "Unexpected exception occured")
+            };
+
+        private static HttpStatusCode GetStatusCodeForException(Exception exception) =>
+            exception switch
             {
                 SalaryCounterWebException webException => webException.StatusCode,
                 SalaryCounterException => HttpStatusCode.BadRequest,
                 SalaryCounterModelException => HttpStatusCode.BadRequest,
                 _ => HttpStatusCode.InternalServerError
             };
-        }
 
         private static ErrorDto ProcessException(ILogger logger, Exception exception,
             string errorType, bool shouldBeLogged,
@@ -68,8 +75,7 @@ namespace SalaryCounter.Api.Middleware
             if (shouldBeLogged)
                 // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
                 logger.LogError(exception, logMessage);
-            var error = new ErrorDto(exception.Message, errorType);
-            return error;
+            return new ErrorDto(exception.Message, errorType);
         }
     }
 }

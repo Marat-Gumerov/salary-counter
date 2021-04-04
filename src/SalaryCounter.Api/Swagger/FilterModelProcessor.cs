@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NJsonSchema.Generation;
 using SalaryCounter.Api.Util;
+using SalaryCounter.Model.Extension;
 using SalaryCounter.Service.Exception;
 
 namespace SalaryCounter.Api.Swagger
@@ -11,16 +12,14 @@ namespace SalaryCounter.Api.Swagger
     {
         private static readonly string[] Namespaces =
         {
-            "SalaryCounter.Model.Dto",
-            "SalaryCounter.Model.Enumeration",
+            "SalaryCounter.Model.Dto", "SalaryCounter.Model.Enumeration",
         };
 
         private readonly FirstTouch<Type> touched;
 
         private static readonly string[] Generics =
         {
-            "System.Collections.Generic.List",
-            "System.Collections.Generic.IList",
+            "System.Collections.Generic.List", "System.Collections.Generic.IList",
         };
 
         public FilterModelProcessor()
@@ -36,27 +35,18 @@ namespace SalaryCounter.Api.Swagger
 
         public void Process(SchemaProcessorContext context)
         {
-            foreach (var type in WithGenerics(context.Type))
-            {
-                if (!touched.IsFirstTouch(type)) continue;
-                if (Generics.Any(i => type.FullName?.StartsWith(i) == true))
-                    continue;
-                if (Namespaces.All(n =>
-                    type.Namespace?.StartsWith(n) != true))
-                    throw new SalaryCounterGeneralException(
-                        $"{type.FullName} should not be added to Swagger", true);
-            }
+            var wrongTypeAdded = WithGenerics(context.Type)
+                .Where(type => touched.IsFirstTouch(type))
+                .Where(type => Generics.All(i => type.FullName?.StartsWith(i) != true))
+                .FirstOrDefault(type => Namespaces.All(n => type.Namespace?.StartsWith(n) != true));
+            if (wrongTypeAdded == null) return;
+            throw new SalaryCounterGeneralException(
+                $"{wrongTypeAdded.FullName} should not be added to Swagger", true);
         }
 
-        private static IEnumerable<Type> WithGenerics(params Type[] types)
-        {
-            foreach (var type in types)
-            {
-                yield return type;
-                if (type.GenericTypeArguments == null) continue;
-                foreach (var typeArgument in WithGenerics(type.GenericTypeArguments))
-                    yield return typeArgument;
-            }
-        }
+        private static IEnumerable<Type> WithGenerics(params Type[] types) =>
+            types.SelectMany(type => type
+                .AsList()
+                .Concat(WithGenerics(type.GenericTypeArguments)));
     }
 }

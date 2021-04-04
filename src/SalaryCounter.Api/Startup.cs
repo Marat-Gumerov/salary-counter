@@ -61,10 +61,8 @@ namespace SalaryCounter.Api
         // ReSharper disable once UnusedMember.Global
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (!env.IsProduction())
-                app.UseDeveloperExceptionPage();
-            else
-                app.UseHsts();
+            if (!env.IsProduction()) app.UseDeveloperExceptionPage();
+            if (env.IsProduction()) app.UseHsts();
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseStaticFiles();

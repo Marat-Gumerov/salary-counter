@@ -12,9 +12,9 @@ namespace SalaryCounter.Api.Attribute
         public DateExampleAttribute([NotNull] string name, [NotNull] string exampleName,
             [NotNull] string value) : base(name, exampleName, value)
         {
-            if (!DateTime.TryParse(value, out _))
-                throw new SalaryCounterGeneralException(
-                    $"DateExample generation error for parameter {name}, value:'{value}'");
+            if (DateTime.TryParse(value, out _)) return;
+            throw new SalaryCounterGeneralException(
+                $"DateExample generation error for parameter {name}, value:'{value}'");
         }
 
         public DateExampleAttribute([NotNull] string name, [NotNull] string exampleName,

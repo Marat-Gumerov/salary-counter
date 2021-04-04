@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -16,6 +17,15 @@ namespace SalaryCounter.Model.Extension
         /// <returns></returns>
         public static Stream ToJsonStream(this object value) =>
             new MemoryStream(Encoding.UTF8.GetBytes(value.ToJson()));
+
+        /// <summary>
+        /// Converts value to List of values.
+        /// </summary>
+        public static List<T> AsList<T>(this T value) =>
+            new()
+            {
+                value
+            };
 
         /// <summary>
         ///     Converts an object to Json
