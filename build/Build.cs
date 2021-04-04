@@ -11,6 +11,7 @@ using Nuke.Common.Tools.ReportGenerator;
 using Nuke.Common.Utilities.Collections;
 using NukeBuilder.Enumerations;
 using NukeBuilder.Extensions;
+using NukeBuilder.Tools;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
@@ -34,7 +35,7 @@ namespace NukeBuilder
 
         [Parameter("Test with coverage")] readonly bool Cover = true;
 
-        [Solution] readonly Solution Solution;
+        [Solution] readonly Solution Solution = null!;
 
         static AbsolutePath SourceDirectory => RootDirectory / "src";
 
@@ -42,6 +43,8 @@ namespace NukeBuilder
         static AbsolutePath OutputDirectory => RootDirectory / "output";
 
         static AbsolutePath CoverageResults => RootDirectory / "coverage" / "report.xml";
+
+        SwaggerCodegenTool SwaggerCodegenTool => new SwaggerCodegenTool(Solution.Directory);
 
         [UsedImplicitly]
         Target Clean => _ => _
@@ -69,7 +72,7 @@ namespace NukeBuilder
             .Executes(() => DotNetTest(s => s
                 .SetProcessWorkingDirectory(Solution.Directory)
                 .SetProjectFile(TestsDirectory /
-                                "SalaryCounter.Tests.Unit.csproj")
+                    "SalaryCounter.Tests.Unit.csproj")
                 .EnableNoBuild()
                 .When(Cover, _ => _
                     .EnableCollectCoverage()
@@ -94,5 +97,8 @@ namespace NukeBuilder
                     .SetTargetDirectory(reportDirectory)
                     .SetFramework("net5.0"));
             });
+        [UsedImplicitly]
+        Target Swagger => _ => _
+            .Executes(async () => await SwaggerCodegenTool.Run(args => args.Add("version")));
     }
 }
