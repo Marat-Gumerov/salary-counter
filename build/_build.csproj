@@ -6,11 +6,12 @@
     <NoWarn>CS0649;CS0169</NoWarn>
     <NukeRootDirectory>..</NukeRootDirectory>
     <NukeScriptDirectory>..</NukeScriptDirectory>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nuke.Common" Version="5.0.2" />
-    <PackageReference Include="ReportGenerator" Version="4.8.6" />
+    <PackageReference Include="Nuke.Common" Version="5.1.0" />
+    <PackageReference Include="ReportGenerator" Version="4.8.7" />
     <None Include="$(NukeRootDirectory)\.gitignore" LinkBase="config" />
     <None Include="$(NukeRootDirectory)\Directory.Build.props" LinkBase="config" />
   </ItemGroup>
