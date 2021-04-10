@@ -27,11 +27,7 @@ export class EditEmployeeDialogComponent {
         this.employmentDateControl = new FormControl(employee.employmentDate);
         this.employeeTypeControl = new FormControl(employee.employeeType?.id);
         this.chiefControl = new FormControl(employee.chief);
-        if (employee.id === Util.getEmptyId()) {
-            this.state = 'Add';
-        } else {
-            this.state = 'Edit';
-        }
+        this.state = employee.id === Util.getEmptyId() ? 'Add' : 'Edit';
         this.getEmployeeTypes();
         this.getChiefs();
     }
@@ -50,11 +46,9 @@ export class EditEmployeeDialogComponent {
     }
 
     async onSaveClick(): Promise<void> {
-        if (this.state === 'Add') {
-            this.employee = await this.employeeService.add(this.employee);
-        } else {
-            this.employee = await this.employeeService.update(this.employee);
-        }
+        this.employee = this.state === 'Add'
+            ? await this.employeeService.add(this.employee)
+            : await this.employeeService.update(this.employee);
         this.dialogRef.close(this.employee);
     }
 
@@ -63,7 +57,8 @@ export class EditEmployeeDialogComponent {
     }
 
     onEmployeeTypeChange(value: string): void {
-        this.employee.employeeType = this.employeeTypes.find(employeeType => employeeType.id === value);
+        this.employee.employeeType = this.employeeTypes
+            .find(employeeType => employeeType.id === value);
     }
 
     onChiefChange(value: string): void {
@@ -73,7 +68,8 @@ export class EditEmployeeDialogComponent {
     private async getEmployeeTypes(): Promise<void> {
         this.employeeTypes = EmployeeType.fromDataList(await this.employeeTypeService.get());
         this.employee.employeeType = this.employee.employeeType
-            ? this.employeeTypes.find(employeeType => employeeType.id === this.employee.employeeType.id)
+            ? this.employeeTypes
+                .find(employeeType => employeeType.id === this.employee.employeeType.id)
             : this.employeeTypes[0];
         this.employeeTypeControl.setValue(this.employee?.employeeType?.id);
     }

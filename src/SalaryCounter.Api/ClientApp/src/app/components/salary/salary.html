@@ -1,15 +1,17 @@
 <div class="row">
     <div>
-        <label for="salaryDate">Company salary sum for "{{ dateControl.value.toDateString() }}" is {{ salary }}</label>
+        <label for="salaryDate">
+            Company salary sum for "{{ dateControl.value.toDateString() }}" is {{ salary }}
+        </label>
         <div>
             <mat-form-field>
                 <input
-                    matInput
-                    [matDatepicker]="salaryDate"
-                    placeholder="Choose a date"
-                    [formControl]="dateControl"
-                    id="salaryDate"
-                    (dateChange)="get()">
+                        matInput
+                        [matDatepicker]="salaryDate"
+                        placeholder="Choose a date"
+                        [formControl]="dateControl"
+                        id="salaryDate"
+                        (dateChange)="get()">
                 <mat-datepicker-toggle matSuffix [for]="salaryDate"></mat-datepicker-toggle>
                 <mat-datepicker #salaryDate></mat-datepicker>
             </mat-form-field>

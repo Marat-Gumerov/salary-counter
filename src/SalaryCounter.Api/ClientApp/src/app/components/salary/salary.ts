@@ -6,7 +6,7 @@ import {FormControl} from "@angular/forms";
     templateUrl: "salary.html",
     selector: 'app-salary'
 })
-export default class SalaryComponent {
+export class SalaryComponent {
     salary: number = -1;
     dateControl: FormControl;
 

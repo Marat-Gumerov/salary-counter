@@ -15,13 +15,14 @@ export class EmployeeType {
         employeeType.id = other.id || Util.getEmptyId();
         employeeType.value = other.value || "";
         employeeType.canHaveSubordinates = Boolean(other.canHaveSubordinates) || false;
-        employeeType.salaryRatio = other.salaryRatio && SalaryRatio.fromData(other.salaryRatio) || undefined;
+        employeeType.salaryRatio =
+            other.salaryRatio && SalaryRatio.fromData(other.salaryRatio) || undefined;
         return employeeType;
     }
 
     static fromDataList(other: any[]): EmployeeType[] {
-        return other.map(function (employeeType: any, _index: Number, _employeeTypes: any[]) {
-            return EmployeeType.fromData(employeeType);
-        })
+        return other.map(
+            (employeeType: any, _index: Number, _employeeTypes: any[]) =>
+                EmployeeType.fromData(employeeType));
     }
 }

@@ -3,7 +3,9 @@
         {{ employee.name }}, employed at {{ employee.employmentDate }}
         , with position {{ employee.employeeType?.value }}, salary base {{ employee.salaryBase }}
     </span>
-    <button (click)="onGetSalaryClick()" type="button" class="btn btn-outline-primary mr-1">Get salary</button>
+    <button (click)="onGetSalaryClick()" type="button" class="btn btn-outline-primary mr-1">
+        Get salary
+    </button>
     <span *ngIf="salary >= 0"> Salary: {{ salary }}</span>
     <button (click)="onEdit()" type="button" class="btn btn-outline-primary mr-1">Edit</button>
     <button (click)="delete()" type="button" class="btn btn-outline-danger">Delete</button>

@@ -4,7 +4,7 @@ import {Component} from "@angular/core";
     templateUrl: "home.html",
     selector: 'app-home-page'
 })
-export default class HomeComponent {
+export class HomeComponent {
     constructor() {
     }
 }

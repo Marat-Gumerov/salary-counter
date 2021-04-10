@@ -2,10 +2,10 @@ export class SalaryRatio {
     experienceBonus: number;
     experienceBonusMaximum: number;
     subordinateBonus: number;
-    
+
     constructor() {
     }
-    
+
     static fromData(other: any): SalaryRatio {
         let ratio = new SalaryRatio();
         ratio.experienceBonus = Number(other.experienceBonus) || 0;

@@ -21,15 +21,17 @@ export class Employee {
         employee.id = other.id || employee.id;
         employee.name = other.name || employee.name;
         employee.salaryBase = other.salaryBase && Number(other.salaryBase) || employee.salaryBase;
-        employee.employmentDate = other.employmentDate && new Date(other.employmentDate) || employee.employmentDate;
-        employee.employeeType = other.employeeType && EmployeeType.fromData(other.employeeType) || undefined;
+        employee.employmentDate =
+            other.employmentDate && new Date(other.employmentDate) || employee.employmentDate;
+        employee.employeeType =
+            other.employeeType && EmployeeType.fromData(other.employeeType) || undefined;
         employee.chief = other.chief || employee.chief;
         return employee;
     }
 
     static fromDataList(other: any[]): Employee[] {
-        return other.map(function (employee: any, _index: Number, _employees: any[]) {
-            return Employee.fromData(employee);
-        })
+        return other.map(
+            (employee: any, _index: Number, _employees: any[]) =>
+                Employee.fromData(employee));
     }
 }

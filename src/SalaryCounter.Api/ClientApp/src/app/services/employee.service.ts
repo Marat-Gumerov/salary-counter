@@ -5,19 +5,14 @@ import {map} from "rxjs/operators";
 
 @Injectable()
 export class EmployeeService {
-    private backend: string;
+    private readonly backend: string;
 
     constructor(private http: HttpClient) {
         this.backend = 'api/v1.0/employee';
     }
 
     async get(date: Date): Promise<Employee[]> {
-        let dateString: string;
-        if (date instanceof Date) {
-            dateString = date.toISOString();
-        } else {
-            dateString = new Date(date).toISOString();
-        }
+        let dateString = date instanceof Date ? date.toISOString() : new Date(date).toISOString();
         return await this.http
             .get<Employee[]>(this.backend, {
                 params: {

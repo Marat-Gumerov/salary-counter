@@ -4,11 +4,11 @@
         <mat-form-field>
             <label>
                 <input
-                    matInput
-                    [matDatepicker]="getEmployeeDate"
-                    placeholder="Choose a date"
-                    [formControl]="dateControl"
-                    (dateChange)="get()">
+                        matInput
+                        [matDatepicker]="getEmployeeDate"
+                        placeholder="Choose a date"
+                        [formControl]="dateControl"
+                        (dateChange)="get()">
             </label>
             <mat-datepicker-toggle matSuffix [for]="getEmployeeDate"></mat-datepicker-toggle>
             <mat-datepicker #getEmployeeDate></mat-datepicker>
@@ -18,12 +18,15 @@
         <h4>List of employees on date {{ dateControl.value?.toDateString() }}</h4>
         <ul>
             <li *ngFor="let employeeItem of employees">
-                <app-employee [employee]="employeeItem" [date]="dateControl.value" (onDelete)="get()"></app-employee>
+                <app-employee [employee]="employeeItem" [date]="dateControl.value"
+                              (onDelete)="get()"></app-employee>
             </li>
         </ul>
     </div>
     <div class="row">
-        <button (click)="add()" type="button" class="btn btn-outline-primary mr-1">Add employee</button>
+        <button (click)="add()" type="button" class="btn btn-outline-primary mr-1">
+            Add employee
+        </button>
         <button (click)="get()" type="button" class="btn btn-outline-primary">Update list</button>
     </div>
 </div>

@@ -5,6 +5,6 @@ import {EmployeeType} from '../../models/employeeType';
     templateUrl: "employee.type.html",
     selector: 'app-employee-type'
 })
-export default class EmployeeTypeComponent {
+export class EmployeeTypeComponent {
     @Input() employeeType: EmployeeType;
 }

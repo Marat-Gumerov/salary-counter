@@ -6,7 +6,7 @@ import {EmployeeType} from "../../models/employeeType";
     templateUrl: "employee.type.list.html",
     selector: 'app-employee-type-list'
 })
-export default class EmployeeTypeListComponent {
+export class EmployeeTypeListComponent {
     employeeTypes: EmployeeType[];
 
     constructor(private employeeTypeService: EmployeeTypeService) {

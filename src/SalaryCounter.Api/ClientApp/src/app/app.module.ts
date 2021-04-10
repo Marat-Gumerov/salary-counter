@@ -7,21 +7,21 @@ import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {MaterialModule} from './material.module';
 
 import {ApplicationComponent} from './components/application/application';
-import NavbarComponent from './components/navbar/navbar';
-import HomeComponent from './components/home/home';
-import SalaryComponent from './components/salary/salary';
-import EmployeeTypeListComponent from './components/employee-type-list/employee.type.list';
-import EmployeeTypeComponent from './components/employee-type/employee.type';
+import {NavbarComponent} from './components/navbar/navbar';
+import {HomeComponent} from './components/home/home';
+import {SalaryComponent} from './components/salary/salary';
+import {EmployeeTypeListComponent} from './components/employee-type-list/employee.type.list';
+import {EmployeeTypeComponent} from './components/employee-type/employee.type';
 
 import {SalaryService} from './services/salary.service';
 import {EmployeeTypeService} from './services/employee-type.service';
 import {EmployeeListComponent} from './components/employee-list/employee.list';
 import {EmployeeComponent} from './components/employee/employee';
 import {EmployeeService} from './services/employee.service';
-import {MatDialogModule} from '@angular/material/dialog';
 import {EditEmployeeDialogComponent} from './components/edit-employee-dialog/edit.employee.dialog';
 import {ReactiveFormsModule} from "@angular/forms";
 import {ConsoleErrorHandler} from "./util/console-error-handler";
+import {MatDialogModule} from "@angular/material/dialog";
 
 const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -35,8 +35,8 @@ const routes: Routes = [
         RouterModule.forRoot(routes),
         HttpClientModule,
         MaterialModule,
-        MatDialogModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatDialogModule
     ],
     declarations: [
         ApplicationComponent,
