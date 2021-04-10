@@ -52,32 +52,34 @@ namespace SalaryCounter.Service.Service.Salary
         {
             BuildTree(treeItemsDictionary, roots);
 
-            decimal salary = 0;
-            foreach (var root in roots.Values)
-            {
-                var snake = new Stack<EmployeeTreeItem>();
-                snake.Push(root);
-                while (snake.Any())
-                {
-                    var current = snake.Peek();
-                    if (current.Subordinates.Any())
-                    {
-                        snake.Push(current.Subordinates.Pop());
-                        continue;
-                    }
+            return roots.Values
+                .Sum(root => GetSalaryForRoot(root, date, roots.Keys));
+        }
 
-                    snake.Pop();
-                    if (roots.ContainsKey(current.Employee.Id)) continue;
-                    var currentSalary = current.GetSalary(date);
-                    snake.Peek().SubordinateSalarySum +=
-                        currentSalary + current.SubordinateSalarySum;
+        private static decimal GetSalaryForRoot(EmployeeTreeItem root, DateTime date,
+            ICollection<Guid> roots)
+        {
+
+            var snake = new Stack<EmployeeTreeItem>();
+            snake.Push(root);
+            while (snake.Any())
+            {
+                var current = snake.Peek();
+                if (current.Subordinates.Any())
+                {
+                    snake.Push(current.Subordinates.Pop());
+                    continue;
                 }
 
-                var rootSalary = root.GetSalary(date);
-                salary += rootSalary + root.SubordinateSalarySum;
+                snake.Pop();
+                if (roots.Contains(current.Employee.Id)) continue;
+                var currentSalary = current.GetSalary(date);
+                snake.Peek().SubordinateSalarySum +=
+                    currentSalary + current.SubordinateSalarySum;
             }
 
-            return salary;
+            var rootSalary = root.GetSalary(date);
+            return rootSalary + root.SubordinateSalarySum;
         }
 
         private static void BuildTree(IDictionary<Guid, EmployeeTreeItem> treeItemsDictionary,
