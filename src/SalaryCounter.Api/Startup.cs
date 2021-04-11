@@ -78,7 +78,7 @@ namespace SalaryCounter.Api
             if (env.IsEnvironment("NoSpa")) return;
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "../../front/angular";
                 spa.Options.StartupTimeout = TimeSpan.FromSeconds(120);
 
                 if (env.IsDevelopment()) spa.UseAngularCliServer("start");

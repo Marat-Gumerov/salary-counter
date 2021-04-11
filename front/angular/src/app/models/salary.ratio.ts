@@ -1,7 +1,7 @@
 export class SalaryRatio {
-    experienceBonus: number;
-    experienceBonusMaximum: number;
-    subordinateBonus: number;
+    experienceBonus: number | undefined;
+    experienceBonusMaximum: number | undefined;
+    subordinateBonus: number | undefined;
 
     constructor() {
     }

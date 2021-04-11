@@ -6,5 +6,5 @@ import {EmployeeType} from '../../models/employeeType';
     selector: 'app-employee-type'
 })
 export class EmployeeTypeComponent {
-    @Input() employeeType: EmployeeType;
+    @Input() employeeType: EmployeeType | undefined;
 }

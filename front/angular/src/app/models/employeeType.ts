@@ -2,10 +2,10 @@ import {SalaryRatio} from "./salary.ratio";
 import Util from "../util/util";
 
 export class EmployeeType {
-    id: string;
-    value: string;
-    canHaveSubordinates: boolean;
-    salaryRatio: SalaryRatio;
+    id: string | undefined;
+    value: string | undefined;
+    canHaveSubordinates: boolean | undefined;
+    salaryRatio: SalaryRatio | undefined;
 
     constructor() {
     }

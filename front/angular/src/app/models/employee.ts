@@ -6,8 +6,8 @@ export class Employee {
     name: string;
     employmentDate: Date;
     salaryBase: number;
-    employeeType: EmployeeType;
-    chief: string;
+    employeeType: EmployeeType | undefined;
+    chief: string | undefined;
 
     constructor() {
         this.id = Util.getEmptyId();
