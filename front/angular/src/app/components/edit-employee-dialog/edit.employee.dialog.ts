@@ -14,7 +14,7 @@ import {FormControl} from "@angular/forms";
 export class EditEmployeeDialogComponent {
     state: string;
     employeeTypes: EmployeeType[];
-    chiefs: Employee[];
+    chiefs: (Employee | undefined)[];
     employmentDateControl: FormControl;
     employeeTypeControl: FormControl;
     chiefControl: FormControl;
@@ -78,6 +78,7 @@ export class EditEmployeeDialogComponent {
 
     private async getChiefs(): Promise<void> {
         this.chiefs = await this.employeeService.get(this.employee.employmentDate);
+        this.chiefs.unshift(undefined);
         this.chiefControl.setValue(this.employee?.chief);
     }
 }
