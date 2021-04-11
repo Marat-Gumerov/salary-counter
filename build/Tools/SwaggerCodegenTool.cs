@@ -14,31 +14,32 @@ namespace NukeBuilder.Tools
     class SwaggerCodegenTool
     {
         const string Version = "3.0.25";
-        readonly AbsolutePath SolutionDirectory;
         readonly AbsolutePath TemporaryDirectory;
+        readonly AbsolutePath TemplatesDirectory;
 
-        internal SwaggerCodegenTool(AbsolutePath solutionDirectory, AbsolutePath temporaryDirectory)
+        internal SwaggerCodegenTool(AbsolutePath temporaryDirectory,
+            AbsolutePath buildProjectDirectory)
         {
-            SolutionDirectory = solutionDirectory;
             TemporaryDirectory = temporaryDirectory;
+            TemplatesDirectory = buildProjectDirectory / "codegen-templates";
         }
 
         internal async Task Generate(SwaggerCodegenLanguage language, string specUrl, AbsolutePath workingDirectory)
         {
             EnsureExistingDirectory(workingDirectory);
             var languageString = language.AsToolArgument();
-            var templateDir = SolutionDirectory / "codegen-templates" / languageString;
+            var templateDirectory = TemplatesDirectory / languageString;
             await Run(_ => _
                 .Add("generate")
                 .Add($"-l {languageString}")
                 .Add($"-i {specUrl}")
-                .When(Directory.Exists(templateDir), __ => __
-                    .Add($"-t {templateDir}")),
+                .When(Directory.Exists(templateDirectory), __ => __
+                    .Add($"-t {templateDirectory}")),
                 workingDirectory);
         }
 
         async Task Run(Func<Arguments, Arguments> argumentsConfigurator,
-            AbsolutePath? workingDirectory = null, IReadOnlyDictionary<string, string> environment = null)
+            AbsolutePath? workingDirectory = null, IReadOnlyDictionary<string, string>? environment = null)
         {
             var jar = await GetJar();
             var arguments = argumentsConfigurator(new Arguments()

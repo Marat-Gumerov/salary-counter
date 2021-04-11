@@ -45,9 +45,8 @@ namespace NukeBuilder
 
         static AbsolutePath CoverageResults => RootDirectory / "coverage" / "report.xml";
 
-        SwaggerCodegenTool SwaggerCodegenTool => new(
-            Solution.Directory ?? throw new Exception("Solution is not set"),
-            TemporaryDirectory);
+        SwaggerCodegenTool SwaggerCodegenTool => new(TemporaryDirectory,
+            BuildProjectDirectory ?? throw new Exception("Build project directory is not set"));
 
         [UsedImplicitly]
         Target Clean => _ => _
