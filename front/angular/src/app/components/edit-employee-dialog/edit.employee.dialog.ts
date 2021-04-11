@@ -28,7 +28,9 @@ export class EditEmployeeDialogComponent {
         this.employeeTypeControl = new FormControl(employee.employeeType?.id);
         this.chiefControl = new FormControl(employee.chief);
         this.state = employee.id === Util.getEmptyId() ? 'Add' : 'Edit';
+        this.employeeTypes = [];
         this.getEmployeeTypes();
+        this.chiefs = [];
         this.getChiefs();
     }
 
@@ -66,17 +68,16 @@ export class EditEmployeeDialogComponent {
     }
 
     private async getEmployeeTypes(): Promise<void> {
-        this.employeeTypes = EmployeeType.fromDataList(await this.employeeTypeService.get());
+        this.employeeTypes = await this.employeeTypeService.get();
         this.employee.employeeType = this.employee.employeeType
             ? this.employeeTypes
-                .find(employeeType => employeeType.id === this.employee.employeeType.id)
+                .find(employeeType => employeeType.id === this.employee.employeeType?.id)
             : this.employeeTypes[0];
-        this.employeeTypeControl.setValue(this.employee?.employeeType?.id);
+        this.employeeTypeControl.setValue(this.employee.employeeType?.id);
     }
 
     private async getChiefs(): Promise<void> {
         this.chiefs = await this.employeeService.get(this.employee.employmentDate);
-        this.chiefs.unshift(undefined);
         this.chiefControl.setValue(this.employee?.chief);
     }
 }

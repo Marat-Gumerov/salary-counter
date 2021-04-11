@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {EmployeeType} from '../models/employeeType';
+import {map} from "rxjs/operators";
 
 @Injectable()
 export class EmployeeTypeService {
@@ -12,6 +13,8 @@ export class EmployeeTypeService {
 
     async get(): Promise<EmployeeType[]> {
         return await this.http
-            .get<EmployeeType[]>(this.backend).toPromise();
+            .get<EmployeeType[]>(this.backend)
+            .pipe(map(types => EmployeeType.fromDataList(types)))
+            .toPromise();
     }
 }

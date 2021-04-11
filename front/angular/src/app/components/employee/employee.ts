@@ -20,6 +20,8 @@ export class EmployeeComponent {
         private employeeService: EmployeeService,
         public dialog: MatDialog) {
         this.salary = -1;
+        this.employee = new Employee();
+        this.date = new Date();
     }
 
     async onGetSalaryClick(): Promise<void> {
