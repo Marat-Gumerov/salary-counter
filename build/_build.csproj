@@ -14,6 +14,7 @@
     <PackageReference Include="ReportGenerator" Version="4.8.7" />
     <None Include="$(NukeRootDirectory)\.gitignore" LinkBase="config" />
     <None Include="$(NukeRootDirectory)\Directory.Build.props" LinkBase="config" />
+    <None Include="codegen-templates" />
   </ItemGroup>
 
 </Project>

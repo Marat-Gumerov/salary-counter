@@ -45,8 +45,9 @@ namespace NukeBuilder
 
         static AbsolutePath CoverageResults => RootDirectory / "coverage" / "report.xml";
 
-        SwaggerCodegenTool SwaggerCodegenTool =>
-            new(Solution.Directory ?? throw new Exception("Solution is not set"));
+        SwaggerCodegenTool SwaggerCodegenTool => new(
+            Solution.Directory ?? throw new Exception("Solution is not set"),
+            TemporaryDirectory);
 
         [UsedImplicitly]
         Target Clean => _ => _
@@ -101,6 +102,9 @@ namespace NukeBuilder
             });
         [UsedImplicitly]
         Target Swagger => _ => _
-            .Executes(async () => await SwaggerCodegenTool.Run(args => args.Add("version")));
+            .Executes(async () => await SwaggerCodegenTool.Generate(
+                SwaggerCodegenLanguage.TypescriptAngular,
+                "http://localhost:5000/swagger/v1.0/swagger.json",
+                TemporaryDirectory / SwaggerCodegenLanguage.TypescriptAngular.AsToolArgument()));
     }
 }

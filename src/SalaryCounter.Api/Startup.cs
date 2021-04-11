@@ -43,7 +43,7 @@ namespace SalaryCounter.Api
             });
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/dist";
+                configuration.RootPath = "../../front/angular/dist";
             });
             services.AddOpenApiDocument((document, serviceProvider) =>
             {
