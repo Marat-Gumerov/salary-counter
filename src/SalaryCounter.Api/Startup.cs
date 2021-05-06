@@ -26,8 +26,7 @@ namespace SalaryCounter.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            services.AddMvcCore()
+            services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.Configure());
             services.AddApiVersioning(config =>
             {
